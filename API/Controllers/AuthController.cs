@@ -27,9 +27,10 @@ namespace API.Controllers
             }
 
             var user = await userManager.FindByNameAsync(signin.Email);
-            return Json(new {
-                username= user.UserName,
-                email = user.Email,
+            return Json(new SigninResponseDto
+            {
+                Email= user.Email,
+                Username = user.UserName,
             });
         }
 
