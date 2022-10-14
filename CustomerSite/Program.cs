@@ -1,15 +1,26 @@
+using CustomerSite.Interfaces;
+using CustomerSite.Interfaces.Clients;
+using CustomerSite.Services;
+using Microsoft.Net.Http.Headers;
+using System.Net.Http;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddHttpClient("", opt =>
 {
     opt.BaseAddress = new Uri(builder.Configuration["ApiUrl"] ?? "");
+    opt.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
 });
+
 builder.Services.AddSession(option =>
 {
     option.IdleTimeout = TimeSpan.FromMinutes(10);
 });
+
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 var app = builder.Build();
 

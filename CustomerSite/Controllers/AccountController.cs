@@ -3,17 +3,19 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Net.Http;
+using CustomerSite.Interfaces.Clients;
 using System.Text;
+using CustomerSite.Interfaces;
 
 namespace CustomerSite.Controllers
 {
 	public class AccountController : Controller
 	{
-		private IHttpClientFactory clientFactory;
+		private readonly IAuthService authService;
 
-		public AccountController(IHttpClientFactory clientFactory)
+		public AccountController(IAuthService authService )
 		{
-			this.clientFactory = clientFactory;
+			this.authService = authService;
 		}
 
 		public IActionResult Signin()
@@ -26,23 +28,12 @@ namespace CustomerSite.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				var client = clientFactory.CreateClient();
 
-				var jsonInString = Json(model).ToString();
-				
-				var response = await client.PostAsync("Auth/signin", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
-
-				if (response.IsSuccessStatusCode)
+				var result = await authService.SigninAsync(model.Email, model.Password);
+	
+				if (result != null)
 				{
-					return View();
-				}
-				
-				var contents = await response.Content.ReadAsStringAsync();
-				var data = JsonConvert.DeserializeObject<SigninRequestDto>(contents);
-
-				if (data != null)
-				{
-					Request.HttpContext.Session.SetString("Email", data.Email);
+					Request.HttpContext.Session.SetString("Email", result.Email);
 					return RedirectToAction("Index", "Home");
 				}
 				else
