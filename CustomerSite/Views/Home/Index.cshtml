@@ -1,8 +1,13 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    var email = Context.Session.GetString("Email");
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@if (email != null)
+{
+    <h1>@email</h1>
+}
+else
+{
+    <h1>Need Login</h1>
+}

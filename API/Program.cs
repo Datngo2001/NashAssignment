@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApiDbContext>(options =>
+builder.Services.AddDbContext<ApiDbContext>(options =>  
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -22,7 +22,7 @@ var app = builder.Build();
 app.UseCors(x => x.AllowAnyHeader()
     .AllowAnyMethod()
     .AllowCredentials()
-    .WithOrigins("https://localhost:4200"));
+    .WithOrigins("https://localhost:7268/"));
 
 app.UseAuthentication();
 app.UseAuthorization();

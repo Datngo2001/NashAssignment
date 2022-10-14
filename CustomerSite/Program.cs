@@ -2,6 +2,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpClient("", opt =>
+{
+    opt.BaseAddress = new Uri(builder.Configuration["ApiUrl"] ?? "");
+});
+builder.Services.AddSession(option =>
+{
+    option.IdleTimeout = TimeSpan.FromMinutes(10);
+});
 
 var app = builder.Build();
 
@@ -17,6 +25,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthorization();
 

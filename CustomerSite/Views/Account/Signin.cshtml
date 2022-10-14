@@ -1,0 +1,21 @@
+﻿@model SigninRequestDto
+
+@{
+    ViewData["Title"] = "Login";
+}
+<h1>Login</h1>
+
+<form method="post" asp-controller="Account" asp-action="Signin">
+    <label asp-for="Email"></label>
+    <input asp-for="Email" />
+    <span asp-validation-for="Email" class="text-danger"></span>
+
+    <br />
+    <label asp-for="Password"></label>
+    <input asp-for="Password" />
+    <span asp-validation-for="Password" class="text-danger"></span>
+    <br />
+    <input type="submit" title="Login" />
+    <br />
+    @Html.ValidationSummary()
+</form>
