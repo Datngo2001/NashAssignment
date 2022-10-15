@@ -8,7 +8,7 @@ namespace CommonModel.Auth
 {
     public class SigninResponseDto
     {
-        public string? Email { get; set; }
-        public string? Username { get; set; }
+        public string Email { get; set; } = "";
+        public string Username { get; set; } = "";
     }
 }

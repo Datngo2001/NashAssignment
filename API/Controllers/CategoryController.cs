@@ -10,7 +10,6 @@ using Microsoft.Extensions.Logging;
 
 namespace API.Controllers
 {
-    [Route("[controller]")]
     public class CategoryController : _APIController
     {
         private readonly ICategoryRepository categoryRepository;
