@@ -3,74 +3,73 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Net.Http;
-using CustomerSite.Interfaces.Clients;
 using System.Text;
 using CustomerSite.Interfaces;
 
 namespace CustomerSite.Controllers
 {
-	public class AccountController : Controller
-	{
-		private readonly IAuthService authService;
+    public class AccountController : Controller
+    {
+        private readonly IAuthService authService;
 
-		public AccountController(IAuthService authService )
-		{
-			this.authService = authService;
-		}
+        public AccountController(IAuthService authService)
+        {
+            this.authService = authService;
+        }
 
-		public IActionResult Signin()
-		{
-			return View();
-		}
+        public IActionResult Signin()
+        {
+            return View();
+        }
 
-		[HttpPost]
-		public async Task<IActionResult> Signin(SigninRequestDto model)
-		{
-			if (ModelState.IsValid)
-			{
+        [HttpPost]
+        public async Task<IActionResult> Signin(SigninRequestDto model)
+        {
+            if (ModelState.IsValid)
+            {
 
-				var result = await authService.SigninAsync(model.Email, model.Password);
-	
-				if (result != null)
-				{
-					Request.HttpContext.Session.SetString("Email", result.Email);
-					return RedirectToAction("Index", "Home");
-				}
-				else
-				{
-					ModelState.AddModelError("", "Invalid username or password");
-				}
-			}
+                var result = await authService.SigninAsync(model.Email, model.Password);
 
-			return View(model);
-		}
+                if (result != null)
+                {
+                    Request.HttpContext.Session.SetString("Email", result.Email);
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Invalid username or password");
+                }
+            }
 
-		public IActionResult Register()
-		{
-			return View();
-		}
+            return View(model);
+        }
 
-		//[HttpPost]
-		//public async Task<IActionResult> Register(RegisterRequestModel model)
-		//{
-		//	var client = clientFactory.CreateClient();
+        public IActionResult Register()
+        {
+            return View();
+        }
 
-		//	var jsonInString = JsonConvert.SerializeObject(model);
+        //[HttpPost]
+        //public async Task<IActionResult> Register(RegisterRequestModel model)
+        //{
+        //	var client = clientFactory.CreateClient();
 
-		//	var response = await client.PostAsync("auth/register", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
-		//	var contents = await response.Content.ReadAsStringAsync();
-		//	var data = JsonConvert.DeserializeObject<RegisterResponseModel>(contents);
+        //	var jsonInString = JsonConvert.SerializeObject(model);
 
-		//	if (data != null && data.StatusCode == System.Net.HttpStatusCode.OK)
-		//	{
-		//		return RedirectToAction("Index", "Home");
-		//	}
-		//	else
-		//	{
-		//		ModelState.AddModelError("", "Failed to register");
-		//	}
+        //	var response = await client.PostAsync("auth/register", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
+        //	var contents = await response.Content.ReadAsStringAsync();
+        //	var data = JsonConvert.DeserializeObject<RegisterResponseModel>(contents);
 
-		//	return View(model);
-		//}
-	}
+        //	if (data != null && data.StatusCode == System.Net.HttpStatusCode.OK)
+        //	{
+        //		return RedirectToAction("Index", "Home");
+        //	}
+        //	else
+        //	{
+        //		ModelState.AddModelError("", "Failed to register");
+        //	}
+
+        //	return View(model);
+        //}
+    }
 }

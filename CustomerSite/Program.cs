@@ -1,5 +1,4 @@
 using CustomerSite.Interfaces;
-using CustomerSite.Interfaces.Clients;
 using CustomerSite.Services;
 using Microsoft.Net.Http.Headers;
 using System.Net.Http;

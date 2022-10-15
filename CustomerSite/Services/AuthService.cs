@@ -1,4 +1,5 @@
 ﻿using CommonModel.Auth;
+using CustomerSite.Extensions;
 using CustomerSite.Interfaces;
 using Newtonsoft.Json;
 using System.Net.Http;
@@ -8,25 +9,21 @@ namespace CustomerSite.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly HttpClient httpClient;
+        private readonly IHttpClientFactory clientFactory;
 
         public AuthService(IHttpClientFactory clientFactory)
         {
-            httpClient = clientFactory.CreateClient();
+            this.clientFactory = clientFactory;
         }
 
-        public async Task<SigninResponseDto> SigninAsync(string email, string password)
+        public async Task<SigninResponseDto?> SigninAsync(string email, string password)
         {
 
             var param = new SigninRequestDto() { Email = email, Password = password };
 
-            var jsonInString = JsonConvert.SerializeObject(param);
-            
-            var response = await httpClient.PostAsync("Auth/signin", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
+            var httpClient = clientFactory.CreateClient();
 
-            var contents = await response.Content.ReadAsStringAsync();
-
-            var data = JsonConvert.DeserializeObject<SigninResponseDto>(contents);
+            var data = await httpClient.PostApiAsync<SigninRequestDto, SigninResponseDto>("Auth/signin", param);
 
             return data;
         }
