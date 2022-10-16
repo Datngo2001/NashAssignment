@@ -8,7 +8,7 @@
 
 <div class="container rounded p-3" style="background-color: #fff;">
     <h4 class="mb-3">Categories</h4>
-    <div class="d-flex flex-row gap-2 flex-wrap">
+    <div class="d-flex gap-2 flex-wrap justify-content-between align-content-start ">
         @foreach (var category in categories)
         {
             @Html.Partial("Partials/_CategoryPartial", category)
