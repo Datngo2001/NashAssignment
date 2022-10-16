@@ -1,9 +1,6 @@
 ﻿using CommonModel.Auth;
 using CustomerSite.Extensions;
 using CustomerSite.Interfaces;
-using Newtonsoft.Json;
-using System.Net.Http;
-using System.Text;
 
 namespace CustomerSite.Services
 {

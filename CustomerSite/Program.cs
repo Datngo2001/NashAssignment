@@ -1,7 +1,6 @@
 using CustomerSite.Interfaces;
 using CustomerSite.Services;
 using Microsoft.Net.Http.Headers;
-using System.Net.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +19,7 @@ builder.Services.AddSession(option =>
 });
 
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 var app = builder.Build();
 

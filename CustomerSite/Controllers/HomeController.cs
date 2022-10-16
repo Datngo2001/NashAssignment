@@ -1,4 +1,5 @@
-﻿using CustomerSite.Models;
+﻿using CustomerSite.Interfaces;
+using CustomerSite.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -6,15 +7,16 @@ namespace CustomerSite.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ICategoryService categoryService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ICategoryService categoryService)
         {
-            _logger = logger;
+            this.categoryService = categoryService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            ViewData["categories"] = await categoryService.GetAllAsync();
             return View();
         }
 

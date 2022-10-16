@@ -17,21 +17,22 @@ namespace API.Controllers
         }
 
         [HttpPost("signin")]
-        public async Task<IActionResult> signin(SigninRequestDto signin)
+        public async Task<ActionResult<SigninResponseDto>> signin(SigninRequestDto signin)
         {
             var result = await signInManager.PasswordSignInAsync(signin.Email, signin.Password, isPersistent: false, lockoutOnFailure: true);
-            
+
             if (!result.Succeeded)
             {
                 return Unauthorized();
             }
 
             var user = await userManager.FindByNameAsync(signin.Email);
-            return Json(new SigninResponseDto
+
+            return new SigninResponseDto
             {
-                Email= user.Email,
+                Email = user.Email,
                 Username = user.UserName,
-            });
+            };
         }
 
         [HttpPost("signup")]
@@ -46,7 +47,7 @@ namespace API.Controllers
 
             var createUserResult = await userManager.CreateAsync(user, signup.Password);
 
-            if (! createUserResult.Succeeded)
+            if (!createUserResult.Succeeded)
             {
                 return BadRequest(createUserResult.Errors);
             }

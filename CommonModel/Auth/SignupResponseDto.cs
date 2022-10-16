@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CommonModel.Auth
 {
-    public class SigninResponseDto
+    public class SignupResponseDto
     {
         public string Email { get; set; } = "";
         public string Username { get; set; } = "";

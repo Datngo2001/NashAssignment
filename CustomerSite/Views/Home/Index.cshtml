@@ -1,13 +1,17 @@
 ﻿@{
+    var categories = ViewData["categories"] as List<CategoryDto>;
+    if (categories == null) categories = new List<CategoryDto>();
+
     ViewData["Title"] = "Home Page";
     var email = Context.Session.GetString("Email");
 }
 
-@if (email != null)
-{
-    <h1>@email</h1>
-}
-else
-{
-    <h1>Need Login</h1>
-}
+<div class="container rounded p-3" style="background-color: #fff;">
+    <h4 class="mb-3">Categories</h4>
+    <div class="d-flex flex-row gap-2 flex-wrap">
+        @foreach (var category in categories)
+        {
+            @Html.Partial("Partials/_CategoryPartial", category)
+        }
+    </div>
+</div>
