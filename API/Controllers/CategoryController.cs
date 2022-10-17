@@ -12,6 +12,7 @@ namespace API.Controllers
 {
     public class CategoryController : _APIController
     {
+
         private readonly ICategoryRepository categoryRepository;
 
         public CategoryController(ICategoryRepository categoryRepository)
