@@ -41,12 +41,12 @@ namespace API.Repositories
                 .ToListAsync();
         }
 
-        public async Task<List<ProductSearchHint>> SearchProductHint(string query, int limit)
+        public async Task<List<ProductSearchHintDto>> SearchProductHint(string query, int limit)
         {
             return await context.Products
                 .Where(p => p.Name.Contains(query))
                 .Take(limit)
-                .ProjectTo<ProductSearchHint>(mapper.ConfigurationProvider)
+                .ProjectTo<ProductSearchHintDto>(mapper.ConfigurationProvider)
                 .ToListAsync();
         }
     }

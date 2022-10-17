@@ -12,7 +12,6 @@ namespace API.Controllers
 {
     public class ProductController : _APIController
     {
-        private readonly int limit = 10;
         private readonly IProductRepository productRepository;
 
         public ProductController(IProductRepository productRepository)
@@ -23,19 +22,19 @@ namespace API.Controllers
         [HttpGet("get-all")]
         public async Task<List<ProductDto>> GetAllProduct([FromQuery(Name = "p")] int page = 1)
         {
-            return await productRepository.GetAllProduct(page, limit);
+            return await productRepository.GetAllProduct(page, 8);
         }
 
         [HttpGet("search")]
         public async Task<List<ProductDto>> SearchProduct([FromQuery(Name = "q")] string query = "", [FromQuery(Name = "p")] int page = 1)
         {
-            return await productRepository.SearchProduct(query, page, limit);
+            return await productRepository.SearchProduct(query, page, 8);
         }
 
         [HttpGet("search-hint")]
-        public async Task<List<ProductSearchHint>> SearchProductHint([FromQuery(Name = "q")] string query = "")
+        public async Task<List<ProductSearchHintDto>> SearchProductHint([FromQuery(Name = "q")] string query = "")
         {
-            return await productRepository.SearchProductHint(query, limit);
+            return await productRepository.SearchProductHint(query, 10);
         }
     }
 }

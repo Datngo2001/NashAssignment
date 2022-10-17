@@ -2,11 +2,14 @@
     var categories = ViewData["categories"] as List<CategoryDto>;
     if (categories == null) categories = new List<CategoryDto>();
 
+    var products = ViewData["products"] as List<ProductDto>;
+    if (products == null) products = new List<ProductDto>();
+
     ViewData["Title"] = "Home Page";
     var email = Context.Session.GetString("Email");
 }
 
-<div class="container rounded p-3" style="background-color: #fff;">
+<div class="container rounded p-3 mb-3" style="background-color: #fff;">
     <h4 class="mb-3">Categories</h4>
     <div class="d-flex gap-2 flex-wrap justify-content-between align-content-start ">
         @foreach (var category in categories)
@@ -14,4 +17,15 @@
             @Html.Partial("Partials/_CategoryPartial", category)
         }
     </div>
+</div>
+
+<div class="container rounded p-3 mb-3" style="background-color: #fff;">
+    <h4 class="mb-3">Lasted Product</h4>
+    <div class="d-flex gap-2 flex-wrap justify-content-between align-content-start mb-3">
+        @foreach (var product in products)
+        {
+            @Html.Partial("../Shared/ProductCard/_ProductCard", product)
+        }
+    </div>
+    <button type="button" class="btn btn-outline-primary d-block m-auto">More</button>
 </div>

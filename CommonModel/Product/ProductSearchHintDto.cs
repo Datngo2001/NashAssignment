@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CommonModel.Product
 {
-    public class ProductSearchHint
+    public class ProductSearchHintDto
     {
         public string hint { get; set; } = "";
     }
