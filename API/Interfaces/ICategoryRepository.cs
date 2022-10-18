@@ -12,5 +12,6 @@ namespace API.Interfaces
     {
         Task<List<CategoryDto>> GetAllCategories();
         Task<List<ProductDto>> GetProductByCategoryAsync(int id, int page, int limit);
+        Task<CategoryDto?> GetCategoryById(int id);
     }
 }

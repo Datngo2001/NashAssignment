@@ -21,6 +21,13 @@ namespace API.Controllers
             this.categoryRepository = categoryRepository;
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<CategoryDto?>> getAll(int id)
+        {
+            var result = await categoryRepository.GetCategoryById(id);
+            return result;
+        }
+
         [HttpGet("get-all")]
         public async Task<ActionResult<List<CategoryDto>>> getAll()
         {

@@ -31,6 +31,14 @@ namespace API.Repositories
                 .ToListAsync();
         }
 
+        public async Task<CategoryDto?> GetCategoryById(int id)
+        {
+            return await dbContext.Categories
+                .Where(c => c.Id == id)
+                .ProjectTo<CategoryDto>(mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<List<ProductDto>> GetProductByCategoryAsync(int id, int page, int limit)
         {
             var products = await dbContext.Categories
