@@ -18,6 +18,7 @@ namespace ApiTest
             new CategoryDto(){ Id = 4, Name="Abdul", Image=""}
         };
 
+        [Fact]
         public async Task Get_All_Category()
         {
             // Arrange 

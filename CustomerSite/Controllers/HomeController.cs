@@ -23,6 +23,12 @@ namespace CustomerSite.Controllers
             return View();
         }
 
+        public async Task<IActionResult> MoreProduct([FromQuery(Name = "p")] int page)
+        {
+            var products = await productService.GetAllAsync(page);
+            return PartialView("Views/Shared/Product/_ProductCardList.cshtml", products);
+        }
+
         public IActionResult Privacy()
         {
             return View();
