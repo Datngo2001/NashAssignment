@@ -1,1 +1,20 @@
-@ViewData["name"]
+@using CustomerSite.Views.Shared.Components.ProductCard
+
+@{
+    var products = ViewData["products"] as List<ProductDto>;
+    if (products == null) products = new List<ProductDto>();
+}
+
+<div class="container rounded p-3 mb-3" style="background-color: #fff;">
+    <h4 class="mb-3">Lasted Product</h4>
+
+</div>
+
+<div class="container rounded p-3 mb-3" style="background-color: #fff;">
+    <div id="home_product_cards" class="d-flex gap-3 flex-wrap align-content-start mb-3">
+        @foreach (var product in products)
+        {
+            @await Component.InvokeAsync(nameof(ProductCard), product)
+        }
+    </div>
+</div>

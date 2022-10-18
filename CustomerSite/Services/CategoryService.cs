@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CustomerSite.Interfaces;
 using CustomerSite.Extensions;
 using CommonModel.Category;
+using CommonModel.Product;
 
 namespace CustomerSite.Services
 {
@@ -25,6 +26,19 @@ namespace CustomerSite.Services
             if (data == null)
             {
                 data = new List<CategoryDto>();
+            }
+
+            return data;
+        }
+
+        public async Task<List<ProductDto>> GetCategoryProductAsync(int id, int page)
+        {
+            var httpClient = clientFactory.CreateClient();
+            var data = await httpClient.GetApiAsync<List<ProductDto>>($"Category/get-product-by-category?id={id}&page={page}");
+
+            if (data == null)
+            {
+                data = new List<ProductDto>();
             }
 
             return data;

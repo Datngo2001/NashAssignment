@@ -15,9 +15,16 @@ namespace CustomerSite.Controllers
             this.categoryService = categoryService;
         }
 
-        public async Task<IActionResult> Index(int? id)
+        public async Task<IActionResult> Index([FromQuery(Name = "id")] int? id)
         {
-            ViewData["name"] = id;
+            if (id == null)
+            {
+                return BadRequest();
+            }
+
+            var products = await categoryService.GetCategoryProductAsync((int)id, 1);
+            ViewData["products"] = products;
+
             return View();
         }
 
