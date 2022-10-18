@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Interfaces;
+using CommonModel;
 using CommonModel.Category;
 using CommonModel.Product;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +37,7 @@ namespace API.Controllers
         }
 
         [HttpGet("get-product-by-category")]
-        public async Task<ActionResult<List<ProductDto>>> getProductByCategory([FromQuery(Name = "id")] int id, [FromQuery(Name = "page")] int page)
+        public async Task<ActionResult<Paging<ProductDto>>> getProductByCategory([FromQuery(Name = "id")] int id, [FromQuery(Name = "page")] int page)
         {
             var result = await categoryRepository.GetProductByCategoryAsync(id, page, 10);
             return result;

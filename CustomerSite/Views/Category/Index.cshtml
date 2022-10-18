@@ -1,6 +1,8 @@
 @using CustomerSite.Views.Shared.Components.ProductCard
 
 @{
+    var totalPage = ViewBag.TotalPage;
+    var page = ViewBag.Page;
     var category = ViewData["category"] as CategoryDto;
     var products = ViewData["products"] as List<ProductDto>;
     if (products == null) products = new List<ProductDto>();

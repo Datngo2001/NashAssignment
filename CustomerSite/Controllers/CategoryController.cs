@@ -23,9 +23,11 @@ namespace CustomerSite.Controllers
             }
 
             var category = await categoryService.GetCategoryByIdAsync((int)id);
-            var products = await categoryService.GetCategoryProductAsync((int)id, 1);
+            var productsWithPaging = await categoryService.GetCategoryProductAsync((int)id, 1);
             ViewData["category"] = category;
-            ViewData["products"] = products;
+            ViewData["products"] = productsWithPaging.Items;
+            ViewBag.TotalPage = productsWithPaging.TotalPage;
+            ViewBag.Page = productsWithPaging.Page;
 
             return View();
         }

@@ -6,6 +6,7 @@ using CustomerSite.Interfaces;
 using CustomerSite.Extensions;
 using CommonModel.Category;
 using CommonModel.Product;
+using CommonModel;
 
 namespace CustomerSite.Services
 {
@@ -39,14 +40,14 @@ namespace CustomerSite.Services
             return data;
         }
 
-        public async Task<List<ProductDto>> GetCategoryProductAsync(int id, int page)
+        public async Task<Paging<ProductDto>> GetCategoryProductAsync(int id, int page)
         {
             var httpClient = clientFactory.CreateClient();
-            var data = await httpClient.GetApiAsync<List<ProductDto>>($"Category/get-product-by-category?id={id}&page={page}");
+            var data = await httpClient.GetApiAsync<Paging<ProductDto>>($"Category/get-product-by-category?id={id}&page={page}");
 
             if (data == null)
             {
-                data = new List<ProductDto>();
+                data = new Paging<ProductDto>();
             }
 
             return data;

@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using CommonModel.Category;
 using AutoMapper.QueryableExtensions;
 using CommonModel.Product;
+using CommonModel;
 
 namespace API.Repositories
 {
@@ -39,21 +40,28 @@ namespace API.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<List<ProductDto>> GetProductByCategoryAsync(int id, int page, int limit)
+        public async Task<Paging<ProductDto>> GetProductByCategoryAsync(int id, int page, int limit)
         {
-            var products = await dbContext.Products
-                .Where(p => p.Categories.Any(c => c.Id == id))
-                .Skip((page - 1) * limit)
-                .Take(limit)
+            var query = dbContext.Products.Where(p => p.Categories.Any(c => c.Id == id));
+
+            var products = await query.Skip((page - 1) * limit).Take(limit)
                 .ProjectTo<ProductDto>(mapper.ConfigurationProvider)
                 .ToListAsync();
+            var count = await query.CountAsync();
 
             if (products == null)
             {
-                return new List<ProductDto>();
+                return new Paging<ProductDto>();
             }
 
-            return products;
+
+            return new Paging<ProductDto>()
+            {
+                Page = page,
+                Limit = limit,
+                TotalPage = count / limit + 1,
+                Items = products,
+            };
         }
     }
 }
