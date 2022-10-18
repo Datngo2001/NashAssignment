@@ -1,5 +1,6 @@
 ﻿using CustomerSite.Interfaces;
 using CustomerSite.Models;
+using CustomerSite.Views.Shared.Components.ProductCardList;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -26,7 +27,7 @@ namespace CustomerSite.Controllers
         public async Task<IActionResult> MoreProduct([FromQuery(Name = "p")] int page)
         {
             var products = await productService.GetAllAsync(page);
-            return PartialView("Views/Shared/Product/_ProductCardList.cshtml", products);
+            return ViewComponent(nameof(ProductCardList), products);
         }
 
         public IActionResult Privacy()

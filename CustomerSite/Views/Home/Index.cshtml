@@ -1,4 +1,7 @@
-﻿@{
+﻿@using CustomerSite.Views.Shared.Components.ProductCard
+@using CustomerSite.Views.Shared.Components.CategoryCard
+
+@{
     var categories = ViewData["categories"] as List<CategoryDto>;
     if (categories == null) categories = new List<CategoryDto>();
 
@@ -14,7 +17,7 @@
     <div class="d-flex gap-2 flex-wrap justify-content-between align-content-start ">
         @foreach (var category in categories)
         {
-            @Html.Partial("Partials/_CategoryPartial", category)
+            @await Component.InvokeAsync(nameof(CategoryCard), category)
         }
     </div>
 </div>
@@ -24,7 +27,7 @@
     <div id="home_product_cards" class="d-flex gap-2 flex-wrap justify-content-between align-content-start mb-3">
         @foreach (var product in products)
         {
-            @Html.Partial("../Shared/Product/_ProductCard", product)
+            @await Component.InvokeAsync(nameof(ProductCard), product)
         }
     </div>
     <button id="home_more_button" type="button" class="btn btn-outline-primary d-block m-auto w-25">More</button>
