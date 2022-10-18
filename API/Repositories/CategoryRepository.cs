@@ -41,21 +41,19 @@ namespace API.Repositories
 
         public async Task<List<ProductDto>> GetProductByCategoryAsync(int id, int page, int limit)
         {
-            var products = await dbContext.Categories
-                .Where(c => c.Id == id)
-                .Include(c => c.Products)
-                .Select(c => c.Products)
+            var products = await dbContext.Products
+                .Where(p => p.Categories.Any(c => c.Id == id))
                 .Skip((page - 1) * limit)
                 .Take(limit)
-                .FirstOrDefaultAsync();
+                .ProjectTo<ProductDto>(mapper.ConfigurationProvider)
+                .ToListAsync();
 
             if (products == null)
             {
                 return new List<ProductDto>();
             }
 
-            var result = mapper.Map<List<Product>, List<ProductDto>>(products);
-            return result;
+            return products;
         }
     }
 }

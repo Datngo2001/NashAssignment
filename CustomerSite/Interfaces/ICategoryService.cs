@@ -11,5 +11,6 @@ namespace CustomerSite.Interfaces
     {
         Task<List<CategoryDto>> GetAllAsync();
         Task<List<ProductDto>> GetCategoryProductAsync(int id, int page);
+        Task<CategoryDto?> GetCategoryByIdAsync(int id);
     }
 }

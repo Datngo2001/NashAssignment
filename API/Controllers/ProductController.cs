@@ -22,13 +22,13 @@ namespace API.Controllers
         [HttpGet("get-all")]
         public async Task<List<ProductDto>> GetAllProduct([FromQuery(Name = "p")] int page = 1)
         {
-            return await productRepository.GetAllProduct(page, 8);
+            return await productRepository.GetAllProduct(page, 10);
         }
 
         [HttpGet("search")]
         public async Task<List<ProductDto>> SearchProduct([FromQuery(Name = "q")] string query = "", [FromQuery(Name = "p")] int page = 1)
         {
-            return await productRepository.SearchProduct(query, page, 8);
+            return await productRepository.SearchProduct(query, page, 10);
         }
 
         [HttpGet("search-hint")]

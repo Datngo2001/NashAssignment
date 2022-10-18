@@ -22,7 +22,9 @@ namespace CustomerSite.Controllers
                 return BadRequest();
             }
 
+            var category = await categoryService.GetCategoryByIdAsync((int)id);
             var products = await categoryService.GetCategoryProductAsync((int)id, 1);
+            ViewData["category"] = category;
             ViewData["products"] = products;
 
             return View();

@@ -1,12 +1,13 @@
 @using CustomerSite.Views.Shared.Components.ProductCard
 
 @{
+    var category = ViewData["category"] as CategoryDto;
     var products = ViewData["products"] as List<ProductDto>;
     if (products == null) products = new List<ProductDto>();
 }
 
 <div class="container rounded p-3 mb-3" style="background-color: #fff;">
-    <h4 class="mb-3">Lasted Product</h4>
+    <h4 class="mb-3">@category?.Name</h4>
 
 </div>
 
