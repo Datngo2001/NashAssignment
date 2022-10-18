@@ -20,7 +20,7 @@ namespace CustomerSite.Services
         public async Task<List<CategoryDto>> GetAllAsync()
         {
             var httpClient = clientFactory.CreateClient();
-            var data = await httpClient.GetApiAsync<List<CategoryDto>>("Category");
+            var data = await httpClient.GetApiAsync<List<CategoryDto>>("Category/get-all");
 
             if (data == null)
             {
