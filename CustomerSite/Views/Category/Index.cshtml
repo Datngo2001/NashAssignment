@@ -1,8 +1,10 @@
 @using CustomerSite.Views.Shared.Components.ProductCard
+@using CustomerSite.Views.Shared.Components.Paging
+@using CustomerSite.Models
 
 @{
-    var totalPage = ViewBag.TotalPage;
-    var page = ViewBag.Page;
+    var totalPage = Convert.ToInt32(ViewData["total-page"]);
+    var page = Convert.ToInt32(ViewData["page"]);
     var category = ViewData["category"] as CategoryDto;
     var products = ViewData["products"] as List<ProductDto>;
     if (products == null) products = new List<ProductDto>();
@@ -21,3 +23,10 @@
         }
     </div>
 </div>
+
+@await Component.InvokeAsync(nameof(Paging), new PagingViewModel()
+{
+page = page,
+totalPage = totalPage,
+getLink = p => $"./Category/Index?id={category?.Id}&page={p}"
+});

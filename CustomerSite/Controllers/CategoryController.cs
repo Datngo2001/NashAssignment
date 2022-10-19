@@ -26,8 +26,8 @@ namespace CustomerSite.Controllers
             var productsWithPaging = await categoryService.GetCategoryProductAsync((int)id, 1);
             ViewData["category"] = category;
             ViewData["products"] = productsWithPaging.Items;
-            ViewBag.TotalPage = productsWithPaging.TotalPage;
-            ViewBag.Page = productsWithPaging.Page;
+            ViewData["total-page"] = productsWithPaging.TotalPage;
+            ViewData["page"] = productsWithPaging.Page;
 
             return View();
         }

@@ -54,7 +54,6 @@ namespace API.Repositories
                 return new Paging<ProductDto>();
             }
 
-
             return new Paging<ProductDto>()
             {
                 Page = page,
