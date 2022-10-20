@@ -63,7 +63,18 @@ namespace API.Repositories
 
         public async Task<double> AverageStar(int id)
         {
-            return await context.Products.Where(p => p.Id == id).Select(p => p.Rattings.Average(r => r.Star)).FirstOrDefaultAsync();
+            double result = 0;
+
+            try
+            {
+                result = await context.Products.Where(p => p.Id == id).Select(p => p.Rattings.Average(r => r.Star)).FirstOrDefaultAsync();
+            }
+            catch (System.Exception)
+            {
+                result = 0;
+            }
+
+            return result;
         }
     }
 }

@@ -40,6 +40,15 @@ namespace CustomerSite.Services
             return result;
         }
 
+        public async Task<double> GetProductStarAsync(int id)
+        {
+            var httpClient = clientFactory.CreateClient();
+
+            var result = await httpClient.GetApiNumberAsync($"Product/{id}/avg-star");
+
+            return result;
+        }
+
         public async Task<List<ProductDto>> SearchAsync(string query = "", int page = 1)
         {
             var httpClient = clientFactory.CreateClient();

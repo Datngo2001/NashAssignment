@@ -16,6 +16,13 @@ namespace CustomerSite.Extensions
             var result = JsonConvert.DeserializeObject<ResponseType>(contents);
             return result;
         }
+        public static async Task<double> GetApiNumberAsync(this HttpClient httpClient, string url)
+        {
+            var response = await httpClient.GetAsync(url);
+            var contents = await response.Content.ReadAsStringAsync();
+            var result = Convert.ToDouble(contents);
+            return result;
+        }
 
         public static async Task<ResponseType?> PostApiAsync<ParamType, ResponseType>(this HttpClient httpClient, string url, ParamType param)
         {

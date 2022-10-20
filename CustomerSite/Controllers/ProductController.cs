@@ -22,7 +22,8 @@ namespace CustomerSite.Controllers
         public async Task<IActionResult> Index(int id)
         {
             var product = await productService.GetProductByIdAsync(id);
-
+            var avgStar = await productService.GetProductStarAsync(id);
+            ViewData["avg-star"] = avgStar;
             return View(product);
         }
 
