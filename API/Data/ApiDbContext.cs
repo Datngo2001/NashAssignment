@@ -25,6 +25,9 @@ namespace API.Data
             modelBuilder.Entity<Product>()
                 .Property(b => b.Name)
                 .IsRequired();
+            modelBuilder.Entity<Rating>()
+                .Property(r => r.CreateDate)
+                .HasDefaultValue(DateTime.Now);
         }
     }
 }

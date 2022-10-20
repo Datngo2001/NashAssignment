@@ -8,7 +8,7 @@ namespace CommonModel.Product
     public class RatingDto
     {
         public int Id { get; set; }
-        public string Star { get; set; } = "";
+        public int Star { get; set; }
         public string Message { get; set; } = "";
         public DateTime CreateDate { get; set; }
     }

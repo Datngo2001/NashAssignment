@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20221020083042_AddRatting")]
+    [Migration("20221020083653_AddRatting")]
     partial class AddRatting
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -117,9 +117,8 @@ namespace API.Migrations
                     b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Star")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Star")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

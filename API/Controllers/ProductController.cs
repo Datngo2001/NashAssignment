@@ -49,5 +49,11 @@ namespace API.Controllers
 
             return product;
         }
+
+        [HttpGet("{id}/avg-star")]
+        public async Task<ActionResult<double>> GetProductAvgStar(int id)
+        {
+            return await productRepository.AverageStar(id);
+        }
     }
 }
