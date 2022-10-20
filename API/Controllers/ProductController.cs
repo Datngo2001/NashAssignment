@@ -20,21 +20,34 @@ namespace API.Controllers
         }
 
         [HttpGet("get-all")]
-        public async Task<List<ProductDto>> GetAllProduct([FromQuery(Name = "p")] int page = 1)
+        public async Task<ActionResult<List<ProductDto>>> GetAllProduct([FromQuery(Name = "p")] int page = 1)
         {
             return await productRepository.GetAllProduct(page, 10);
         }
 
         [HttpGet("search")]
-        public async Task<List<ProductDto>> SearchProduct([FromQuery(Name = "q")] string query = "", [FromQuery(Name = "p")] int page = 1)
+        public async Task<ActionResult<List<ProductDto>>> SearchProduct([FromQuery(Name = "q")] string query = "", [FromQuery(Name = "p")] int page = 1)
         {
             return await productRepository.SearchProduct(query, page, 10);
         }
 
         [HttpGet("search-hint")]
-        public async Task<List<ProductSearchHintDto>> SearchProductHint([FromQuery(Name = "q")] string query = "")
+        public async Task<ActionResult<List<ProductSearchHintDto>>> SearchProductHint([FromQuery(Name = "q")] string query = "")
         {
             return await productRepository.SearchProductHint(query, 10);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ProductDetailDto>> GetProductById(int id)
+        {
+            var product = await productRepository.GetProductById(id);
+
+            if (product == null)
+            {
+                return BadRequest();
+            }
+
+            return product;
         }
     }
 }
