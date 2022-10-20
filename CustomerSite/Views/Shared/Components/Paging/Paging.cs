@@ -159,6 +159,8 @@ namespace CustomerSite.Views.Shared.Components.Paging
             ViewData["pages"] = pages;
             ViewData["is-first-page"] = isFirstPage;
             ViewData["is-last-page"] = isLastPage;
+            ViewData["next-link"] = isLastPage ? "" : getLink(page + 1);
+            ViewData["prev-link"] = isFirstPage ? "" : getLink(page - 1);
             return View();
         }
     }

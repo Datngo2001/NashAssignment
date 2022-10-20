@@ -5,23 +5,26 @@
 
     var isFirstPage = (bool?)ViewData["is-first-page"];
     var isLastPage = (bool?)ViewData["is-last-page"];
+
+    var nextLink = Convert.ToString(ViewData["next-link"]);
+    var prevLink = Convert.ToString(ViewData["prev-link"]);
 }
 
 <ul class="pagination justify-content-center gap-3">
     @* Prev *@
     @if (isFirstPage == false)
     {
-        <li class="page-item"><a class="page-link" href="#"><i class="fas fa-caret-left"></i></a></li>
+        <li class="page-item"><a class="page-link" href="@prevLink"><i class="fas fa-caret-left"></i></a></li>
     }
 
     @foreach (var pageItem in pages)
     {
-        <li class="page-item"><a class="page-link @pageItem.activeClass" href="@pageItem.link">@pageItem.text</a></li>
+        <li class="page-item @pageItem.activeClass"><a class="page-link" href="@pageItem.link">@pageItem.text</a></li>
     }
 
     @* Next *@
     @if (isLastPage == false)
     {
-        <li class="page-item"><a class="page-link" href="#"><i class="fas fa-caret-right"></i></a></li>
+        <li class="page-item"><a class="page-link" href="@nextLink"><i class="fas fa-caret-right"></i></a></li>
     }
 </ul>

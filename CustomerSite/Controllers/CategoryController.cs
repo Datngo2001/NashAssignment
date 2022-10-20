@@ -15,7 +15,7 @@ namespace CustomerSite.Controllers
             this.categoryService = categoryService;
         }
 
-        public async Task<IActionResult> Index([FromQuery(Name = "id")] int? id)
+        public async Task<IActionResult> Index([FromQuery(Name = "id")] int? id, [FromQuery(Name = "page")] int page = 1)
         {
             if (id == null)
             {
@@ -23,7 +23,7 @@ namespace CustomerSite.Controllers
             }
 
             var category = await categoryService.GetCategoryByIdAsync((int)id);
-            var productsWithPaging = await categoryService.GetCategoryProductAsync((int)id, 1);
+            var productsWithPaging = await categoryService.GetCategoryProductAsync((int)id, page);
             ViewData["category"] = category;
             ViewData["products"] = productsWithPaging.Items;
             ViewData["total-page"] = productsWithPaging.TotalPage;
