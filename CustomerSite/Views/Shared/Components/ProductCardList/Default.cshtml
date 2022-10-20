@@ -1,0 +1,7 @@
+@model List<ProductDto>
+@using CustomerSite.Views.Shared.Components.ProductCard
+
+@foreach (var product in Model)
+{
+    @await Component.InvokeAsync(nameof(ProductCard), product)
+}

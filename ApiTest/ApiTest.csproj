@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\API\API.csproj" />
+    <ProjectReference Include="..\CommonModel\CommonModel.csproj" />
   </ItemGroup>
 
 </Project>

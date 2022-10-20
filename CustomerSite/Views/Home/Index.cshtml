@@ -1,17 +1,50 @@
-﻿@{
+﻿@using CustomerSite.Views.Shared.Components.ProductCard
+@using CustomerSite.Views.Shared.Components.CategoryCard
+
+@{
     var categories = ViewData["categories"] as List<CategoryDto>;
     if (categories == null) categories = new List<CategoryDto>();
+
+    var products = ViewData["products"] as List<ProductDto>;
+    if (products == null) products = new List<ProductDto>();
 
     ViewData["Title"] = "Home Page";
     var email = Context.Session.GetString("Email");
 }
 
-<div class="container rounded p-3" style="background-color: #fff;">
+<div class="container rounded p-3 mb-3" style="background-color: #fff;">
     <h4 class="mb-3">Categories</h4>
     <div class="d-flex gap-2 flex-wrap justify-content-between align-content-start ">
         @foreach (var category in categories)
         {
-            @Html.Partial("Partials/_CategoryPartial", category)
+            @await Component.InvokeAsync(nameof(CategoryCard), category)
         }
     </div>
 </div>
+
+<div class="container rounded p-3 mb-3" style="background-color: #fff;">
+    <h4 class="mb-3">Lasted Product</h4>
+    <div id="home_product_cards" class="d-flex gap-2 flex-wrap justify-content-between align-content-start mb-3">
+        @foreach (var product in products)
+        {
+            @await Component.InvokeAsync(nameof(ProductCard), product)
+        }
+    </div>
+    <button id="home_more_button" type="button" class="btn btn-outline-primary d-block m-auto w-25">More</button>
+</div>
+
+<script>
+    var currentProductPage = 1
+    const moreButton = document.getElementById("home_more_button")
+    const productCardsList = document.getElementById("home_product_cards")
+    moreButton.addEventListener("click", async () => {
+        var moreButtonText = moreButton.innerText
+        moreButton.innerText = "Loading..."
+        var views = await getView(`Home/MoreProduct?p=${currentProductPage + 1}`);
+        if (views) {
+            productCardsList.innerHTML += views
+            currentProductPage += 1
+        }
+        moreButton.innerText = moreButtonText
+    })
+</script>
