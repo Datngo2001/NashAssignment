@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using CommonModel.Product;
+using CustomerSite.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -11,20 +12,18 @@ namespace CustomerSite.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly ILogger<ProductController> _logger;
+        private readonly IProductService productService;
 
-        public ProductController(ILogger<ProductController> logger)
+        public ProductController(IProductService productService)
         {
-            _logger = logger;
+            this.productService = productService;
         }
 
-        public IActionResult Index(int id)
+        public async Task<IActionResult> Index(int id)
         {
+            var product = await productService.GetProductByIdAsync(id);
 
-            return View(new ProductDto()
-            {
-                Id = id
-            });
+            return View(product);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

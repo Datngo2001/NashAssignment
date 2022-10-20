@@ -31,6 +31,15 @@ namespace CustomerSite.Services
             return result;
         }
 
+        public async Task<ProductDetailDto?> GetProductByIdAsync(int id)
+        {
+            var httpClient = clientFactory.CreateClient();
+
+            var result = await httpClient.GetApiAsync<ProductDetailDto>($"Product/{id}");
+
+            return result;
+        }
+
         public async Task<List<ProductDto>> SearchAsync(string query = "", int page = 1)
         {
             var httpClient = clientFactory.CreateClient();
