@@ -16,6 +16,10 @@
     {
         <li class="page-item"><a class="page-link" href="@prevLink"><i class="fas fa-caret-left"></i></a></li>
     }
+    else
+    {
+        <li class="page-item disabled"><a class="page-link" href="@prevLink"><i class="fas fa-caret-left"></i></a></li>
+    }
 
     @foreach (var pageItem in pages)
     {
@@ -26,5 +30,9 @@
     @if (isLastPage == false)
     {
         <li class="page-item"><a class="page-link" href="@nextLink"><i class="fas fa-caret-right"></i></a></li>
+    }
+    else
+    {
+        <li class="page-item disabled"><a class="page-link" href="@nextLink"><i class="fas fa-caret-right"></i></a></li>
     }
 </ul>
