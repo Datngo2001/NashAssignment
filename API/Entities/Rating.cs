@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 
 namespace API.Entities
 {
-    public class Feature
+    public class Rating
     {
         public int Id { get; set; }
-        public string Key { get; set; } = "";
-        public string Value { get; set; } = "";
+        public string Star { get; set; } = "";
+        public string Message { get; set; } = "";
+        public DateTime CreateDate { get; set; }
     }
 }

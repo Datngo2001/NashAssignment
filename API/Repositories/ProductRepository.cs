@@ -36,6 +36,8 @@ namespace API.Repositories
             return await context.Products
                 .Where(p => p.Id == id)
                 .Include(p => p.Features)
+                .Include(p => p.Categories)
+                .Include(p => p.Rattings)
                 .ProjectTo<ProductDetailDto>(mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
         }

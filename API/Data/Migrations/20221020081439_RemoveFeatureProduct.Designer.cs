@@ -4,6 +4,7 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221020081439_RemoveFeatureProduct")]
+    partial class RemoveFeatureProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,35 +97,6 @@ namespace API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("API.Entities.Rating", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Star")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("Rating");
                 });
 
             modelBuilder.Entity("CategoryProduct", b =>
@@ -346,13 +319,6 @@ namespace API.Migrations
                         .HasForeignKey("ProductId");
                 });
 
-            modelBuilder.Entity("API.Entities.Rating", b =>
-                {
-                    b.HasOne("API.Entities.Product", null)
-                        .WithMany("Rattings")
-                        .HasForeignKey("ProductId");
-                });
-
             modelBuilder.Entity("CategoryProduct", b =>
                 {
                     b.HasOne("API.Entities.Category", null)
@@ -422,8 +388,6 @@ namespace API.Migrations
             modelBuilder.Entity("API.Entities.Product", b =>
                 {
                     b.Navigation("Features");
-
-                    b.Navigation("Rattings");
                 });
 #pragma warning restore 612, 618
         }
