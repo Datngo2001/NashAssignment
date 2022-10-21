@@ -1,10 +1,21 @@
 @model ProductDto
 
+@using System.Globalization
+
+@{
+    CultureInfo cul = CultureInfo.GetCultureInfo("vi-VN"); // try with "en-US"
+    var price = Model.Price.ToString("#,###", cul.NumberFormat) + " đ";
+}
 <div class="card col-1" style="width: 15rem;">
-    <img src="@Model.Image" class="card-img-top" alt="...">
-    <div class="card-body">
-        <h5 class="card-title">@Model.Name</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-            content.</p>
+    <div class="text-center pt-1">
+        <img src="@Model.Image" class="card-img-top" alt="..."
+            style="width: 14rem; height: 14rem; object-fit: contain;">
     </div>
+    <div class="card-body">
+        <div style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" class="card-title fs-6 text-muted">
+            @Model.Name
+        </div>
+        <h5 style="color: #FF424E;">@price</h5>
+    </div>
+    <a href="/Product/Index/@Model.Id" class="stretched-link"></a>
 </div>

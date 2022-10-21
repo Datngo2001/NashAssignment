@@ -31,6 +31,17 @@ namespace API.Repositories
                 .ToListAsync();
         }
 
+        public async Task<ProductDetailDto?> GetProductById(int id)
+        {
+            return await context.Products
+                .Where(p => p.Id == id)
+                .Include(p => p.Features)
+                .Include(p => p.Categories)
+                .Include(p => p.Rattings)
+                .ProjectTo<ProductDetailDto>(mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<List<ProductDto>> SearchProduct(string query, int page, int limit)
         {
             return await context.Products
@@ -48,6 +59,22 @@ namespace API.Repositories
                 .Take(limit)
                 .ProjectTo<ProductSearchHintDto>(mapper.ConfigurationProvider)
                 .ToListAsync();
+        }
+
+        public async Task<double> AverageStar(int id)
+        {
+            double result = 0;
+
+            try
+            {
+                result = await context.Products.Where(p => p.Id == id).Select(p => p.Rattings.Average(r => r.Star)).FirstOrDefaultAsync();
+            }
+            catch (System.Exception)
+            {
+                result = 0;
+            }
+
+            return result;
         }
     }
 }

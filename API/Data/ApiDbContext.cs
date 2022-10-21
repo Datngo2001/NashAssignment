@@ -8,6 +8,7 @@ namespace API.Data
     {
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Feature> Features { get; set; }
 
         public ApiDbContext(DbContextOptions<ApiDbContext> options)
             : base(options)
@@ -24,6 +25,9 @@ namespace API.Data
             modelBuilder.Entity<Product>()
                 .Property(b => b.Name)
                 .IsRequired();
+            modelBuilder.Entity<Rating>()
+                .Property(r => r.CreateDate)
+                .HasDefaultValue(DateTime.Now);
         }
     }
 }
