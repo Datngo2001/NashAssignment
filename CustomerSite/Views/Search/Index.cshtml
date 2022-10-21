@@ -16,7 +16,7 @@
     <div id="home_product_cards" class="d-flex gap-3 flex-wrap align-content-start mb-3">
         @foreach (var product in Model.Items)
         {
-            @await Component.InvokeAsync(nameof(ProductCard), product)
+            <vc:product-card product=product></vc:product-card>
         }
     </div>
 </div>
