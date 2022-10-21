@@ -40,7 +40,7 @@ namespace API.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<Paging<ProductDto>> GetProductByCategoryAsync(int id, int page, int limit)
+        public async Task<PagingDto<ProductDto>> GetProductByCategoryAsync(int id, int page, int limit)
         {
             var query = dbContext.Products.Where(p => p.Categories.Any(c => c.Id == id));
 
@@ -51,10 +51,10 @@ namespace API.Repositories
 
             if (products == null)
             {
-                return new Paging<ProductDto>();
+                return new PagingDto<ProductDto>();
             }
 
-            return new Paging<ProductDto>()
+            return new PagingDto<ProductDto>()
             {
                 Page = page,
                 Limit = limit,

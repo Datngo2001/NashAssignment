@@ -20,9 +20,15 @@ namespace CustomerSite.Controllers
             this.searchService = searchService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index([FromQuery(Name = "q")] string query, [FromQuery(Name = "p")] int page = 1)
         {
-            return View();
+            var productWithPaging = await searchService.SearchProduct(query, page);
+            if (productWithPaging == null)
+            {
+                productWithPaging = new CommonModel.PagingDto<ProductDto>();
+            }
+            ViewData["query"] = query;
+            return View(productWithPaging);
         }
 
         public async Task<IActionResult> GetSearchHint([FromQuery(Name = "q")] string query)

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CommonModel
 {
-    public class Paging<T>
+    public class PagingDto<T>
     {
         public int Page { get; set; } = 1;
         public int Limit { get; set; } = 10;

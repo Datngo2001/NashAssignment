@@ -12,7 +12,7 @@ namespace API.Interfaces
     public interface ICategoryRepository
     {
         Task<List<CategoryDto>> GetAllCategories();
-        Task<Paging<ProductDto>> GetProductByCategoryAsync(int id, int page, int limit);
+        Task<PagingDto<ProductDto>> GetProductByCategoryAsync(int id, int page, int limit);
         Task<CategoryDto?> GetCategoryById(int id);
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using CommonModel;
 using CommonModel.Product;
 
 namespace API.Controllers
@@ -26,7 +27,7 @@ namespace API.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<ActionResult<List<ProductDto>>> SearchProduct([FromQuery(Name = "q")] string query = "", [FromQuery(Name = "p")] int page = 1)
+        public async Task<ActionResult<PagingDto<ProductDto>>> SearchProduct([FromQuery(Name = "q")] string query = "", [FromQuery(Name = "p")] int page = 1)
         {
             return await productRepository.SearchProduct(query, page, 10);
         }

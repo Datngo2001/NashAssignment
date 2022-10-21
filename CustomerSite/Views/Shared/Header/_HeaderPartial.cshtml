@@ -13,10 +13,10 @@
                     </li>
                 </ul>
                 <div class="flex-grow-1">
-                    <form class="d-flex m-auto w-75" asp-controller="Search" asp-action="Index">
+                    <form class="d-flex m-auto w-75" asp-controller="Search" asp-action="Index" method="GET">
                         <div class="flex-grow-1" style="position:relative;">
-                            <input id="header-search-box" name="q" class="form-control me-2" type="search"
-                                placeholder="Search" aria-label="Search" style="postion: relative;" autocomplete="off">
+                            <input id="header-search-box" name="q" class="form-control me-2" placeholder="Search"
+                                aria-label="Search" style="postion: relative;" autocomplete="off">
                             <div id="header-search-hint-container"
                                 style="position: absolute; z-index: 1000; top:100%; width: 100%;">
                             </div>

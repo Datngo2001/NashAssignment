@@ -8,6 +8,7 @@ using CommonModel.Product;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper.QueryableExtensions;
 using AutoMapper;
+using CommonModel;
 
 namespace API.Repositories
 {
@@ -42,14 +43,25 @@ namespace API.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<List<ProductDto>> SearchProduct(string query, int page, int limit)
+        public async Task<PagingDto<ProductDto>> SearchProduct(string query, int page, int limit)
         {
-            return await context.Products
-                .Where(p => p.Name.Contains(query))
+            var queryable = context.Products.Where(p => p.Name.Contains(query));
+
+            var products = await queryable
                 .Skip((page - 1) * limit)
                 .Take(limit)
                 .ProjectTo<ProductDto>(mapper.ConfigurationProvider)
                 .ToListAsync();
+
+            var count = await queryable.CountAsync();
+
+            return new PagingDto<ProductDto>()
+            {
+                Page = page,
+                Limit = limit,
+                TotalPage = count / limit + 1,
+                Items = products,
+            };
         }
 
         public async Task<List<ProductSearchHintDto>> SearchProductHint(string query, int limit)

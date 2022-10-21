@@ -37,7 +37,7 @@ namespace API.Controllers
         }
 
         [HttpGet("get-product-by-category")]
-        public async Task<ActionResult<Paging<ProductDto>>> getProductByCategory([FromQuery(Name = "id")] int id, [FromQuery(Name = "page")] int page)
+        public async Task<ActionResult<PagingDto<ProductDto>>> getProductByCategory([FromQuery(Name = "id")] int id, [FromQuery(Name = "page")] int page)
         {
             var result = await categoryRepository.GetProductByCategoryAsync(id, page, 10);
             return result;
