@@ -3,6 +3,12 @@
     var pages = ViewData["pages"] as List<PageButtonViewModel>;
     if (pages == null) pages = new List<PageButtonViewModel>();
 
+    var isOnlyOnePage = false;
+    if (pages.Count < 2)
+    {
+        isOnlyOnePage = true;
+    }
+
     var isFirstPage = (bool?)ViewData["is-first-page"];
     var isLastPage = (bool?)ViewData["is-last-page"];
 
@@ -12,7 +18,7 @@
 
 <ul class="pagination justify-content-center gap-3">
     @* Prev *@
-    @if (isFirstPage == false)
+    @if (isFirstPage == false && isOnlyOnePage == false)
     {
         <li class="page-item"><a class="page-link" href="@prevLink"><i class="fas fa-caret-left"></i></a></li>
     }
@@ -27,7 +33,7 @@
     }
 
     @* Next *@
-    @if (isLastPage == false)
+    @if (isLastPage == false && isOnlyOnePage == false)
     {
         <li class="page-item"><a class="page-link" href="@nextLink"><i class="fas fa-caret-right"></i></a></li>
     }
