@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace API.Migrations
+namespace DataAccess.Migrations
 {
     public partial class AddProductAndCategory : Migration
     {
