@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using IdentityServer4;
 using IdentityServer4.Models;
 using System.Collections.Generic;
 
@@ -28,17 +29,22 @@ namespace IdentityServer
                 {
                     ClientId = "client",
 
-                    // no interactive user, use the clientid/secret for authentication
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AllowedGrantTypes = GrantTypes.Code,
+                    AllowOfflineAccess = true,
+                    ClientSecrets = { new Secret("secret".Sha256()) },
 
-                    // secret for authentication
-                    ClientSecrets =
+                    RedirectUris =           { "http://localhost:21402/signin-oidc" },
+                    PostLogoutRedirectUris = { "http://localhost:21402/" },
+                    FrontChannelLogoutUri =    "http://localhost:21402/signout-oidc",
+
+                    AllowedScopes =
                     {
-                        new Secret("secret".Sha256())
-                    },
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
 
-                    // scopes that client has access to
-                    AllowedScopes = { "api1" }
+                        "api1",
+                    },
                 }
             };
     }

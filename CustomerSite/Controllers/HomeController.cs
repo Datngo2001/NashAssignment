@@ -21,7 +21,7 @@ namespace CustomerSite.Controllers
 
         public async Task<IActionResult> Index()
         {
-            await identityService.TestIdentity();
+            // await identityService.TestIdentity();
             ViewData["categories"] = await categoryService.GetAllAsync();
             ViewData["products"] = await productService.GetAllAsync(page: 1);
             return View();
