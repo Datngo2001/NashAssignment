@@ -15,6 +15,7 @@ namespace CustomerSite.Controllers
 
         public IActionResult Signin()
         {
+            Response.Redirect("https://localhost:5001/Account/Login");
             return View();
         }
 
