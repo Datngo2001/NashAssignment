@@ -1,0 +1,44 @@
+@using CustomerSite.Models
+@{
+    var pages = ViewData["pages"] as List<PageButtonViewModel>;
+    if (pages == null) pages = new List<PageButtonViewModel>();
+
+    var isOnlyOnePage = false;
+    if (pages.Count < 2)
+    {
+        isOnlyOnePage = true;
+    }
+
+    var isFirstPage = (bool?)ViewData["is-first-page"];
+    var isLastPage = (bool?)ViewData["is-last-page"];
+
+    var nextLink = Convert.ToString(ViewData["next-link"]);
+    var prevLink = Convert.ToString(ViewData["prev-link"]);
+}
+
+<ul class="pagination justify-content-center gap-3">
+    @* Prev *@
+    @if (isFirstPage == false && isOnlyOnePage == false)
+    {
+        <li class="page-item"><a class="page-link" href="@prevLink"><i class="fas fa-caret-left"></i></a></li>
+    }
+    else
+    {
+        <li class="page-item disabled"><a class="page-link" href="@prevLink"><i class="fas fa-caret-left"></i></a></li>
+    }
+
+    @foreach (var pageItem in pages)
+    {
+        <li class="page-item @pageItem.activeClass"><a class="page-link" href="@pageItem.link">@pageItem.text</a></li>
+    }
+
+    @* Next *@
+    @if (isLastPage == false && isOnlyOnePage == false)
+    {
+        <li class="page-item"><a class="page-link" href="@nextLink"><i class="fas fa-caret-right"></i></a></li>
+    }
+    else
+    {
+        <li class="page-item disabled"><a class="page-link" href="@nextLink"><i class="fas fa-caret-right"></i></a></li>
+    }
+</ul>

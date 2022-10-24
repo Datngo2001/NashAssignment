@@ -1,0 +1,32 @@
+@using CustomerSite.Views.Shared.Components.ProductCard
+@using CustomerSite.Views.Shared.Components.Paging
+@using CustomerSite.Models
+
+@{
+    var totalPage = Convert.ToInt32(ViewData["total-page"]);
+    var page = Convert.ToInt32(ViewData["page"]);
+    var category = ViewData["category"] as CategoryDto;
+    var products = ViewData["products"] as List<ProductDto>;
+    if (products == null) products = new List<ProductDto>();
+}
+
+<div class="container rounded p-3 mb-3" style="background-color: #fff;">
+    <h4 class="mb-3">@category?.Name</h4>
+
+</div>
+
+<div class="container rounded p-3 mb-3" style="background-color: #fff;">
+    <div id="home_product_cards" class="d-flex gap-3 flex-wrap align-content-start mb-3">
+        @foreach (var product in products)
+        {
+            @await Component.InvokeAsync(nameof(ProductCard), product)
+        }
+    </div>
+</div>
+
+@await Component.InvokeAsync(nameof(Paging), new PagingViewModel()
+{
+page = page,
+totalPage = totalPage,
+getLink = p => $"./Index?id={category?.Id}&page={p}"
+});
