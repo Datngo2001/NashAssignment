@@ -10,15 +10,18 @@ namespace CustomerSite.Controllers
     {
         private readonly ICategoryService categoryService;
         private readonly IProductService productService;
+        private readonly IIdentityService identityService;
 
-        public HomeController(ICategoryService categoryService, IProductService productService)
+        public HomeController(ICategoryService categoryService, IProductService productService, IIdentityService identityService)
         {
+            this.identityService = identityService;
             this.categoryService = categoryService;
             this.productService = productService;
         }
 
         public async Task<IActionResult> Index()
         {
+            // await identityService.TestIdentity();
             ViewData["categories"] = await categoryService.GetAllAsync();
             ViewData["products"] = await productService.GetAllAsync(page: 1);
             return View();

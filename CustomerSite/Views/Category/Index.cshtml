@@ -12,14 +12,13 @@
 
 <div class="container rounded p-3 mb-3" style="background-color: #fff;">
     <h4 class="mb-3">@category?.Name</h4>
-
 </div>
 
 <div class="container rounded p-3 mb-3" style="background-color: #fff;">
     <div id="home_product_cards" class="d-flex gap-3 flex-wrap align-content-start mb-3">
         @foreach (var product in products)
         {
-            @await Component.InvokeAsync(nameof(ProductCard), product)
+            <vc:product-card product=product></vc:product-card>
         }
     </div>
 </div>

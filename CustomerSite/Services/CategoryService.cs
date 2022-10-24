@@ -40,14 +40,14 @@ namespace CustomerSite.Services
             return data;
         }
 
-        public async Task<Paging<ProductDto>> GetCategoryProductAsync(int id, int page)
+        public async Task<PagingDto<ProductDto>> GetCategoryProductAsync(int id, int page)
         {
             var httpClient = clientFactory.CreateClient();
-            var data = await httpClient.GetApiAsync<Paging<ProductDto>>($"Category/get-product-by-category?id={id}&page={page}");
+            var data = await httpClient.GetApiAsync<PagingDto<ProductDto>>($"Category/get-product-by-category?id={id}&page={page}");
 
             if (data == null)
             {
-                data = new Paging<ProductDto>();
+                data = new PagingDto<ProductDto>();
             }
 
             return data;

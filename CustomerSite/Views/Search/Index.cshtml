@@ -1,0 +1,29 @@
+@using CustomerSite.Views.Shared.Components.ProductCard
+@using CustomerSite.Views.Shared.Components.Paging
+@using CustomerSite.Models
+
+@model PagingDto<ProductDto>
+
+@{
+    var query = ViewData["query"];
+}
+
+<div class="container rounded p-3 mb-3" style="background-color: #fff;">
+    <h4 class="mb-3">Key word "@query"</h4>
+</div>
+
+<div class="container rounded p-3 mb-3" style="background-color: #fff;">
+    <div id="home_product_cards" class="d-flex gap-3 flex-wrap align-content-start mb-3">
+        @foreach (var product in Model.Items)
+        {
+            <vc:product-card product=product></vc:product-card>
+        }
+    </div>
+</div>
+
+@await Component.InvokeAsync(nameof(Paging), new PagingViewModel()
+{
+page = Model.Page,
+totalPage = Model.TotalPage,
+getLink = p => $"/Search/Index?q={query}&p={p}"
+});

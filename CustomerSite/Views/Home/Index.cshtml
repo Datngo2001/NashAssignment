@@ -17,7 +17,7 @@
     <div class="d-flex gap-2 flex-wrap justify-content-between align-content-start ">
         @foreach (var category in categories)
         {
-            @await Component.InvokeAsync(nameof(CategoryCard), category)
+            <vc:category-card category=category></vc:category-card>
         }
     </div>
 </div>
@@ -27,7 +27,7 @@
     <div id="home_product_cards" class="d-flex gap-2 flex-wrap justify-content-between align-content-start mb-3">
         @foreach (var product in products)
         {
-            @await Component.InvokeAsync(nameof(ProductCard), product)
+            <vc:product-card product=product></vc:product-card>
         }
     </div>
     <button id="home_more_button" type="button" class="btn btn-outline-primary d-block m-auto w-25">More</button>

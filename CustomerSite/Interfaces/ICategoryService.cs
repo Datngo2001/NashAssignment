@@ -11,7 +11,7 @@ namespace CustomerSite.Interfaces
     public interface ICategoryService
     {
         Task<List<CategoryDto>> GetAllAsync();
-        Task<Paging<ProductDto>> GetCategoryProductAsync(int id, int page);
+        Task<PagingDto<ProductDto>> GetCategoryProductAsync(int id, int page);
         Task<CategoryDto?> GetCategoryByIdAsync(int id);
     }
 }
