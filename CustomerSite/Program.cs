@@ -36,7 +36,12 @@ builder.Services.AddAuthentication(options =>
         options.ResponseType = "code";
 
         options.SaveTokens = true;
+
+        options.Scope.Add("profile");
+        options.GetClaimsFromUserInfoEndpoint = true;
     });
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
@@ -64,6 +69,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}").RequireAuthorization();
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

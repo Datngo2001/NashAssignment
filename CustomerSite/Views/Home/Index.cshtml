@@ -9,19 +9,19 @@
 
 }
 
-@* @using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication
 
-    <h2>Claims</h2>
+<h2>Claims</h2>
 
-    <dl>
+<dl>
     @foreach (var claim in User.Claims)
     {
-    <dt>@claim.Type</dt>
-    <dd>@claim.Value</dd>
+        <dt>@claim.Type</dt>
+        <dd>@claim.Value</dd>
     }
-    </dl>
+</dl>
 
-    <h2>Properties</h2>
+@* <h2>Properties</h2>
 
     <dl>
     @foreach (var prop in (await Context.AuthenticateAsync()).Properties.Items)
