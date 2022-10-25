@@ -1,4 +1,7 @@
-﻿@{
+﻿@page
+@model IndexModel
+
+@{
     var categories = ViewData["categories"] as List<CategoryDto>;
     if (categories == null) categories = new List<CategoryDto>();
 
@@ -6,20 +9,19 @@
     if (products == null) products = new List<ProductDto>();
 
     ViewData["Title"] = "Home Page";
-
 }
 
-@using Microsoft.AspNetCore.Authentication
+@* @using Microsoft.AspNetCore.Authentication
 
-<h2>Claims</h2>
+    <h2>Claims</h2>
 
-<dl>
+    <dl>
     @foreach (var claim in User.Claims)
     {
-        <dt>@claim.Type</dt>
-        <dd>@claim.Value</dd>
+    <dt>@claim.Type</dt>
+    <dd>@claim.Value</dd>
     }
-</dl>
+    </dl> *@
 
 @* <h2>Properties</h2>
 
@@ -59,7 +61,7 @@
     moreButton.addEventListener("click", async () => {
         var moreButtonText = moreButton.innerText
         moreButton.innerText = "Loading..."
-        var views = await getView(`Home/MoreProduct?p=${currentProductPage + 1}`);
+        var views = await getView(`Index?handler=MoreProduct&p=${currentProductPage + 1}`);
         if (views) {
             productCardsList.innerHTML += views
             currentProductPage += 1
