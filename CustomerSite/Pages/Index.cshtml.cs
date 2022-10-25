@@ -9,13 +9,13 @@ using CustomerSite.Pages.Shared.Components.ProductCardList;
 
 namespace CustomerSite.Pages
 {
-    public class IndexModel : PageModel
+    public class IndexPageModel : PageModel
     {
         private readonly ICategoryService categoryService;
         private readonly IProductService productService;
         private readonly IIdentityService identityService;
 
-        public IndexModel(ICategoryService categoryService, IProductService productService, IIdentityService identityService)
+        public IndexPageModel(ICategoryService categoryService, IProductService productService, IIdentityService identityService)
         {
             this.categoryService = categoryService;
             this.productService = productService;
