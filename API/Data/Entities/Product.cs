@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DataAccess.Entities
+namespace API.Data.Entities
 {
     public class Product
     {

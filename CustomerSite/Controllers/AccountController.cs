@@ -45,6 +45,11 @@ namespace CustomerSite.Controllers
             return View();
         }
 
+        public IActionResult Logout()
+        {
+            return SignOut("Cookies", "oidc");
+        }
+
         //[HttpPost]
         //public async Task<IActionResult> Register(RegisterRequestModel model)
         //{

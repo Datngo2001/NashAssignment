@@ -1,7 +1,4 @@
-﻿@using CustomerSite.Views.Shared.Components.ProductCard
-@using CustomerSite.Views.Shared.Components.CategoryCard
-
-@{
+﻿@{
     var categories = ViewData["categories"] as List<CategoryDto>;
     if (categories == null) categories = new List<CategoryDto>();
 
@@ -9,8 +6,30 @@
     if (products == null) products = new List<ProductDto>();
 
     ViewData["Title"] = "Home Page";
-    var email = Context.Session.GetString("Email");
+
 }
+
+@using Microsoft.AspNetCore.Authentication
+
+<h2>Claims</h2>
+
+<dl>
+    @foreach (var claim in User.Claims)
+    {
+        <dt>@claim.Type</dt>
+        <dd>@claim.Value</dd>
+    }
+</dl>
+
+@* <h2>Properties</h2>
+
+    <dl>
+    @foreach (var prop in (await Context.AuthenticateAsync()).Properties.Items)
+    {
+    <dt>@prop.Key</dt>
+    <dd>@prop.Value</dd>
+    }
+    </dl> *@
 
 <div class="container rounded p-3 mb-3" style="background-color: #fff;">
     <h4 class="mb-3">Categories</h4>

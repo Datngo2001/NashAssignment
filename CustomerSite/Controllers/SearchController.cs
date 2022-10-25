@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CommonModel.Product;
 using CustomerSite.Interfaces;
 using CustomerSite.Views.Shared.Components.SearchHint;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 

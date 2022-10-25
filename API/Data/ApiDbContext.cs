@@ -1,8 +1,8 @@
-﻿using DataAccess.Entities;
+﻿using API.Data.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataAccess
+namespace API.Data
 {
     public class ApiDbContext : IdentityDbContext
     {

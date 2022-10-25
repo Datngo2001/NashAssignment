@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace DataAccess.Migrations
+namespace API.Data.Migrations
 {
     public partial class RemoveFeatureProduct : Migration
     {

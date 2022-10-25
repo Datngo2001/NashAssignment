@@ -2,15 +2,15 @@
 
 #nullable disable
 
-namespace DataAccess.Migrations
+namespace API.Data.Migrations
 {
-    public partial class AddCategoryImage : Migration
+    public partial class AddProductImage : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
                 name: "Image",
-                table: "Categories",
+                table: "Products",
                 type: "nvarchar(max)",
                 nullable: false,
                 defaultValue: "");
@@ -20,7 +20,7 @@ namespace DataAccess.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "Image",
-                table: "Categories");
+                table: "Products");
         }
     }
 }

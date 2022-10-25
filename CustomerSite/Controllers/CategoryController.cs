@@ -1,6 +1,7 @@
 ﻿using CustomerSite.Interfaces;
 using CustomerSite.Models;
 using CustomerSite.Views.Shared.Components.ProductCardList;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 

@@ -1,5 +1,5 @@
 
-using DataAccess.Entities;
+using API.Data.Entities;
 using AutoMapper;
 using CommonModel.Category;
 using CommonModel.Product;
