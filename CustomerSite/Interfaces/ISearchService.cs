@@ -9,7 +9,7 @@ namespace CustomerSite.Interfaces
 {
     public interface ISearchService
     {
-        Task<List<ProductSearchHintDto>?> LoadSearchHint(string query);
-        Task<PagingDto<ProductDto>?> SearchProduct(string query, int page);
+        Task<List<ProductSearchHintDto>> LoadSearchHint(string query);
+        Task<PagingDto<ProductDto>> SearchProduct(string query, int page);
     }
 }

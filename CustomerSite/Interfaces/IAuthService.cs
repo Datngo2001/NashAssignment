@@ -4,6 +4,6 @@ namespace CustomerSite.Interfaces
 {
     public interface IAuthService
     {
-        Task<SigninResponseDto?> SigninAsync(string email, string password);
+        Task<SigninResponseDto> SigninAsync(string email, string password);
     }
 }
