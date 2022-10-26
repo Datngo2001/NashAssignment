@@ -21,9 +21,13 @@
     </div>
 </div>
 
-@await Component.InvokeAsync(nameof(Paging), new PagingViewModel()
-{
-page = Model.ProductsWithPaging.Page,
-totalPage = Model.ProductsWithPaging.TotalPage,
-getLink = p => $"/Search/Index?q={query}&p={p}"
-});
+@{
+    var pagingModel = new PagingViewModel()
+    {
+        page = Model.ProductsWithPaging.Page,
+        totalPage = Model.ProductsWithPaging.TotalPage,
+        getLink = p => $"/Search?q={query}&p={p}"
+    };
+}
+
+<vc:paging model=pagingModel></vc:paging>
