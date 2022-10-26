@@ -20,7 +20,7 @@ namespace CustomerSite.Pages
         [BindProperty]
         public ProductDetailDto Product { get; set; } = new ProductDetailDto();
 
-        public async Task<IActionResult> OnGet(int id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
             Product = await productService.GetProductByIdAsync(id);
             var avgStar = await productService.GetProductStarAsync(id);
