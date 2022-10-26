@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommonModel.Product;
 using CustomerSite.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -26,6 +27,13 @@ namespace CustomerSite.Pages
             var avgStar = await productService.GetProductStarAsync(id);
             ViewData["avg-star"] = avgStar;
             return Page();
+        }
+
+        public async Task<IActionResult> OnGetAddRatingAsync(int id)
+        {
+            ViewData["is-adding-rating"] = true;
+
+            return await OnGetAsync(id);
         }
     }
 }

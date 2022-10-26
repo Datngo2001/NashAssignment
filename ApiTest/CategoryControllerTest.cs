@@ -31,7 +31,7 @@ namespace ApiTest
 
             // Assert
             Assert.IsType<List<CategoryDto>>(result.Value);
-            Assert.Equal(categories.Count, result.Value.Count);
+            Assert.Equal(categories.Count, result.Value?.Count);
         }
     }
 }
