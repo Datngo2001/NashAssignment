@@ -17,7 +17,7 @@ namespace CustomerSite.Pages
             this.categoryService = categoryService;
         }
 
-        public async Task<IActionResult> OnGet(int id = 1, int page = 1)
+        public async Task<IActionResult> OnGet([FromQuery(Name = "id")] int id = 1, [FromQuery(Name = "p")] int page = 1)
         {
             var category = await categoryService.GetCategoryByIdAsync((int)id);
             var productsWithPaging = await categoryService.GetCategoryProductAsync((int)id, page);
