@@ -1,7 +1,7 @@
 <header style="z-index: 1000; position: relative; width: 100%; ">
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
         <div class="container-lg">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CustomerSite</a>
+            <a class="navbar-brand" asp-area="" asp-page="Index">CustomerSite</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -9,11 +9,11 @@
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between align-items-center">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        <a class="nav-link text-dark" asp-area="" asp-page="Index">Home</a>
                     </li>
                 </ul>
                 <div class="flex-grow-1">
-                    <form class="d-flex m-auto w-75" asp-controller="Search" asp-action="Index" method="GET">
+                    <form class="d-flex m-auto w-75" asp-page="Search" method="GET">
                         <div class="flex-grow-1" style="position:relative;">
                             <input id="header-search-box" name="q" class="form-control me-2" placeholder="Search"
                                 aria-label="Search" style="postion: relative;" autocomplete="off">
@@ -64,7 +64,7 @@
         clearTimeout(headerSearchTimer)
         headerSearchTimer = setTimeout(async () => {
             if (e.target.value == "") return;
-            var hints = await getView(`Search/GetSearchHint?q=${e.target.value}`);
+            var hints = await getView(`Search?handler=SearchHint&q=${e.target.value}`);
             headerSearchHintContainer.innerHTML = hints
             headerSearchOverlay.style.display = "block"
             headerSearchHintContainer.style.display = "block"

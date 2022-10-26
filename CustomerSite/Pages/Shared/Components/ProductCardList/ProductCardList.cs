@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using CommonModel.Product;
 
-namespace CustomerSite.Views.Shared.Components.ProductCardList
+namespace CustomerSite.Pages.Shared.Components.ProductCardList
 {
     [ViewComponent]
     public class ProductCardList : ViewComponent

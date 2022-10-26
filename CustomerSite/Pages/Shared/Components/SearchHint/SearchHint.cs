@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using CommonModel.Product;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CustomerSite.Views.Shared.Components.SearchHint
+namespace CustomerSite.Pages.Shared.Components.SearchHint
 {
     [ViewComponent]
     public class SearchHint : ViewComponent

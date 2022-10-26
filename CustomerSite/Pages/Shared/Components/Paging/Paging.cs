@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using CustomerSite.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CustomerSite.Views.Shared.Components.Paging
+namespace CustomerSite.Pages.Shared.Components.Paging
 {
     [ViewComponent]
     public class Paging : ViewComponent

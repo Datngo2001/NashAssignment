@@ -32,11 +32,14 @@ namespace CustomerSite.Services
             return data;
         }
 
-        public async Task<CategoryDto?> GetCategoryByIdAsync(int id)
+        public async Task<CategoryDto> GetCategoryByIdAsync(int id)
         {
             var httpClient = clientFactory.CreateClient();
             var data = await httpClient.GetApiAsync<CategoryDto>($"Category/{id}");
-
+            if (data == null)
+            {
+                throw new Exception("Can not get category");
+            }
             return data;
         }
 

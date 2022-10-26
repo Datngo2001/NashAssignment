@@ -4,7 +4,7 @@
     @foreach (var param in Model)
     {
         <li class="list-group-item list-group-item-action"><a class="text-reset text-decoration-none stretched-link"
-            asp-controller="Search" asp-action="Index" asp-all-route-data="@param">@param["q"]</a>
+            asp-page="Search" asp-all-route-data="@param">@param["q"]</a>
         </li>
     }
 </ul>

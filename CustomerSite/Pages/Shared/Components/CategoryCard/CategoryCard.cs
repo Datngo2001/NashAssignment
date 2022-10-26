@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using CommonModel.Category;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CustomerSite.Views.Shared.Components.CategoryCard
+namespace CustomerSite.Pages.Shared.Components.CategoryCard
 {
     [ViewComponent]
     public class CategoryCard : ViewComponent

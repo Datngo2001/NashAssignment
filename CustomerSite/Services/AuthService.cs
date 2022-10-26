@@ -13,7 +13,7 @@ namespace CustomerSite.Services
             this.clientFactory = clientFactory;
         }
 
-        public async Task<SigninResponseDto?> SigninAsync(string email, string password)
+        public async Task<SigninResponseDto> SigninAsync(string email, string password)
         {
 
             var param = new SigninRequestDto() { Email = email, Password = password };
@@ -21,6 +21,11 @@ namespace CustomerSite.Services
             var httpClient = clientFactory.CreateClient();
 
             var data = await httpClient.PostApiAsync<SigninRequestDto, SigninResponseDto>("Auth/signin", param);
+
+            if (data == null)
+            {
+                data = new SigninResponseDto();
+            }
 
             return data;
         }

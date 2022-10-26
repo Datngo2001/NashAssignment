@@ -1,8 +1,8 @@
-@using CustomerSite.Views.Shared.Components.ProductCard
-@using CustomerSite.Views.Shared.Components.Paging
-@using CustomerSite.Models
+@page
+@model SearchPageModel
 
-@model PagingDto<ProductDto>
+@using CustomerSite.Pages.Shared.Components.Paging
+@using CustomerSite.Models
 
 @{
     var query = ViewData["query"];
@@ -14,7 +14,7 @@
 
 <div class="container rounded p-3 mb-3" style="background-color: #fff;">
     <div id="home_product_cards" class="d-flex gap-3 flex-wrap align-content-start mb-3">
-        @foreach (var product in Model.Items)
+        @foreach (var product in Model.ProductsWithPaging.Items)
         {
             <vc:product-card product=product></vc:product-card>
         }
@@ -23,7 +23,7 @@
 
 @await Component.InvokeAsync(nameof(Paging), new PagingViewModel()
 {
-page = Model.Page,
-totalPage = Model.TotalPage,
+page = Model.ProductsWithPaging.Page,
+totalPage = Model.ProductsWithPaging.TotalPage,
 getLink = p => $"/Search/Index?q={query}&p={p}"
 });
