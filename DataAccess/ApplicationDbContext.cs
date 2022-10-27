@@ -1,16 +1,17 @@
-﻿using API.Data.Entities;
+﻿using DataAccess.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
-namespace API.Data
+namespace DataAccess
 {
-    public class ApiDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Feature> Features { get; set; }
 
-        public ApiDbContext(DbContextOptions<ApiDbContext> options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
@@ -28,6 +29,10 @@ namespace API.Data
             modelBuilder.Entity<Rating>()
                 .Property(r => r.CreateDate)
                 .HasDefaultValue(DateTime.Now);
+
+            modelBuilder.Entity<IdentityUserClaim<string>>()
+                .Property(c => c.Id)
+                .UseIdentityColumn();
         }
     }
 }

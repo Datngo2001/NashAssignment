@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CommonModel\CommonModel.csproj" />
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
   </ItemGroup>
 
   <ItemGroup>

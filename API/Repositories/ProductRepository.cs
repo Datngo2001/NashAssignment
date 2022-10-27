@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using API.Data;
+using DataAccess;
 using API.Interfaces;
 using CommonModel.Product;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +14,10 @@ namespace API.Repositories
 {
     public class ProductRepository : IProductRepository
     {
-        private readonly ApiDbContext context;
+        private readonly ApplicationDbContext context;
         private readonly IMapper mapper;
 
-        public ProductRepository(ApiDbContext context, IMapper mapper)
+        public ProductRepository(ApplicationDbContext context, IMapper mapper)
         {
             this.context = context;
             this.mapper = mapper;

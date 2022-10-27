@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using API.Data;
-using API.Data.Entities;
+using DataAccess;
+using DataAccess.Entities;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -16,10 +16,10 @@ namespace API.Repositories
 {
     public class CategoryRepository : ICategoryRepository
     {
-        private readonly ApiDbContext dbContext;
+        private readonly ApplicationDbContext dbContext;
         private readonly IMapper mapper;
 
-        public CategoryRepository(ApiDbContext dbContext, IMapper mapper)
+        public CategoryRepository(ApplicationDbContext dbContext, IMapper mapper)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
