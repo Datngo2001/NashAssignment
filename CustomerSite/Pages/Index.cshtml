@@ -1,5 +1,6 @@
 ﻿@page
 @model IndexPageModel
+@using Microsoft.AspNetCore.Authentication
 
 @{
     var categories = ViewData["categories"] as List<CategoryDto>;
@@ -9,18 +10,29 @@
     if (products == null) products = new List<ProductDto>();
 
     ViewData["Title"] = "Home Page";
+
+    var accessToken = await HttpContext.GetTokenAsync("access_token");
+    var idToken = await HttpContext.GetTokenAsync("id_token");
 }
-@* @using Microsoft.AspNetCore.Authentication
+<h2>Access Token</h2>
+<dl>
+    <dt>@accessToken</dt>
+</dl>
 
-    <h2>Claims</h2>
+<h2>Id Token</h2>
+<dl>
+    <dt>@idToken</dt>
+</dl>
 
-    <dl>
+<h2>Claims</h2>
+
+<dl>
     @foreach (var claim in User.Claims)
     {
-    <dt>@claim.Type</dt>
-    <dd>@claim.Value</dd>
+        <dt>@claim.Type</dt>
+        <dd>@claim.Value</dd>
     }
-    </dl> *@
+</dl>
 
 @* <h2>Properties</h2>
 

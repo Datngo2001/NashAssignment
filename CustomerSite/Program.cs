@@ -31,18 +31,21 @@ builder.Services.AddAuthentication(options =>
     {
         options.Authority = "https://localhost:5001";
 
-        options.ClientId = "mvc";
-        options.ClientSecret = "secret";
+        options.ClientId = "CustomerSite";
+        options.ClientSecret = "49C1A7E1-0C79-4A89-A3D6-A37998FB86B0";
         options.ResponseType = "code";
 
         options.SaveTokens = true;
 
         options.Scope.Add("profile");
+        options.Scope.Add("AssignmentAPI");
+        options.Scope.Add("offline_access");
+
         options.GetClaimsFromUserInfoEndpoint = true;
     });
 
 builder.Services.AddAuthorization();
-
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddRazorPages();
 
 builder.Services.AddScoped<IAuthService, AuthService>();

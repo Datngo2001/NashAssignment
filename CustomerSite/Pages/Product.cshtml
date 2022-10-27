@@ -3,6 +3,7 @@
 
 @using System.Globalization
 @{
+    var addingRating = Convert.ToBoolean(ViewData["is-adding-rating"]);
     double avgStar = Convert.ToDouble(ViewData["avg-star"]);
     CultureInfo cul = CultureInfo.GetCultureInfo("vi-VN"); // try with "en-US"
     var price = Model.Product.Price.ToString("#,###", cul.NumberFormat) + " đ";
@@ -62,7 +63,8 @@
             <h1>@avgStar<i style="color: #FDD836;" class="fas fa-star"></i></h1>
         </div>
         <div class="col-8 text-end">
-            <button class="btn btn-primary">Add rating</button>
+            <a class="btn btn-primary" asp-page="Product" asp-page-handler="AddRating"
+                asp-route-id="@Model.Product.Id">Add rating</a>
         </div>
     </div>
     @foreach (var rating in Model.Product.Ratings)
