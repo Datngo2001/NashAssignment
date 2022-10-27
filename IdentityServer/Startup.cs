@@ -82,7 +82,7 @@ namespace IdentityServer
 
         public void Configure(IApplicationBuilder app)
         {
-            InitializeDatabase(app);
+            ApplyConfigToDatabase(app);
 
             if (Environment.IsDevelopment())
             {
@@ -101,7 +101,7 @@ namespace IdentityServer
             });
         }
 
-        private void InitializeDatabase(IApplicationBuilder app)
+        private async void ApplyConfigToDatabase(IApplicationBuilder app)
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
@@ -109,32 +109,60 @@ namespace IdentityServer
 
                 var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
                 context.Database.Migrate();
-                if (!context.Clients.Any())
+
+                var existClients = await context.Clients.AsNoTracking().ToListAsync();
+                foreach (var client in Config.Clients)
                 {
-                    foreach (var client in Config.Clients)
+                    var result = existClients.FirstOrDefault(c => c.ClientId == client.ClientId);
+                    if (result == null)
                     {
                         context.Clients.Add(client.ToEntity());
                     }
-                    context.SaveChanges();
-                }
+                    else
+                    {
+                        var clientToUpdate = client.ToEntity();
+                        clientToUpdate.Id = result.Id;
 
-                if (!context.IdentityResources.Any())
+                        context.Clients.Update(clientToUpdate);
+                    }
+                }
+                context.SaveChanges();
+
+                var existResources = await context.IdentityResources.AsNoTracking().ToListAsync();
+                foreach (var resource in Config.IdentityResources)
                 {
-                    foreach (var resource in Config.IdentityResources)
+                    var result = existResources.FirstOrDefault(c => c.Name == resource.Name);
+                    if (result == null)
                     {
                         context.IdentityResources.Add(resource.ToEntity());
                     }
-                    context.SaveChanges();
-                }
+                    else
+                    {
+                        var resourseToUpdate = resource.ToEntity();
+                        resourseToUpdate.Id = result.Id;
 
-                if (!context.ApiScopes.Any())
+                        context.IdentityResources.Update(resourseToUpdate);
+                    }
+                }
+                context.SaveChanges();
+
+                var existApiScopes = await context.ApiScopes.AsNoTracking().ToListAsync();
+                foreach (var resource in Config.ApiScopes)
                 {
-                    foreach (var resource in Config.ApiScopes)
+                    var result = existApiScopes.FirstOrDefault(c => c.Name == resource.Name);
+                    if (result == null)
                     {
                         context.ApiScopes.Add(resource.ToEntity());
                     }
-                    context.SaveChanges();
+                    else
+                    {
+                        var resourseToUpdate = resource.ToEntity();
+                        resourseToUpdate.Id = result.Id;
+
+                        context.ApiScopes.Update(resourseToUpdate);
+                    }
                 }
+                context.SaveChanges();
             }
         }
     }
