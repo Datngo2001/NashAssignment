@@ -11,5 +11,6 @@ namespace DataAccess.Entities
         public int Star { get; set; }
         public string Message { get; set; } = "";
         public DateTime CreateDate { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
     }
 }
