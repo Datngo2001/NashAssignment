@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CommonModel.Product;
+using CommonModel.Rating;
 using CustomerSite.Interfaces;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -13,8 +15,10 @@ namespace CustomerSite.Pages
     public class ProductPageModel : PageModel
     {
         private readonly IProductService productService;
-        public ProductPageModel(IProductService productService)
+        private readonly IRatingService ratingService;
+        public ProductPageModel(IProductService productService, IRatingService ratingService)
         {
+            this.ratingService = ratingService;
             this.productService = productService;
         }
 
@@ -34,6 +38,26 @@ namespace CustomerSite.Pages
             ViewData["is-adding-rating"] = true;
 
             return await OnGetAsync(id);
+        }
+
+        public async Task<IActionResult> OnPostAddRatingAsync()
+        {
+            var addRatingDto = new AddRatingDto()
+            {
+                ProductId = Convert.ToInt32(Request.Form["ProductId"]),
+                Message = Request.Form["Message"],
+                Star = Convert.ToInt32(Request.Form["Star"])
+            };
+
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+            if (accessToken == null)
+            {
+                throw new Exception($"Missing access token");
+            }
+
+            await ratingService.AddRating(addRatingDto, accessToken);
+
+            return Page();
         }
     }
 }
