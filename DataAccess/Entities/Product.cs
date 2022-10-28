@@ -14,6 +14,6 @@ namespace DataAccess.Entities
         public string Description { get; set; } = "";
         public List<Category> Categories { get; set; } = new List<Category>();
         public List<Feature> Features { get; set; } = new List<Feature>();
-        public List<Rating> Rattings { get; set; } = new List<Rating>();
+        public List<Rating> Ratings { get; set; } = new List<Rating>();
     }
 }

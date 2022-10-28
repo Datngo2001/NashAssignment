@@ -39,7 +39,7 @@ namespace API.Repositories
 
             var rating = mapper.Map<Rating>(addRatingDto);
             rating.ApplicationUser = user;
-            product.Rattings.Add(rating);
+            product.Ratings.Add(rating);
 
             await dbContext.SaveChangesAsync();
 

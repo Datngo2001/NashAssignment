@@ -38,7 +38,7 @@ namespace API.Repositories
                 .Where(p => p.Id == id)
                 .Include(p => p.Features)
                 .Include(p => p.Categories)
-                .Include(p => p.Rattings)
+                .Include(p => p.Ratings)
                 .ProjectTo<ProductDetailDto>(mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
         }
@@ -79,7 +79,7 @@ namespace API.Repositories
 
             try
             {
-                result = await context.Products.Where(p => p.Id == id).Select(p => p.Rattings.Average(r => r.Star)).FirstOrDefaultAsync();
+                result = await context.Products.Where(p => p.Id == id).Select(p => p.Ratings.Average(r => r.Star)).FirstOrDefaultAsync();
             }
             catch (System.Exception)
             {

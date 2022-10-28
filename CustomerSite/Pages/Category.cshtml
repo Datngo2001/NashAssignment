@@ -1,7 +1,6 @@
 @page
 @model CategoryPageModel
 
-@using CustomerSite.Pages.Shared.Components.Paging
 @using CustomerSite.Models
 
 @{
@@ -10,6 +9,8 @@
     var category = ViewData["category"] as CategoryDto;
     var products = ViewData["products"] as List<ProductDto>;
     if (products == null) products = new List<ProductDto>();
+
+    ViewData["Title"] = category?.Name;
 }
 
 <div class="container rounded p-3 mb-3" style="background-color: #fff;">

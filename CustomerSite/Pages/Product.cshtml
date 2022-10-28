@@ -3,6 +3,8 @@
 
 @using System.Globalization
 @{
+    ViewData["Title"] = Model.Product.Name;
+
     var addingRating = Convert.ToBoolean(ViewData["is-adding-rating"]);
     double avgStar = Convert.ToDouble(ViewData["avg-star"]);
     CultureInfo cul = CultureInfo.GetCultureInfo("vi-VN"); // try with "en-US"
