@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Interfaces;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CommonModel;
 using CommonModel.Rating;
 using DataAccess;
 using DataAccess.Entities;
@@ -44,6 +46,32 @@ namespace API.Repositories
             await dbContext.SaveChangesAsync();
 
             return mapper.Map<RatingDto>(rating);
+        }
+
+        public async Task<PagingDto<RatingDto>> GetRatingByProductId(int productId, int page, int limit)
+        {
+            var queryable = dbContext.Ratings.Include(r => r.ApplicationUser).Where(p => p.Product.Id == productId);
+
+            var ratings = await queryable
+                .OrderByDescending(r => r.CreateDate)
+                .Skip((page - 1) * limit)
+                .Take(limit)
+                .ProjectTo<RatingDto>(mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            var count = await queryable.CountAsync();
+
+            if (ratings == null)
+            {
+                ratings = new List<RatingDto>();
+            }
+
+            return new PagingDto<RatingDto>()
+            {
+                Page = page,
+                Items = ratings.ToList(),
+                TotalPage = count / limit + 1,
+            };
         }
     }
 }

@@ -10,14 +10,7 @@
     if (products == null) products = new List<ProductDto>();
 
     ViewData["Title"] = "Home Page";
-
-    var accessToken = await HttpContext.GetTokenAsync("access_token");
-    var idToken = await HttpContext.GetTokenAsync("id_token");
 }
-<h1>Id token</h1>
-@idToken
-<h1>Access token</h1>
-@accessToken
 
 <div class="container rounded p-3 mb-3" style="background-color: #fff;">
     <h4 class="mb-3">Categories</h4>

@@ -15,7 +15,9 @@ namespace API.Helpers
             CreateMap<Product, ProductDto>();
             CreateMap<Product, ProductDetailDto>();
             CreateMap<Feature, FeatureDto>();
-            CreateMap<Rating, RatingDto>();
+            CreateMap<Rating, RatingDto>()
+                .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.ApplicationUser));
+            CreateMap<ApplicationUser, RatingAuthorDto>();
             CreateMap<AddRatingDto, Rating>();
             CreateMap<Product, ProductSearchHintDto>()
                 .ForMember(dest => dest.hint, opt => opt.MapFrom(src => src.Name));

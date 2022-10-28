@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace CommonModel.User
+namespace CommonModel.Rating
 {
-    public class ApplicationUserDto
+    public class RatingAuthorDto
     {
         public string Id { get; set; } = "";
         public string Email { get; set; } = "";

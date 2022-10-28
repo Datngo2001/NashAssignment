@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Interfaces;
+using CommonModel;
 using CommonModel.Rating;
 using DataAccess.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -29,6 +30,13 @@ namespace API.Controllers
             var userId = userManager.GetUserId(User);
 
             return await ratingRepository.CreateRating(addRatingDto, userId);
+        }
+
+        [HttpGet("product/{productId}")]
+        public async Task<PagingDto<RatingDto>> getProductRating([FromRoute(Name = "productId")] int productId, [FromQuery(Name = "p")] int page)
+        {
+            var result = await ratingRepository.GetRatingByProductId(productId, page, 10);
+            return result;
         }
     }
 }

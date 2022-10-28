@@ -63,32 +63,29 @@
     <div class="row">
         <div class="col-4">
             <h1>@avgStar<i style="color: #FDD836;" class="fas fa-star"></i></h1>
+            <form asp-page='Product' asp-page-handler='AddRating' method="post">
+                <div class="mb-3">
+                    <label class="form-label">Message</label>
+                    <input type="text" class="form-control" name="Message">
+                    <label class="form-label">Star</label>
+                    <input type="number" class="form-control" name="Star">
+                    <input type="text" class="form-control" name="ProductId" value="@Model.Product.Id" hidden>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Your Rating</button>
+            </form>
         </div>
-        <div class="col-8 text-end">
-            <a class="btn btn-primary" asp-page="Product" asp-page-handler="AddRating"
-                asp-route-id="@Model.Product.Id">Add rating</a>
+        <div class="col-8">
+            <ul class="list-group list-group-flush">
+                @foreach (var rating in Model.Product.Ratings)
+                {
+                    <li class="list-group-item">
+                        <h4>@rating.Star<i style="color: #FDD836;" class="fas fa-star"></i></h4>
+                        <p>@rating.CreateDate</p>
+                        <p>@rating.Message</p>
+                    </li>
+                }
+            </ul>
         </div>
     </div>
-    <form asp-page='Product' asp-page-handler='AddRating' method="post">
-        <div class="mb-3">
-            <label class="form-label">Message</label>
-            <input type="text" class="form-control" name="Message">
-            <label class="form-label">Star</label>
-            <input type="number" class="form-control" name="Star">
-            <input type="text" class="form-control" name="ProductId" value="@Model.Product.Id" hidden>
-        </div>
-        <button type="submit" class="btn btn-primary">Add Your Rating</button>
-    </form>
-    @foreach (var rating in Model.Product.Ratings)
-    {
-        <div class="row" style="min-height: 100px;">
-            <div class="col-4">
-            </div>
-            <div class="col-8">
-                <h4>@rating.Star<i style="color: #FDD836;" class="fas fa-star"></i></h4>
-                <p>@rating.CreateDate</p>
-                <p>@rating.Message</p>
-            </div>
-        </div>
-    }
+
 </div>

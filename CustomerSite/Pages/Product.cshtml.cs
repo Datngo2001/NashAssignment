@@ -57,7 +57,8 @@ namespace CustomerSite.Pages
 
             await ratingService.AddRating(addRatingDto, accessToken);
 
-            return Page();
+            // return await OnGetAsync(addRatingDto.ProductId);
+            return RedirectToPage(new { id = addRatingDto.ProductId });
         }
     }
 }

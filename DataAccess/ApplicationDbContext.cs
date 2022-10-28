@@ -10,6 +10,7 @@ namespace DataAccess
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Feature> Features { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
