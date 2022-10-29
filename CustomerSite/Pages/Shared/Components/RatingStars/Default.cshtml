@@ -1,0 +1,60 @@
+@model RatingStarsViewModel
+
+@{
+    var Id = Model.Id;
+    var size = "";
+    if (Model.Size == StarSize.Small)
+    {
+        size = "1rem";
+    }
+    else if (Model.Size == StarSize.Medium)
+    {
+        size = "2rem";
+    }
+    else if (Model.Size == StarSize.Large)
+    {
+        size = "3rem";
+    }
+
+    var disableClick = Model.Disable ? "pe-none" : "pe-auto";
+}
+
+<style>
+    .checked-star,
+    .checked-star~span {
+        color: orange;
+    }
+</style>
+
+<div id="@Id" class="d-flex flex-row-reverse justify-content-end @disableClick">
+    <input name="Star" type="number" value="@Model.Stars" hidden>
+    @for (int i = Model.Max; i >= 1; i--)
+    {
+        @if (i == Model.Stars)
+        {
+            <span value="@i" style="font-size: @size; cursor: pointer;" class="fa fa-star checked-star"></span>
+        }
+        else
+        {
+            <span value="@i" style="font-size: @size; cursor: pointer;" class="fa fa-star"></span>
+        }
+    }
+</div>
+
+<script>
+    window.addEventListener("load", () => {
+        let input = document.querySelector("#@Id input");
+        let stars = document.querySelectorAll("#@Id span");
+        let checkedStar = document.querySelector("#@Id span.checked-star");
+        stars.forEach(star => {
+            star.addEventListener("click", () => {
+                if (checkedStar) {
+                    checkedStar.classList.remove("checked-star")
+                }
+                star.classList.add("checked-star")
+                checkedStar = star
+                input.value = star.getAttribute("value")
+            })
+        })
+    })
+</script>

@@ -25,7 +25,7 @@ namespace API.Repositories
         }
 
 
-        public async Task<RatingDto> CreateRating(AddRatingDto addRatingDto, string userId)
+        public async Task<AddRatingResDto> CreateRating(AddRatingDto addRatingDto, string userId)
         {
             var product = await dbContext.Products.FirstOrDefaultAsync(p => p.Id == addRatingDto.ProductId);
             if (product == null)
@@ -45,7 +45,7 @@ namespace API.Repositories
 
             await dbContext.SaveChangesAsync();
 
-            return mapper.Map<RatingDto>(rating);
+            return mapper.Map<AddRatingResDto>(rating);
         }
 
         public async Task<PagingDto<RatingDto>> GetRatingByProductId(int productId, int page, int limit)

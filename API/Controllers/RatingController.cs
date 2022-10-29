@@ -25,7 +25,7 @@ namespace API.Controllers
 
         [Authorize(Policy = "ApiScope", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
-        public async Task<RatingDto> addRating([FromBody] AddRatingDto addRatingDto)
+        public async Task<AddRatingResDto> addRating([FromBody] AddRatingDto addRatingDto)
         {
             var userId = userManager.GetUserId(User);
 
@@ -35,7 +35,7 @@ namespace API.Controllers
         [HttpGet("product/{productId}")]
         public async Task<PagingDto<RatingDto>> getProductRating([FromRoute(Name = "productId")] int productId, [FromQuery(Name = "p")] int page)
         {
-            var result = await ratingRepository.GetRatingByProductId(productId, page, 10);
+            var result = await ratingRepository.GetRatingByProductId(productId, page, 5);
             return result;
         }
     }

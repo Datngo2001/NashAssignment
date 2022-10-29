@@ -10,6 +10,13 @@ namespace CustomerSite.Extensions
 {
     public static class HttpClientExtension
     {
+        private static async Task<T?> getResult<T>(HttpResponseMessage response)
+        {
+            var contents = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<T>(contents);
+            return result;
+        }
+
         public static async Task<ResponseType?> GetApiAsync<ResponseType>(this HttpClient httpClient, string url)
         {
             var response = await httpClient.GetAsync(url);
@@ -47,12 +54,6 @@ namespace CustomerSite.Extensions
             return result;
         }
 
-        private static async Task<T?> getResult<T>(HttpResponseMessage response)
-        {
-            var contents = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<T>(contents);
-            return result;
-        }
 
         #region with accessToken
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CommonModel;
 using CommonModel.Product;
 using CommonModel.Rating;
 using CustomerSite.Interfaces;
@@ -25,19 +26,22 @@ namespace CustomerSite.Pages
         [BindProperty]
         public ProductDetailDto Product { get; set; } = new ProductDetailDto();
 
+        [BindProperty]
+        public PagingDto<RatingDto> RatingsWithPaging { get; set; } = new PagingDto<RatingDto>();
+
         public async Task<IActionResult> OnGetAsync(int id)
         {
             Product = await productService.GetProductByIdAsync(id);
-            var avgStar = await productService.GetProductStarAsync(id);
-            ViewData["avg-star"] = avgStar;
+            RatingsWithPaging = await ratingService.GetProductRating(id, 1);
+            if (RatingsWithPaging.Items.Count() != 0)
+            {
+                ViewData["avg-star"] = await productService.GetProductStarAsync(id);
+            }
+            else
+            {
+                ViewData["avg-star"] = 0;
+            }
             return Page();
-        }
-
-        public async Task<IActionResult> OnGetAddRatingAsync(int id)
-        {
-            ViewData["is-adding-rating"] = true;
-
-            return await OnGetAsync(id);
         }
 
         public async Task<IActionResult> OnPostAddRatingAsync()

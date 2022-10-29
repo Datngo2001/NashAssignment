@@ -9,7 +9,7 @@ namespace API.Interfaces
 {
     public interface IRatingRepository
     {
-        Task<RatingDto> CreateRating(AddRatingDto addRatingDto, string userId);
+        Task<AddRatingResDto> CreateRating(AddRatingDto addRatingDto, string userId);
         Task<PagingDto<RatingDto>> GetRatingByProductId(int productId, int page, int limit);
     }
 }

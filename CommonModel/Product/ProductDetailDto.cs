@@ -16,6 +16,5 @@ namespace CommonModel.Product
         public string Description { get; set; } = "";
         public List<CategoryDto> Categories { get; set; } = new List<CategoryDto>();
         public List<FeatureDto> Features { get; set; } = new List<FeatureDto>();
-        public List<RatingDto> Ratings { get; set; } = new List<RatingDto>();
     }
 }

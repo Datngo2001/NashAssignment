@@ -9,6 +9,8 @@
     double avgStar = Convert.ToDouble(ViewData["avg-star"]);
     CultureInfo cul = CultureInfo.GetCultureInfo("vi-VN"); // try with "en-US"
     var price = Model.Product.Price.ToString("#,###", cul.NumberFormat) + " đ";
+
+
 }
 <div class="rounded p-3 mb-3 row" style="background-color: #fff;">
     <div class="col-5 flex-shrink-0 text-center">
@@ -59,33 +61,99 @@
 </div>
 
 <div class="rounded p-3 mb-3 row" style="background-color: #fff;">
-    <h2 class="p-0 mb-3">Rating From Customer</h2>
-    <div class="row">
-        <div class="col-4">
-            <h1>@avgStar<i style="color: #FDD836;" class="fas fa-star"></i></h1>
-            <form asp-page='Product' asp-page-handler='AddRating' method="post">
-                <div class="mb-3">
-                    <label class="form-label">Message</label>
-                    <input type="text" class="form-control" name="Message">
-                    <label class="form-label">Star</label>
-                    <input type="number" class="form-control" name="Star">
-                    <input type="text" class="form-control" name="ProductId" value="@Model.Product.Id" hidden>
-                </div>
-                <button type="submit" class="btn btn-primary">Add Your Rating</button>
-            </form>
-        </div>
-        <div class="col-8">
-            <ul class="list-group list-group-flush">
-                @foreach (var rating in Model.Product.Ratings)
-                {
-                    <li class="list-group-item">
-                        <h4>@rating.Star<i style="color: #FDD836;" class="fas fa-star"></i></h4>
-                        <p>@rating.CreateDate</p>
-                        <p>@rating.Message</p>
-                    </li>
-                }
-            </ul>
-        </div>
+    <div class="d-flex align-items-center">
+        <h2 class="p-0 mb-3 flex-grow-1">Rating From Customer</h2>
+        @if (User.Claims.Count() != 0)
+        {
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productRatingModal">
+                Write your rating
+            </button>
+        }
     </div>
 
+    @if (Model.RatingsWithPaging.Items.Count() != 0)
+    {
+        <div class="row">
+            <div class="col-4">
+                <div class="mb-2">
+                    @{
+                        var avgStarModel = new RatingStarsViewModel()
+                        {
+                            Id = "avg-star",
+                            Stars = Convert.ToInt32(avgStar),
+                            Size = StarSize.Large,
+                            Disable = true
+                        };
+                    }
+                    <vc:rating-stars model=avgStarModel></vc:rating-stars>
+                </div>
+            </div>
+            <div class="col-8">
+                <ul class="list-group list-group-flush">
+                    @foreach (var rating in Model.RatingsWithPaging.Items)
+                    {
+                        <li class="list-group-item">
+                            @{
+                                var starModel = new RatingStarsViewModel()
+                                {
+                                    Id = $"star-{rating.Id}",
+                                    Stars = rating.Star,
+                                    Size = StarSize.Small,
+                                    Disable = true
+                                };
+                            }
+                            <vc:rating-stars model=starModel></vc:rating-stars>
+                            <p>@rating.CreateDate</p>
+                            <p>@rating.Message</p>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="container text-center">
+            <h3>No rating yet</h3>
+        </div>
+    }
+</div>
+
+<!-- Rating Modal -->
+<div class="modal fade" id="productRatingModal" tabindex="-1" aria-labelledby="productRatingModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="productRatingModalLabel">Rating</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-page='Product' asp-page-handler='AddRating' method="post">
+                    <div class="d-flex flex-column gap-3">
+                        @{
+                            var inputStarModel = new RatingStarsViewModel()
+                            {
+                                Id = "star-input",
+                                Stars = 0,
+                                Size = StarSize.Large,
+                                Disable = false
+                            };
+                        }
+                        <style>
+                            #star-input {
+                                justify-content: space-around !important;
+                            }
+                        </style>
+                        <vc:rating-stars model=inputStarModel></vc:rating-stars>
+                        <input type="text" class="form-control" name="ProductId" value="@Model.Product.Id" hidden>
+                        <input type="text" class="form-control" name="Title" placeholder="Title" required>
+                        <textarea class="form-control" name="Message" placeholder="Message" style="height: 100px"
+                            required></textarea>
+                        <button type="submit" class="btn btn-primary">Add Your Rating</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
