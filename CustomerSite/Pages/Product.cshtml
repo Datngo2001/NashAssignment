@@ -10,7 +10,12 @@
     CultureInfo cul = CultureInfo.GetCultureInfo("vi-VN"); // try with "en-US"
     var price = Model.Product.Price.ToString("#,###", cul.NumberFormat) + " đ";
 
-
+    var avgStarModel = new RatingStarsViewModel()
+    {
+        Id = "avg-star",
+        Stars = Convert.ToInt32(avgStar),
+        Disable = true
+    };
 }
 <div class="rounded p-3 mb-3 row" style="background-color: #fff;">
     <div class="col-5 flex-shrink-0 text-center">
@@ -20,6 +25,10 @@
         <h2 class="mb-2 flex-shrink-0">@Model.Product.Name</h2>
         <div class="flex-grow-1 row align-items-stretch justify-content-between">
             <div class="col-7 d-flex flex-column">
+                @{
+                    avgStarModel.Size = StarSize.Small;
+                }
+                <vc:rating-stars model=avgStarModel></vc:rating-stars>
                 <h2 style="color: #FF424E;" class="mb-3">@price</h2>
                 <div class="flex-grow-1"></div>
                 <div class="w-100 d-flex gap-2">
@@ -60,8 +69,8 @@
     @Model.Product.Description
 </div>
 
-<div class="rounded p-3 mb-3 row" style="background-color: #fff;">
-    <div class="d-flex align-items-center">
+<div class="rounded p-3 mb-3" style="background-color: #fff;">
+    <div class="d-flex align-items-center mb-3">
         <h2 class="p-0 mb-3 flex-grow-1">Rating From Customer</h2>
         @if (User.Claims.Count() != 0)
         {
@@ -75,15 +84,9 @@
     {
         <div class="row">
             <div class="col-4">
-                <div class="mb-2">
+                <div class="row">
                     @{
-                        var avgStarModel = new RatingStarsViewModel()
-                        {
-                            Id = "avg-star",
-                            Stars = Convert.ToInt32(avgStar),
-                            Size = StarSize.Large,
-                            Disable = true
-                        };
+                        avgStarModel.Size = StarSize.Large;
                     }
                     <vc:rating-stars model=avgStarModel></vc:rating-stars>
                 </div>
@@ -92,7 +95,7 @@
                 <ul class="list-group list-group-flush">
                     @foreach (var rating in Model.RatingsWithPaging.Items)
                     {
-                        <li class="list-group-item">
+                        <li class="list-group-item container">
                             @{
                                 var starModel = new RatingStarsViewModel()
                                 {
@@ -102,8 +105,15 @@
                                     Disable = true
                                 };
                             }
-                            <vc:rating-stars model=starModel></vc:rating-stars>
-                            <p>@rating.CreateDate</p>
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1">
+                                    <vc:rating-stars model=starModel></vc:rating-stars>
+                                </div>
+                                <div>
+                                    <span>@rating.CreateDate</span>
+                                </div>
+                            </div>
+                            <h5>@rating.Title - @rating.Author.UserName</h5>
                             <p>@rating.Message</p>
                         </li>
                     }
