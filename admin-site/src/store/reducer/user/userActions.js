@@ -1,31 +1,41 @@
 import { call, put } from 'redux-saga/effects'
-import { SIGNIN_FAILURE } from './userActionTypes'
+import { CHECK_USER_STATUS, SIGNIN_SUCCESS } from './userActionTypes'
 import UserManager from "../../../oidc/userManager"
 
-export function* signin() {
-    UserManager.signinRedirect();
+export function signin() {
+    try {
+        UserManager.signinRedirect();
+    } catch (error) {
+        console.log(error)
+    }
 }
 
-export function* signout() {
-    UserManager.signoutRedirect();
+export function signout() {
+    try {
+        UserManager.signoutRedirect();
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export function* signinCallback() {
+    try {
+        yield UserManager.signinRedirectCallback()
+        yield put({
+            type: CHECK_USER_STATUS,
+        })
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 export function* checkUserStatus() {
     try {
-        debugger
-        var user = yield call(UserManager.getUser);
-        if (user) {
-            console.log(user)
-            yield put({
-                type: SIGNIN_FAILURE,
-                payload: user
-            })
-        } else {
-            yield put({
-                type: SIGNIN_FAILURE,
-                payload: user
-            })
-        }
+        var user = yield UserManager.getUser()
+        yield put({
+            type: SIGNIN_SUCCESS,
+            payload: user
+        })
     } catch (error) {
         console.log(error)
     }

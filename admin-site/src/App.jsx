@@ -5,6 +5,7 @@ import ConsoleLayout from "./layout/ConsoleLayout";
 import "./App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { CHECK_USER_STATUS } from "./store/reducer/user/userActionTypes";
+import UserManager from "./oidc/userManager";
 
 const theme = createTheme({
   palette: {
@@ -27,6 +28,12 @@ function App() {
       type: CHECK_USER_STATUS,
     });
   }, []);
+
+  UserManager.getUser()
+    .then((user) => {
+      console.log(user);
+    })
+    .catch((err) => console.log(err));
 
   return (
     <ThemeProvider theme={theme}>

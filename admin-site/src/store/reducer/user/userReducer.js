@@ -1,9 +1,8 @@
-import { SIGNIN_FAILURE, SIGNIN_REQUEST } from "./userActionTypes";
+import { SIGNIN_REQUEST, SIGNIN_SUCCESS } from "./userActionTypes";
 
 const init = {
     user: null,
     loading: true,
-    accessToken: null,
     error: {
         action: "",
         message: null
@@ -22,15 +21,12 @@ export default function userReducer(state = init, { type, payload }) {
                     message: null
                 }
             };
-        case SIGNIN_FAILURE:
+        case SIGNIN_SUCCESS:
+            debugger
             return {
                 ...state,
                 loading: false,
-                user: null,
-                error: {
-                    action: type,
-                    message: payload
-                }
+                user: payload,
             };
         default:
             return state;
