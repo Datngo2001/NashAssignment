@@ -1,6 +1,5 @@
 import {
   Box,
-  Divider,
   Drawer,
   List,
   ListItem,
@@ -10,12 +9,17 @@ import {
   Toolbar,
 } from "@mui/material";
 import React from "react";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+import Inventory2Icon from "@mui/icons-material/Inventory2";
+import StarRateIcon from "@mui/icons-material/StarRate";
+import CategoryIcon from "@mui/icons-material/Category";
+import PersonIcon from "@mui/icons-material/Person";
+import { useLocation, useNavigate } from "react-router";
 
 const drawerWidth = 240;
 
 function SideBar() {
+  const navigate = useNavigate();
+  const location = useLocation();
   return (
     <Drawer
       variant="permanent"
@@ -31,29 +35,50 @@ function SideBar() {
       <Toolbar />
       <Box sx={{ overflow: "auto" }}>
         <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
+          <ListItem disablePadding>
+            <ListItemButton
+              selected={location.pathname === "/"}
+              onClick={() => navigate("/")}
+            >
+              <ListItemIcon>
+                <Inventory2Icon />
+              </ListItemIcon>
+              <ListItemText primary={"Product"} />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton
+              selected={location.pathname === "/category"}
+              onClick={() => navigate("/category")}
+            >
+              <ListItemIcon>
+                <CategoryIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Category"} />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton
+              selected={location.pathname === "/customer"}
+              onClick={() => navigate("/customer")}
+            >
+              <ListItemIcon>
+                <PersonIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Customer"} />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton
+              selected={location.pathname === "/rating"}
+              onClick={() => navigate("/rating")}
+            >
+              <ListItemIcon>
+                <StarRateIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Rating"} />
+            </ListItemButton>
+          </ListItem>
         </List>
       </Box>
     </Drawer>

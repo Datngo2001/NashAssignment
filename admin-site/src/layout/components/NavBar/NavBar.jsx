@@ -2,7 +2,9 @@ import {
   AppBar,
   Avatar,
   Box,
+  Button,
   IconButton,
+  Link,
   Menu,
   MenuItem,
   Toolbar,
@@ -11,9 +13,11 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
 import { SIGNOUT_REQUEST } from "../../../store/reducer/user/userActionTypes";
 
 function NavBar() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [anchorElUser, setAnchorElUser] = useState();
 
@@ -37,10 +41,24 @@ function NavBar() {
       sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
     >
       <Toolbar>
-        <Typography variant="h6" noWrap component="div">
+        <Typography variant="h5" noWrap component="div">
           Admin
         </Typography>
-        <Box sx={{ flexGrow: 1, display: "flex" }}></Box>
+        <Box sx={{ flexGrow: 1, display: "flex", paddingLeft: 2 }}>
+          <Link
+            target="_blank"
+            href="https://localhost:5002/"
+            color="inherit"
+            sx={{
+              textDecoration: "none",
+              ":hover": {
+                textDecoration: "underline",
+              },
+            }}
+          >
+            Customer Site
+          </Link>
+        </Box>
         <Box sx={{ flexGrow: 0 }}>
           <Tooltip title="Open settings">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
