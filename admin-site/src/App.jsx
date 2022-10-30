@@ -29,12 +29,6 @@ function App() {
     });
   }, []);
 
-  UserManager.getUser()
-    .then((user) => {
-      console.log(user);
-    })
-    .catch((err) => console.log(err));
-
   return (
     <ThemeProvider theme={theme}>
       {user ? <ConsoleLayout /> : <LoginLayout />}

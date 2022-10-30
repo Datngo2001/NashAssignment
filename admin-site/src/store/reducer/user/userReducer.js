@@ -22,7 +22,6 @@ export default function userReducer(state = init, { type, payload }) {
                 }
             };
         case SIGNIN_SUCCESS:
-            debugger
             return {
                 ...state,
                 loading: false,

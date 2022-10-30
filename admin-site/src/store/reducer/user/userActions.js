@@ -1,4 +1,4 @@
-import { call, put } from 'redux-saga/effects'
+import { put } from 'redux-saga/effects'
 import { CHECK_USER_STATUS, SIGNIN_SUCCESS } from './userActionTypes'
 import UserManager from "../../../oidc/userManager"
 
