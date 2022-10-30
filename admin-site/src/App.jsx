@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { createTheme, ThemeProvider } from "@mui/material";
 import LoginLayout from "./layout/LoginLayout";
 import ConsoleLayout from "./layout/ConsoleLayout";
 import "./App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { CHECK_USER_STATUS } from "./store/reducer/user/userActionTypes";
-import UserManager from "./oidc/userManager";
 
 const theme = createTheme({
   palette: {
