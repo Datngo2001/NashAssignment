@@ -38,7 +38,6 @@ namespace API.Repositories
                 .Where(p => p.Id == id)
                 .Include(p => p.Features)
                 .Include(p => p.Categories)
-                .Include(p => p.Ratings)
                 .ProjectTo<ProductDetailDto>(mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
         }
@@ -56,6 +55,29 @@ namespace API.Repositories
             var count = await queryable.CountAsync();
 
             return new PagingDto<ProductDto>()
+            {
+                Page = page,
+                Limit = limit,
+                TotalPage = count / limit + 1,
+                Items = products,
+            };
+        }
+
+        public async Task<PagingDto<ProductDetailDto>> AdminSearchProduct(string query, int page, int limit)
+        {
+            var queryable = context.Products.Where(p => p.Name.Contains(query));
+
+            var products = await queryable
+                .Include(p => p.Features)
+                .Include(p => p.Categories)
+                .Skip((page - 1) * limit)
+                .Take(limit)
+                .ProjectTo<ProductDetailDto>(mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            var count = await queryable.CountAsync();
+
+            return new PagingDto<ProductDetailDto>()
             {
                 Page = page,
                 Limit = limit,

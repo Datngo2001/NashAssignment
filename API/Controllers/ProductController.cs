@@ -20,10 +20,10 @@ namespace API.Controllers
             this.productRepository = productRepository;
         }
 
-        [HttpGet("admin/search")]
-        public async Task<ActionResult<PagingDto<ProductDto>>> AdminSearchProducts([FromQuery(Name = "query")] string query = "", [FromQuery(Name = "page")] int page = 1, [FromQuery(Name = "limit")] int limit = 10)
+        [HttpPost("admin/search")]
+        public async Task<ActionResult<PagingDto<ProductDetailDto>>> AdminSearchProducts([FromBody] ProductAdminSearchDto model)
         {
-            return await productRepository.SearchProduct(query, page, limit);
+            return await productRepository.AdminSearchProduct(model.Query, model.Page, model.Limit);
         }
 
         [HttpGet("get-all")]

@@ -4,10 +4,10 @@ import { SEARCH_PRODUCT_FAILURE, SEARCH_PRODUCT_SUCCESS } from './productActionT
 
 export function* searchProduct({ payload }) {
     try {
-        var productsWithPaging = yield getProducts(payload.query, payload.page, payload.limit)
+        var res = yield getProducts(payload.query, payload.page, payload.limit)
         yield put({
             type: SEARCH_PRODUCT_SUCCESS,
-            payload: productsWithPaging
+            payload: res.data
         })
     } catch (error) {
         yield put({

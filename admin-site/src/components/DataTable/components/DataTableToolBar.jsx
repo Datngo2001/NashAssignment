@@ -4,7 +4,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { alpha } from "@mui/material/styles";
 
-export default function DataTableToolbar({ numSelected }) {
+export default function DataTableToolbar({ title, numSelected }) {
   return (
     <Toolbar
       sx={{
@@ -35,7 +35,7 @@ export default function DataTableToolbar({ numSelected }) {
           id="tableTitle"
           component="div"
         >
-          Nutrition
+          {title}
         </Typography>
       )}
 

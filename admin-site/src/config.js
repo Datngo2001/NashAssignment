@@ -2,8 +2,8 @@ export const { NODE_ENV } = process.env;
 
 let apiurl;
 if (NODE_ENV === 'development') {
-  apiurl = 'http://localhost:3001/';
+  apiurl = 'https://localhost:6001/api';
 } else {
-  apiurl = 'https://e-working-api.herokuapp.com/';
+  apiurl = '';
 }
 export const API_URL = apiurl;
