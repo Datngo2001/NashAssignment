@@ -2,7 +2,6 @@ import {
   AppBar,
   Avatar,
   Box,
-  Button,
   IconButton,
   Link,
   Menu,
@@ -13,11 +12,9 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
 import { SIGNOUT_REQUEST } from "../../../store/reducer/user/userActionTypes";
 
 function NavBar() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [anchorElUser, setAnchorElUser] = useState();
 
