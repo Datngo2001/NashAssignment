@@ -55,7 +55,7 @@ namespace CustomerSite.Pages
             };
 
             var accessToken = await HttpContext.GetTokenAsync("access_token");
-            if (accessToken == null)
+            if (accessToken == null || accessToken == "")
             {
                 throw new Exception($"Missing access token");
             }

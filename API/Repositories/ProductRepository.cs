@@ -79,8 +79,10 @@ namespace API.Repositories
 
             return new PagingDto<ProductDetailDto>()
             {
+                Query = query,
                 Page = page,
                 Limit = limit,
+                Count = count,
                 TotalPage = count / limit + 1,
                 Items = products,
             };

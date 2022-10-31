@@ -1,8 +1,10 @@
 import { SEARCH_PRODUCT_FAILURE, SEARCH_PRODUCT_REQUEST, SEARCH_PRODUCT_SUCCESS } from "./productActionTypes";
 
 const init = {
+    query: "",
     page: 1,
-    limit: 10,
+    limit: 5,
+    count: 0,
     totalPage: 0,
     products: [],
     loading: true,

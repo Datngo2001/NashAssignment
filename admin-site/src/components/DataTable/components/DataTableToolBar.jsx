@@ -1,10 +1,21 @@
-import React from "react";
-import { IconButton, Toolbar, Tooltip, Typography } from "@mui/material";
+import React, { useState } from "react";
+import {
+  IconButton,
+  TextField,
+  Toolbar,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import FilterListIcon from "@mui/icons-material/FilterList";
 import { alpha } from "@mui/material/styles";
+import { Box } from "@mui/system";
 
-export default function DataTableToolbar({ title, numSelected }) {
+export default function DataTableToolbar({
+  title,
+  numSelected,
+  onSearchChange,
+}) {
+  const [query, setQuery] = useState("");
   return (
     <Toolbar
       sx={{
@@ -46,11 +57,19 @@ export default function DataTableToolbar({ title, numSelected }) {
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
+        <Box sx={{ flexBasis: 500 }}>
+          <TextField
+            autoComplete="off"
+            sx={{ width: "100%" }}
+            variant="standard"
+            placeholder="Search..."
+            value={query}
+            onChange={(e) => {
+              onSearchChange(e);
+              setQuery(e.target.value);
+            }}
+          />
+        </Box>
       )}
     </Toolbar>
   );
