@@ -20,6 +20,12 @@ namespace API.Controllers
             this.productRepository = productRepository;
         }
 
+        [HttpGet("admin/search")]
+        public async Task<ActionResult<PagingDto<ProductDto>>> AdminSearchProducts([FromQuery(Name = "query")] string query = "", [FromQuery(Name = "page")] int page = 1, [FromQuery(Name = "limit")] int limit = 10)
+        {
+            return await productRepository.SearchProduct(query, page, limit);
+        }
+
         [HttpGet("get-all")]
         public async Task<ActionResult<List<ProductDto>>> GetAllProduct([FromQuery(Name = "p")] int page = 1)
         {
