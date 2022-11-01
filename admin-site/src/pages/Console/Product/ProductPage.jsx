@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "../../../components/DataTable/DataTable";
 import { SEARCH_PRODUCT_REQUEST } from "../../../store/reducer/product/productActionTypes";
+import ProductModal from "./ProductModal/ProductModal";
 
 const headCells = [
   {
@@ -29,6 +30,11 @@ function ProductPage() {
   const { query, page, limit, count, products } = useSelector(
     (state) => state.product
   );
+  const [productModal, setProductModal] = useState({
+    open: false,
+    product: null,
+    action: "create",
+  });
 
   useEffect(() => {
     dispatch({
@@ -64,6 +70,30 @@ function ProductPage() {
     }, 250);
   };
 
+  const handleAddClick = () => {
+    setProductModal({
+      open: true,
+      product: null,
+      action: "create",
+    });
+  };
+
+  const handleSave = () => {
+    setProductModal({
+      open: false,
+      product: null,
+      action: "create",
+    });
+  };
+
+  const handleClose = () => {
+    setProductModal({
+      open: false,
+      product: null,
+      action: "create",
+    });
+  };
+
   return (
     <div>
       <DataTable
@@ -77,6 +107,13 @@ function ProductPage() {
         handleChangePage={handlePageChange}
         handleChangeRowsPerPage={handleLimitChange}
         handleSearch={handleSearch}
+        handleAddClick={handleAddClick}
+      />
+      <ProductModal
+        open={productModal.open}
+        action={productModal.action}
+        onSave={handleSave}
+        onClose={handleClose}
       />
     </div>
   );

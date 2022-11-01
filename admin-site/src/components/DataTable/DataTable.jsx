@@ -11,22 +11,6 @@ import Checkbox from "@mui/material/Checkbox";
 import DataTableHead from "./components/DataTableHead";
 import DataTableToolbar from "./components/DataTableToolBar";
 
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
 // EXAMPLE HEAD CONFIG
 // const headCells = [
 //   {
@@ -38,16 +22,15 @@ function getComparator(order, orderBy) {
 // ];
 
 export default function DataTable({
-  title,
   rows,
   headCells,
-  query,
   page,
   count,
   limit,
   handleChangePage,
   handleChangeRowsPerPage,
   handleSearch,
+  handleAddClick,
 }) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
@@ -94,10 +77,9 @@ export default function DataTable({
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
         <DataTableToolbar
-          query={query}
-          title={title}
           numSelected={selected.length}
           onSearchChange={handleSearch}
+          onAddClick={handleAddClick}
         />
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">

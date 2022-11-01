@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  Button,
   IconButton,
   TextField,
   Toolbar,
@@ -9,11 +10,12 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import { alpha } from "@mui/material/styles";
 import { Box } from "@mui/system";
+import AddIcon from "@mui/icons-material/Add";
 
 export default function DataTableToolbar({
-  title,
   numSelected,
   onSearchChange,
+  onAddClick,
 }) {
   const [query, setQuery] = useState("");
   return (
@@ -40,29 +42,12 @@ export default function DataTableToolbar({
           {numSelected} selected
         </Typography>
       ) : (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          {title}
-        </Typography>
-      )}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Box sx={{ flexBasis: 500 }}>
+        <Box sx={{ flexGrow: 1 }}>
           <TextField
             autoComplete="off"
-            sx={{ width: "100%" }}
+            sx={{ width: 500 }}
             variant="standard"
-            placeholder="Search..."
+            placeholder="Search Product ..."
             value={query}
             onChange={(e) => {
               onSearchChange(e);
@@ -70,6 +55,23 @@ export default function DataTableToolbar({
             }}
           />
         </Box>
+      )}
+
+      {numSelected > 0 ? (
+        <Tooltip title="Delete">
+          <IconButton size="large">
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+      ) : (
+        <Button
+          size="large"
+          color="secondary"
+          variant="outlined"
+          onClick={onAddClick}
+        >
+          <AddIcon />
+        </Button>
       )}
     </Toolbar>
   );
