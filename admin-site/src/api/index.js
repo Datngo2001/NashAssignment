@@ -3,7 +3,7 @@ import { API_URL } from "../config";
 import store from "../store";
 
 function getToken() {
-    const token = store.getState().user.accessToken;
+    const token = store.getState().user.user.access_token;
     return token ? `Bearer ${token}` : null;
 }
 

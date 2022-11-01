@@ -22,6 +22,7 @@ namespace API.Helpers
             CreateMap<AddRatingDto, Rating>();
             CreateMap<Product, ProductSearchHintDto>()
                 .ForMember(dest => dest.hint, opt => opt.MapFrom(src => src.Name));
+            CreateMap<CreateProductDto, Product>();
         }
     }
 }
