@@ -1,5 +1,5 @@
 import { Button, Paper, TextField } from "@mui/material";
-import React from "react";
+import React, { useRef } from "react";
 import BaseModal from "../../../../components/BaseModal/BaseModal";
 import { useForm, useWatch } from "react-hook-form";
 import { Box, Stack } from "@mui/system";
@@ -7,13 +7,16 @@ import ConfirmModal from "../../../../components/ConfirmModal";
 import useConfirmModal from "../../../../hooks/useConfirmModal";
 import RichTextField from "../../../../components/RichTextField/RichTextField";
 import dumpImg from "../../../../assets/dump_img.webp";
+import { convertToRaw } from "draft-js";
+import draftToHtml from "draftjs-to-html";
 
 function ProductModal({ open, onClose, onSave, product, action = "create" }) {
   const { control, getValues, register, handleSubmit, formState, reset } =
     useForm({
-      defaultValues: product,
+      defaultValues: { ...product },
     });
   useWatch({ control: control, name: "image" });
+  const description = useRef();
 
   const { confirm, openNewConfirm, onAnswer } = useConfirmModal({
     message: "Save Change ?",
@@ -38,6 +41,9 @@ function ProductModal({ open, onClose, onSave, product, action = "create" }) {
   };
 
   const onSubmit = (data) => {
+    data.description = draftToHtml(
+      convertToRaw(description.current.getCurrentContent())
+    );
     onSave(data);
     reset();
   };
@@ -92,7 +98,7 @@ function ProductModal({ open, onClose, onSave, product, action = "create" }) {
             </Stack>
           </Box>
           <Box sx={{ flexGrow: 1 }}>
-            <RichTextField />
+            <RichTextField ref={description} />
           </Box>
           <Box sx={{ textAlign: "end" }}>
             <Button type="submit" variant="contained">

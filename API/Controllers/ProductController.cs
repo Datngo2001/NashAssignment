@@ -29,7 +29,7 @@ namespace API.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Bearer", Policy = "Admin")]
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<ActionResult<ProductDetailDto>> CreateProducts([FromBody] CreateProductDto model)
         {
             return await productRepository.CreateProduct(model);

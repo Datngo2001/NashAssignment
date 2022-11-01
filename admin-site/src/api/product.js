@@ -7,5 +7,5 @@ export function getProducts(query, page, limit) {
 }
 
 export function postProduct(data) {
-    return api.post("Product", data);
+    return api.post("Product/create", data);
 }

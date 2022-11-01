@@ -1,7 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "../../../components/DataTable/DataTable";
-import { SEARCH_PRODUCT_REQUEST } from "../../../store/reducer/product/productActionTypes";
+import {
+  CREATE_PRODUCT_REQUEST,
+  SEARCH_PRODUCT_REQUEST,
+} from "../../../store/reducer/product/productActionTypes";
 import ProductModal from "./ProductModal/ProductModal";
 
 const headCells = [
@@ -78,7 +81,11 @@ function ProductPage() {
     });
   };
 
-  const handleSave = () => {
+  const handleSave = (data) => {
+    dispatch({
+      type: CREATE_PRODUCT_REQUEST,
+      payload: data,
+    });
     setProductModal({
       open: false,
       product: null,
