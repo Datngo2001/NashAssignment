@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using CommonModel;
 using CommonModel.Product;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
@@ -20,10 +21,18 @@ namespace API.Controllers
             this.productRepository = productRepository;
         }
 
+        [Authorize(AuthenticationSchemes = "Bearer", Policy = "Admin")]
         [HttpPost("admin/search")]
         public async Task<ActionResult<PagingDto<ProductDetailDto>>> AdminSearchProducts([FromBody] ProductAdminSearchDto model)
         {
             return await productRepository.AdminSearchProduct(model.Query, model.Page, model.Limit);
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer", Policy = "Admin")]
+        [HttpPost("create")]
+        public async Task<ActionResult<ProductDetailDto>> CreateProducts([FromBody] CreateProductDto model)
+        {
+            return await productRepository.CreateProduct(model);
         }
 
         [HttpGet("get-all")]

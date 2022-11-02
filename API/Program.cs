@@ -46,7 +46,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("ApiScope", policy =>
+    options.AddPolicy("Admin", policy =>
     {
         policy.RequireAuthenticatedUser();
         policy.RequireClaim("scope", "AssignmentAPI");

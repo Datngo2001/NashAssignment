@@ -22,6 +22,7 @@ function BaseModalContent({ title, open, onClose, styles, children }) {
           ...styles,
           bgcolor: "background.paper",
           marginTop: 10,
+          marginBottom: 10,
           boxShadow: 24,
         }}
       >

@@ -25,6 +25,38 @@ namespace API.Repositories
             this.mapper = mapper;
         }
 
+        public async Task<PagingDto<CategoryDto>> AdminSearchCategory(string query, int page, int limit)
+        {
+            var queryable = dbContext.Categories.Where(p => p.Name.Contains(query));
+
+            var categories = await queryable
+                .Skip((page - 1) * limit)
+                .Take(limit)
+                .ProjectTo<CategoryDto>(mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            var count = await queryable.CountAsync();
+
+            return new PagingDto<CategoryDto>()
+            {
+                Query = query,
+                Page = page,
+                Limit = limit,
+                Count = count,
+                TotalPage = count / limit + 1,
+                Items = categories,
+            };
+        }
+
+        public async Task<CategoryDto> CreateCategory(CreateCategoryDto createCategoryDto)
+        {
+            var category = mapper.Map<Category>(createCategoryDto);
+            dbContext.Categories.Add(category);
+            await dbContext.SaveChangesAsync();
+
+            return mapper.Map<CategoryDto>(category);
+        }
+
         public async Task<List<CategoryDto>> GetAllCategories()
         {
             return await dbContext.Categories

@@ -15,5 +15,6 @@ namespace API.Interfaces
         Task<List<ProductSearchHintDto>> SearchProductHint(string query, int limit);
         Task<double> AverageStar(int id);
         Task<PagingDto<ProductDetailDto>> AdminSearchProduct(string query, int page, int limit);
+        Task<ProductDetailDto> CreateProduct(CreateProductDto createProductDto);
     }
 }

@@ -7,6 +7,7 @@ using API.Interfaces;
 using CommonModel;
 using CommonModel.Category;
 using CommonModel.Product;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -41,6 +42,20 @@ namespace API.Controllers
         {
             var result = await categoryRepository.GetProductByCategoryAsync(id, page, 10);
             return result;
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer", Policy = "Admin")]
+        [HttpPost("admin/search")]
+        public async Task<ActionResult<PagingDto<CategoryDto>>> AdminSearchProducts([FromBody] AdminSearchCategoryDto model)
+        {
+            return await categoryRepository.AdminSearchCategory(model.Query, model.Page, model.Limit);
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer", Policy = "Admin")]
+        [HttpPost("create")]
+        public async Task<ActionResult<CategoryDto>> CreateCategory([FromBody] CreateCategoryDto model)
+        {
+            return await categoryRepository.CreateCategory(model);
         }
     }
 }

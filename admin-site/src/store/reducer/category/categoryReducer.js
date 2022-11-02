@@ -1,4 +1,4 @@
-import { CREATE_PRODUCT_FAILURE, CREATE_PRODUCT_REQUEST, CREATE_PRODUCT_SUCCESS, SEARCH_PRODUCT_FAILURE, SEARCH_PRODUCT_REQUEST, SEARCH_PRODUCT_SUCCESS } from "./productActionTypes";
+import { CREATE_CATEGORY_FAILURE, CREATE_CATEGORY_REQUEST, CREATE_CATEGORY_SUCCESS, SEARCH_CATEGORY_FAILURE, SEARCH_CATEGORY_REQUEST, SEARCH_CATEGORY_SUCCESS } from "./categoryActionTypes";
 
 const init = {
     query: "",
@@ -6,7 +6,7 @@ const init = {
     limit: 5,
     count: 0,
     totalPage: 0,
-    products: [],
+    categories: [],
     loading: true,
     error: {
         action: "",
@@ -14,10 +14,10 @@ const init = {
     }
 }
 
-export default function productReducer(state = init, { type, payload }) {
+export default function categoryReducer(state = init, { type, payload }) {
     switch (type) {
-        case CREATE_PRODUCT_REQUEST:
-        case SEARCH_PRODUCT_REQUEST:
+        case CREATE_CATEGORY_REQUEST:
+        case SEARCH_CATEGORY_REQUEST:
             return {
                 ...state,
                 loading: true,
@@ -26,8 +26,8 @@ export default function productReducer(state = init, { type, payload }) {
                     message: null
                 }
             };
-        case CREATE_PRODUCT_FAILURE:
-        case SEARCH_PRODUCT_FAILURE:
+        case CREATE_CATEGORY_FAILURE:
+        case SEARCH_CATEGORY_FAILURE:
             return {
                 ...state,
                 loading: false,
@@ -36,17 +36,17 @@ export default function productReducer(state = init, { type, payload }) {
                     message: payload.message
                 }
             };
-        case SEARCH_PRODUCT_SUCCESS:
+        case SEARCH_CATEGORY_SUCCESS:
             return {
                 ...state,
                 ...payload,
-                products: payload.items,
+                categories: payload.items,
                 loading: false,
             };
-        case CREATE_PRODUCT_SUCCESS:
+        case CREATE_CATEGORY_SUCCESS:
             return {
                 ...state,
-                products: [payload, ...state.products],
+                categories: [payload, ...state.categories],
                 loading: false,
             };
         default:

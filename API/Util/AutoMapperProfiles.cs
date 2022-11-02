@@ -12,6 +12,7 @@ namespace API.Helpers
         public AutoMapperProfiles()
         {
             CreateMap<Category, CategoryDto>();
+            CreateMap<CreateCategoryDto, Category>();
             CreateMap<Product, ProductDto>();
             CreateMap<Product, ProductDetailDto>();
             CreateMap<Feature, FeatureDto>();
@@ -22,6 +23,7 @@ namespace API.Helpers
             CreateMap<AddRatingDto, Rating>();
             CreateMap<Product, ProductSearchHintDto>()
                 .ForMember(dest => dest.hint, opt => opt.MapFrom(src => src.Name));
+            CreateMap<CreateProductDto, Product>();
         }
     }
 }

@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper.QueryableExtensions;
 using AutoMapper;
 using CommonModel;
+using DataAccess.Entities;
 
 namespace API.Repositories
 {
@@ -111,6 +112,15 @@ namespace API.Repositories
             }
 
             return result;
+        }
+
+        public async Task<ProductDetailDto> CreateProduct(CreateProductDto createProductDto)
+        {
+            var product = mapper.Map<Product>(createProductDto);
+            context.Products.Add(product);
+            await context.SaveChangesAsync();
+
+            return mapper.Map<ProductDetailDto>(product);
         }
     }
 }

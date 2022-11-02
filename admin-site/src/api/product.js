@@ -5,3 +5,7 @@ export function getProducts(query, page, limit) {
         query, page, limit
     });
 }
+
+export function postProduct(data) {
+    return api.post("Product/create", data);
+}
