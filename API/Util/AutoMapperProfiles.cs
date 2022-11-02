@@ -13,6 +13,7 @@ namespace API.Helpers
         {
             CreateMap<Category, CategoryDto>();
             CreateMap<CreateCategoryDto, Category>();
+            CreateMap<UpdateCategoryDto, Category>();
             CreateMap<Product, ProductDto>();
             CreateMap<Product, ProductDetailDto>();
             CreateMap<Feature, FeatureDto>();

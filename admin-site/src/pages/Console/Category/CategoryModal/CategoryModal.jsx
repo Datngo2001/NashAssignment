@@ -8,9 +8,8 @@ import dumpImg from "../../../../assets/dump_img.webp";
 
 function CategoryModal({ open, onClose, onSave, category, action = "create" }) {
   const { control, getValues, register, handleSubmit, formState, reset } =
-    useForm({
-      defaultValues: { ...category },
-    });
+    useForm();
+
   useWatch({ control: control, name: "image" });
 
   const { confirm, openNewConfirm, onAnswer } = useConfirmModal({
@@ -18,10 +17,10 @@ function CategoryModal({ open, onClose, onSave, category, action = "create" }) {
   });
 
   const handleClose = () => {
-    if (formState.isDirty) {
+    if (formState.isDirty && action !== "detail") {
       openNewConfirm(
         () => {
-          onSave();
+          onSave(getValues(), action);
           reset();
         },
         () => {
@@ -36,7 +35,7 @@ function CategoryModal({ open, onClose, onSave, category, action = "create" }) {
   };
 
   const onSubmit = (data) => {
-    onSave(data);
+    onSave(data, action);
     reset();
   };
 
@@ -56,24 +55,34 @@ function CategoryModal({ open, onClose, onSave, category, action = "create" }) {
         <Stack spacing={2} sx={{ height: "100%" }}>
           <Box sx={{ display: "flex", gap: 1 }}>
             <Stack spacing={2} sx={{ flexGrow: 2 }}>
-              {action === "edit" && (
+              {(action === "edit" || action === "detail") && (
                 <TextField
-                  label="Product ID"
+                  value={category?.id}
+                  label="Category ID"
                   {...register("id")}
-                  InputProps={{
-                    readOnly: true,
-                  }}
+                  disabled={true}
                 />
               )}
               <TextField
                 label="Category Name"
                 multiline
                 rows={4}
-                {...register("name")}
+                InputProps={{
+                  ...register("name"),
+                  defaultValue: category?.name,
+                  readOnly: action === "detail",
+                }}
               />
             </Stack>
             <Stack spacing={2} sx={{ flexGrow: 1 }}>
-              <TextField label="Image" {...register("image")} />
+              <TextField
+                label="Image"
+                InputProps={{
+                  ...register("image"),
+                  defaultValue: category?.image,
+                  readOnly: action === "detail",
+                }}
+              />
               <Paper elevation={1} sx={{ textAlign: "center" }}>
                 <img
                   style={{
@@ -81,19 +90,21 @@ function CategoryModal({ open, onClose, onSave, category, action = "create" }) {
                     width: "200px",
                     objectFit: "contain",
                   }}
-                  src={getValues("image") ? getValues("image") : dumpImg}
+                  src={category ? category.image : dumpImg}
                   alt="img"
                 />
               </Paper>
             </Stack>
           </Box>
           <Box sx={{ flexGrow: 1 }}></Box>
-          <Box sx={{ textAlign: "end" }}>
-            <Button type="submit" variant="contained">
-              Save
-            </Button>
-            <Button onClick={handleCancel}>Cancel</Button>
-          </Box>
+          {action !== "detail" && (
+            <Box sx={{ textAlign: "end" }}>
+              <Button type="submit" variant="contained">
+                Save
+              </Button>
+              <Button onClick={handleCancel}>Cancel</Button>
+            </Box>
+          )}
         </Stack>
       </form>
       <ConfirmModal

@@ -108,5 +108,23 @@ namespace API.Repositories
                 Items = products,
             };
         }
+
+        public async Task<CategoryDto> UpdateCategory(UpdateCategoryDto updateCategoryDto)
+        {
+            var category = await dbContext.Categories.FirstOrDefaultAsync(c => c.Id == updateCategoryDto.Id);
+
+            if (category == null)
+            {
+                throw new Exception($"Can not find category with id: {updateCategoryDto.Id}");
+            }
+
+            dbContext.Categories.Update(category);
+
+            mapper.Map(updateCategoryDto, category);
+
+            await dbContext.SaveChangesAsync();
+
+            return mapper.Map<CategoryDto>(category);
+        }
     }
 }

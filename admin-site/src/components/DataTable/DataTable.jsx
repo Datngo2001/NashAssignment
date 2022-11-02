@@ -37,7 +37,6 @@ export default function DataTable({
 }) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
-  const [selected, setSelected] = React.useState([]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -45,20 +44,10 @@ export default function DataTable({
     setOrderBy(property);
   };
 
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelected = rows.map((n) => n.name);
-      setSelected(newSelected);
-      return;
-    }
-    setSelected([]);
-  };
-
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
         <DataTableToolbar
-          numSelected={selected.length}
           onSearchChange={handleSearch}
           onAddClick={handleAddClick}
         />
@@ -66,10 +55,8 @@ export default function DataTable({
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
             <DataTableHead
               headCells={headCells}
-              numSelected={selected.length}
               order={order}
               orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
             />

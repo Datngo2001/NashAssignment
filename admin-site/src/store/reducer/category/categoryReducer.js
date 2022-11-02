@@ -1,4 +1,4 @@
-import { CREATE_CATEGORY_FAILURE, CREATE_CATEGORY_REQUEST, CREATE_CATEGORY_SUCCESS, DELETE_CATEGORY_FAILURE, DELETE_CATEGORY_REQUEST, DELETE_CATEGORY_SUCCESS, SEARCH_CATEGORY_FAILURE, SEARCH_CATEGORY_REQUEST, SEARCH_CATEGORY_SUCCESS } from "./categoryActionTypes";
+import { CREATE_CATEGORY_FAILURE, CREATE_CATEGORY_REQUEST, CREATE_CATEGORY_SUCCESS, DELETE_CATEGORY_FAILURE, DELETE_CATEGORY_REQUEST, DELETE_CATEGORY_SUCCESS, SEARCH_CATEGORY_FAILURE, SEARCH_CATEGORY_REQUEST, SEARCH_CATEGORY_SUCCESS, UPDATE_CATEGORY_FAILURE, UPDATE_CATEGORY_REQUEST, UPDATE_CATEGORY_SUCCESS } from "./categoryActionTypes";
 
 const init = {
     query: "",
@@ -16,6 +16,7 @@ const init = {
 
 export default function categoryReducer(state = init, { type, payload }) {
     switch (type) {
+        case UPDATE_CATEGORY_REQUEST:
         case DELETE_CATEGORY_REQUEST:
         case CREATE_CATEGORY_REQUEST:
         case SEARCH_CATEGORY_REQUEST:
@@ -27,6 +28,7 @@ export default function categoryReducer(state = init, { type, payload }) {
                     message: null
                 }
             };
+        case UPDATE_CATEGORY_FAILURE:
         case DELETE_CATEGORY_FAILURE:
         case CREATE_CATEGORY_FAILURE:
         case SEARCH_CATEGORY_FAILURE:
@@ -57,6 +59,13 @@ export default function categoryReducer(state = init, { type, payload }) {
                 categories: removeCategoryFromStore(state.categories, payload),
                 loading: false,
             };
+
+        case UPDATE_CATEGORY_SUCCESS:
+            return {
+                ...state,
+                categories: updateCategoryFromStore(state.categories, payload),
+                loading: false,
+            };
         default:
             return state;
     }
@@ -65,5 +74,11 @@ export default function categoryReducer(state = init, { type, payload }) {
 function removeCategoryFromStore(categories, toDelete) {
     let index = categories.findIndex(c => c.id === toDelete.id)
     categories.splice(index, 1)
+    return categories
+}
+
+function updateCategoryFromStore(categories, toUpdate) {
+    let index = categories.findIndex(c => c.id === toUpdate.id)
+    categories[index] = toUpdate;
     return categories
 }

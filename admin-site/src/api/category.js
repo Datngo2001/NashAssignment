@@ -13,3 +13,7 @@ export function postCategory(data) {
 export function deleteCategory(id) {
     return api.delete(`Category/delete/${id}`);
 }
+
+export function putCategory(data) {
+    return api.put("Category/update", data);
+}

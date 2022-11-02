@@ -64,5 +64,12 @@ namespace API.Controllers
         {
             return await categoryRepository.DeleteCategory(id);
         }
+
+        [Authorize(AuthenticationSchemes = "Bearer", Policy = "Admin")]
+        [HttpPut("update")]
+        public async Task<ActionResult<CategoryDto>> UpdateCategory([FromBody] UpdateCategoryDto model)
+        {
+            return await categoryRepository.UpdateCategory(model);
+        }
     }
 }

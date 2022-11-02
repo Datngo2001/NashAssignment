@@ -6,6 +6,7 @@ import {
   SEARCH_CATEGORY_REQUEST,
   CREATE_CATEGORY_REQUEST,
   DELETE_CATEGORY_REQUEST,
+  UPDATE_CATEGORY_REQUEST,
 } from "../../../store/reducer/category/categoryActionTypes";
 import useConfirmModal from "../../../hooks/useConfirmModal";
 import ConfirmModal from "../../../components/ConfirmModal";
@@ -32,7 +33,7 @@ function CategoryPage() {
   );
   const [categoryModal, setCategoryModal] = useState({
     open: false,
-    product: null,
+    category: null,
     action: "create",
   });
   const { confirm, openNewConfirm, onAnswer } = useConfirmModal({
@@ -76,19 +77,27 @@ function CategoryPage() {
   const handleAddClick = () => {
     setCategoryModal({
       open: true,
-      product: null,
+      category: null,
       action: "create",
     });
   };
 
-  const handleSave = (data) => {
-    dispatch({
-      type: CREATE_CATEGORY_REQUEST,
-      payload: data,
-    });
+  const handleSave = (data, action) => {
+    if (action === "edit") {
+      dispatch({
+        type: UPDATE_CATEGORY_REQUEST,
+        payload: data,
+      });
+    } else if (action === "create") {
+      dispatch({
+        type: CREATE_CATEGORY_REQUEST,
+        payload: data,
+      });
+    }
+
     setCategoryModal({
       open: false,
-      product: null,
+      category: null,
       action: "create",
     });
   };
@@ -96,14 +105,30 @@ function CategoryPage() {
   const handleClose = () => {
     setCategoryModal({
       open: false,
-      product: null,
-      action: "create",
+      category: null,
+      action: "",
     });
   };
 
   const handleDelete = (category) => {
     openNewConfirm(() => {
       dispatch({ type: DELETE_CATEGORY_REQUEST, payload: category.id });
+    });
+  };
+
+  const handleDetailClick = (row) => {
+    setCategoryModal({
+      open: true,
+      category: row,
+      action: "detail",
+    });
+  };
+
+  const handleEdit = (row) => {
+    setCategoryModal({
+      open: true,
+      category: row,
+      action: "edit",
     });
   };
 
@@ -121,9 +146,12 @@ function CategoryPage() {
         handleChangeRowsPerPage={handleLimitChange}
         handleSearch={handleSearch}
         handleAddClick={handleAddClick}
+        handleEditClick={handleEdit}
         handleDeleteClick={handleDelete}
+        handleDetailClick={handleDetailClick}
       />
       <CategoryModal
+        category={categoryModal.category}
         open={categoryModal.open}
         action={categoryModal.action}
         onSave={handleSave}
