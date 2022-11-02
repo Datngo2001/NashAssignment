@@ -13,5 +13,7 @@ namespace API.Interfaces
         Task<List<CategoryDto>> GetAllCategories();
         Task<PagingDto<ProductDto>> GetProductByCategoryAsync(int id, int page, int limit);
         Task<CategoryDto?> GetCategoryById(int id);
+        Task<PagingDto<CategoryDto>> AdminSearchCategory(string query, int page, int limit);
+        Task<CategoryDto> CreateCategory(CreateCategoryDto createCategoryDto);
     }
 }
