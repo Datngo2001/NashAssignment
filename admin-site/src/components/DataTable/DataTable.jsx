@@ -7,9 +7,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import Checkbox from "@mui/material/Checkbox";
 import DataTableHead from "./components/DataTableHead";
 import DataTableToolbar from "./components/DataTableToolBar";
+import RowAction from "./components/RowAction";
 
 // EXAMPLE HEAD CONFIG
 // const headCells = [
@@ -31,6 +31,9 @@ export default function DataTable({
   handleChangeRowsPerPage,
   handleSearch,
   handleAddClick,
+  handleEditClick,
+  handleDeleteClick,
+  handleDetailClick,
 }) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
@@ -50,28 +53,6 @@ export default function DataTable({
     }
     setSelected([]);
   };
-
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelected(newSelected);
-  };
-
-  const isSelected = (name) => selected.indexOf(name) !== -1;
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -94,28 +75,8 @@ export default function DataTable({
             />
             <TableBody>
               {rows.map((row, index) => {
-                const isItemSelected = isSelected(row.name);
-                const labelId = `enhanced-table-checkbox-${index}`;
-
                 return (
-                  <TableRow
-                    hover
-                    onClick={(event) => handleClick(event, row.name)}
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row.name}
-                    selected={isItemSelected}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.name}>
                     {headCells.map((headCell) => (
                       <TableCell
                         key={`cell-${headCell.id}-${index}`}
@@ -124,6 +85,14 @@ export default function DataTable({
                         {row[headCell.id]}
                       </TableCell>
                     ))}
+                    <TableCell padding="button" sx={{ textAlign: "end" }}>
+                      <RowAction
+                        row={row}
+                        onDetailClick={handleDetailClick}
+                        onEditClick={handleEditClick}
+                        onDeleteClick={handleDeleteClick}
+                      />
+                    </TableCell>
                   </TableRow>
                 );
               })}
