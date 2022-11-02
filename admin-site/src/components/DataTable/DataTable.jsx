@@ -135,8 +135,8 @@ export default function DataTable({
           component="div"
           count={count}
           rowsPerPage={limit}
-          page={page}
-          onPageChange={handleChangePage}
+          page={page - 1}
+          onPageChange={(event, newPage) => handleChangePage(newPage + 1)}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>

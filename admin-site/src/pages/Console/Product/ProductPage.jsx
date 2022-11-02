@@ -46,7 +46,7 @@ function ProductPage() {
     });
   }, []);
 
-  const handlePageChange = (event, newPage) => {
+  const handlePageChange = (newPage) => {
     dispatch({
       type: SEARCH_PRODUCT_REQUEST,
       payload: { query: query, page: newPage, limit: limit },
