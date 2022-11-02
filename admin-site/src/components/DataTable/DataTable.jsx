@@ -85,7 +85,7 @@ export default function DataTable({
                         {row[headCell.id]}
                       </TableCell>
                     ))}
-                    <TableCell padding="button" sx={{ textAlign: "end" }}>
+                    <TableCell padding="none" sx={{ textAlign: "end" }}>
                       <RowAction
                         row={row}
                         onDetailClick={handleDetailClick}

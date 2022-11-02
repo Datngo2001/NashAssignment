@@ -46,7 +46,7 @@ export default function DataTableHead({
             </TableSortLabel>
           </TableCell>
         ))}
-        <TableCell padding="button"></TableCell>
+        <TableCell padding="none"></TableCell>
       </TableRow>
     </TableHead>
   );

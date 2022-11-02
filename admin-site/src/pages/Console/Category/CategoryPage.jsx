@@ -5,7 +5,10 @@ import CategoryModal from "./CategoryModal/CategoryModal";
 import {
   SEARCH_CATEGORY_REQUEST,
   CREATE_CATEGORY_REQUEST,
+  DELETE_CATEGORY_REQUEST,
 } from "../../../store/reducer/category/categoryActionTypes";
+import useConfirmModal from "../../../hooks/useConfirmModal";
+import ConfirmModal from "../../../components/ConfirmModal";
 
 const headCells = [
   {
@@ -31,6 +34,9 @@ function CategoryPage() {
     open: false,
     product: null,
     action: "create",
+  });
+  const { confirm, openNewConfirm, onAnswer } = useConfirmModal({
+    message: "Do you want to delete category ?",
   });
 
   useEffect(() => {
@@ -95,6 +101,12 @@ function CategoryPage() {
     });
   };
 
+  const handleDelete = (category) => {
+    openNewConfirm(() => {
+      dispatch({ type: DELETE_CATEGORY_REQUEST, payload: category.id });
+    });
+  };
+
   return (
     <div>
       <DataTable
@@ -109,12 +121,18 @@ function CategoryPage() {
         handleChangeRowsPerPage={handleLimitChange}
         handleSearch={handleSearch}
         handleAddClick={handleAddClick}
+        handleDeleteClick={handleDelete}
       />
       <CategoryModal
         open={categoryModal.open}
         action={categoryModal.action}
         onSave={handleSave}
         onClose={handleClose}
+      />
+      <ConfirmModal
+        open={confirm.open}
+        message={confirm.message}
+        onAnswer={onAnswer}
       />
     </div>
   );

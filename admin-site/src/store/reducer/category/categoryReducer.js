@@ -1,4 +1,4 @@
-import { CREATE_CATEGORY_FAILURE, CREATE_CATEGORY_REQUEST, CREATE_CATEGORY_SUCCESS, SEARCH_CATEGORY_FAILURE, SEARCH_CATEGORY_REQUEST, SEARCH_CATEGORY_SUCCESS } from "./categoryActionTypes";
+import { CREATE_CATEGORY_FAILURE, CREATE_CATEGORY_REQUEST, CREATE_CATEGORY_SUCCESS, DELETE_CATEGORY_FAILURE, DELETE_CATEGORY_REQUEST, DELETE_CATEGORY_SUCCESS, SEARCH_CATEGORY_FAILURE, SEARCH_CATEGORY_REQUEST, SEARCH_CATEGORY_SUCCESS } from "./categoryActionTypes";
 
 const init = {
     query: "",
@@ -16,6 +16,7 @@ const init = {
 
 export default function categoryReducer(state = init, { type, payload }) {
     switch (type) {
+        case DELETE_CATEGORY_REQUEST:
         case CREATE_CATEGORY_REQUEST:
         case SEARCH_CATEGORY_REQUEST:
             return {
@@ -26,6 +27,7 @@ export default function categoryReducer(state = init, { type, payload }) {
                     message: null
                 }
             };
+        case DELETE_CATEGORY_FAILURE:
         case CREATE_CATEGORY_FAILURE:
         case SEARCH_CATEGORY_FAILURE:
             return {
@@ -49,7 +51,19 @@ export default function categoryReducer(state = init, { type, payload }) {
                 categories: [payload, ...state.categories],
                 loading: false,
             };
+        case DELETE_CATEGORY_SUCCESS:
+            return {
+                ...state,
+                categories: removeCategoryFromStore(state.categories, payload),
+                loading: false,
+            };
         default:
             return state;
     }
+}
+
+function removeCategoryFromStore(categories, toDelete) {
+    let index = categories.findIndex(c => c.id === toDelete.id)
+    categories.splice(index, 1)
+    return categories
 }

@@ -15,5 +15,6 @@ namespace API.Interfaces
         Task<CategoryDto?> GetCategoryById(int id);
         Task<PagingDto<CategoryDto>> AdminSearchCategory(string query, int page, int limit);
         Task<CategoryDto> CreateCategory(CreateCategoryDto createCategoryDto);
+        Task<CategoryDto> DeleteCategory(int id);
     }
 }
