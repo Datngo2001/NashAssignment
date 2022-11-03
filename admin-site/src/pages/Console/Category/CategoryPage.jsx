@@ -10,6 +10,7 @@ import {
 } from "../../../store/reducer/category/categoryActionTypes";
 import useConfirmModal from "../../../hooks/useConfirmModal";
 import ConfirmModal from "../../../components/ConfirmModal";
+import useThrottle from "../../../hooks/useThrottle";
 
 const headCells = [
   {
@@ -61,18 +62,12 @@ function CategoryPage() {
     });
   };
 
-  const searchThrottle = useRef();
-  const handleSearch = (e) => {
-    if (searchThrottle.current) {
-      clearTimeout(searchThrottle);
-    }
-    searchThrottle.current = setTimeout(() => {
-      dispatch({
-        type: SEARCH_CATEGORY_REQUEST,
-        payload: { query: e.target.value, page: 1, limit: limit },
-      });
-    }, 250);
-  };
+  const handleSearch = useThrottle((e) => {
+    dispatch({
+      type: SEARCH_CATEGORY_REQUEST,
+      payload: { query: e.target.value, page: 1, limit: limit },
+    });
+  }, 1000);
 
   const handleAddClick = () => {
     setCategoryModal({
