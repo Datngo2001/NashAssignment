@@ -10,9 +10,11 @@ function useConfirmModal({ open, message }) {
 
     const onAnswer = (result) => {
         if (result) {
-            confirm.onYes();
+            if (confirm.onYes)
+                confirm.onYes();
         } else {
-            confirm.onNo();
+            if (confirm.onNo)
+                confirm.onNo();
         }
 
         setConfirm(val => ({

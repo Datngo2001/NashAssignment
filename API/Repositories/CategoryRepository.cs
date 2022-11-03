@@ -57,6 +57,20 @@ namespace API.Repositories
             return mapper.Map<CategoryDto>(category);
         }
 
+        public async Task<CategoryDto> DeleteCategory(int id)
+        {
+            var category = await dbContext.Categories.FirstOrDefaultAsync(c => c.Id == id);
+            if (category == null)
+            {
+                throw new Exception($"Can not find category with id: {id}");
+            }
+
+            dbContext.Categories.Remove(category);
+            await dbContext.SaveChangesAsync();
+
+            return mapper.Map<CategoryDto>(category);
+        }
+
         public async Task<List<CategoryDto>> GetAllCategories()
         {
             return await dbContext.Categories
@@ -93,6 +107,24 @@ namespace API.Repositories
                 TotalPage = count / limit + 1,
                 Items = products,
             };
+        }
+
+        public async Task<CategoryDto> UpdateCategory(UpdateCategoryDto updateCategoryDto)
+        {
+            var category = await dbContext.Categories.FirstOrDefaultAsync(c => c.Id == updateCategoryDto.Id);
+
+            if (category == null)
+            {
+                throw new Exception($"Can not find category with id: {updateCategoryDto.Id}");
+            }
+
+            dbContext.Categories.Update(category);
+
+            mapper.Map(updateCategoryDto, category);
+
+            await dbContext.SaveChangesAsync();
+
+            return mapper.Map<CategoryDto>(category);
         }
     }
 }

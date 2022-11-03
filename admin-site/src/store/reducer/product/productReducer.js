@@ -5,7 +5,7 @@ const init = {
     page: 1,
     limit: 5,
     count: 0,
-    totalPage: 0,
+    totalPage: 1,
     products: [],
     loading: true,
     error: {
