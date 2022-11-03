@@ -15,7 +15,9 @@ function ProductModal({ open, onClose, onSave, product, action = "create" }) {
     useForm({
       defaultValues: { ...product },
     });
-  useWatch({ control: control, name: "image" });
+
+  const watchImg = useWatch({ control: control, name: "image" });
+
   const description = useRef();
 
   const { confirm, openNewConfirm, onAnswer } = useConfirmModal({

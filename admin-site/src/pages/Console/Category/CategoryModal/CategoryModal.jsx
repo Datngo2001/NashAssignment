@@ -1,23 +1,32 @@
 import { Box, Button, Paper, Stack, TextField } from "@mui/material";
-import React from "react";
-import { useForm, useWatch } from "react-hook-form";
+import React, { useEffect } from "react";
+import { useWatch } from "react-hook-form";
 import BaseModal from "../../../../components/BaseModal/BaseModal";
 import ConfirmModal from "../../../../components/ConfirmModal";
 import useConfirmModal from "../../../../hooks/useConfirmModal";
-import dumpImg from "../../../../assets/dump_img.webp";
+import useDataForm from "../../../../hooks/useDataForm";
+import { getSrc } from "../../../../util/getSrcImg";
 
-function CategoryModal({ open, onClose, onSave, category, action = "create" }) {
-  const { control, getValues, register, handleSubmit, formState, reset } =
-    useForm();
+function CategoryModal({ open, onClose, onSave, category, action }) {
+  const {
+    getValues,
+    register,
+    handleSubmit,
+    formState,
+    reset,
+    watch,
+    UPDATING,
+    DETAILING,
+  } = useDataForm({ action });
 
-  useWatch({ control: control, name: "image" });
+  const watchImg = watch("image");
 
   const { confirm, openNewConfirm, onAnswer } = useConfirmModal({
     message: "Save Change ?",
   });
 
   const handleClose = () => {
-    if (formState.isDirty && action !== "detail") {
+    if (formState.isDirty && !DETAILING) {
       openNewConfirm(
         () => {
           onSave(getValues(), action);
@@ -35,11 +44,12 @@ function CategoryModal({ open, onClose, onSave, category, action = "create" }) {
   };
 
   const onSubmit = (data) => {
-    onSave(data, action);
+    onSave(data);
     reset();
   };
 
   const handleCancel = () => handleClose();
+
   return (
     <BaseModal
       title={"Create category"}
@@ -55,13 +65,20 @@ function CategoryModal({ open, onClose, onSave, category, action = "create" }) {
         <Stack spacing={2} sx={{ height: "100%" }}>
           <Box sx={{ display: "flex", gap: 1 }}>
             <Stack spacing={2} sx={{ flexGrow: 2 }}>
-              {(action === "edit" || action === "detail") && (
-                <TextField
-                  value={category?.id}
-                  label="Category ID"
-                  {...register("id")}
-                  disabled={true}
-                />
+              {(UPDATING || DETAILING) && (
+                <>
+                  <TextField
+                    value={category?.id}
+                    label="Category ID"
+                    disabled={true}
+                  />
+                  <input
+                    type="text"
+                    defaultValue={category?.id}
+                    hidden
+                    {...register("id")}
+                  />
+                </>
               )}
               <TextField
                 label="Category Name"
@@ -70,7 +87,7 @@ function CategoryModal({ open, onClose, onSave, category, action = "create" }) {
                 InputProps={{
                   ...register("name"),
                   defaultValue: category?.name,
-                  readOnly: action === "detail",
+                  readOnly: DETAILING,
                 }}
               />
             </Stack>
@@ -79,8 +96,8 @@ function CategoryModal({ open, onClose, onSave, category, action = "create" }) {
                 label="Image"
                 InputProps={{
                   ...register("image"),
-                  defaultValue: category?.image,
-                  readOnly: action === "detail",
+                  value: category?.image,
+                  readOnly: DETAILING,
                 }}
               />
               <Paper elevation={1} sx={{ textAlign: "center" }}>
@@ -90,14 +107,14 @@ function CategoryModal({ open, onClose, onSave, category, action = "create" }) {
                     width: "200px",
                     objectFit: "contain",
                   }}
-                  src={category ? category.image : dumpImg}
+                  src={getSrc([watchImg, category?.image])}
                   alt="img"
                 />
               </Paper>
             </Stack>
           </Box>
           <Box sx={{ flexGrow: 1 }}></Box>
-          {action !== "detail" && (
+          {!DETAILING && (
             <Box sx={{ textAlign: "end" }}>
               <Button type="submit" variant="contained">
                 Save

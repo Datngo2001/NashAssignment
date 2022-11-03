@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "../../../components/DataTable/DataTable";
 import CategoryModal from "./CategoryModal/CategoryModal";
@@ -11,6 +11,7 @@ import {
 import useConfirmModal from "../../../hooks/useConfirmModal";
 import ConfirmModal from "../../../components/ConfirmModal";
 import useThrottle from "../../../hooks/useThrottle";
+import useDataModal from "../../../hooks/useDataModal";
 
 const headCells = [
   {
@@ -29,14 +30,19 @@ const headCells = [
 
 function CategoryPage() {
   const dispatch = useDispatch();
+
   const { query, page, limit, count, categories } = useSelector(
     (state) => state.category
   );
-  const [categoryModal, setCategoryModal] = useState({
-    open: false,
-    category: null,
-    action: "create",
-  });
+
+  const {
+    dataModal,
+    openCreateModal,
+    openDetailModal,
+    openUpdateModal,
+    closeModal,
+  } = useDataModal();
+
   const { confirm, openNewConfirm, onAnswer } = useConfirmModal({
     message: "Do you want to delete category ?",
   });
@@ -69,61 +75,26 @@ function CategoryPage() {
     });
   }, 1000);
 
-  const handleAddClick = () => {
-    setCategoryModal({
-      open: true,
-      category: null,
-      action: "create",
-    });
-  };
-
-  const handleSave = (data, action) => {
-    if (action === "edit") {
-      dispatch({
-        type: UPDATE_CATEGORY_REQUEST,
-        payload: data,
-      });
-    } else if (action === "create") {
-      dispatch({
-        type: CREATE_CATEGORY_REQUEST,
-        payload: data,
-      });
-    }
-
-    setCategoryModal({
-      open: false,
-      category: null,
-      action: "create",
-    });
-  };
-
-  const handleClose = () => {
-    setCategoryModal({
-      open: false,
-      category: null,
-      action: "",
-    });
-  };
-
   const handleDelete = (category) => {
     openNewConfirm(() => {
       dispatch({ type: DELETE_CATEGORY_REQUEST, payload: category.id });
     });
   };
 
-  const handleDetailClick = (row) => {
-    setCategoryModal({
-      open: true,
-      category: row,
-      action: "detail",
+  const handleEdit = (row) => {
+    openUpdateModal(row, (data) => {
+      dispatch({
+        type: UPDATE_CATEGORY_REQUEST,
+        payload: data,
+      });
     });
   };
-
-  const handleEdit = (row) => {
-    setCategoryModal({
-      open: true,
-      category: row,
-      action: "edit",
+  const handleCreate = () => {
+    openCreateModal((data) => {
+      dispatch({
+        type: CREATE_CATEGORY_REQUEST,
+        payload: data,
+      });
     });
   };
 
@@ -140,17 +111,17 @@ function CategoryPage() {
         handleChangePage={handlePageChange}
         handleChangeRowsPerPage={handleLimitChange}
         handleSearch={handleSearch}
-        handleAddClick={handleAddClick}
+        handleAddClick={handleCreate}
         handleEditClick={handleEdit}
         handleDeleteClick={handleDelete}
-        handleDetailClick={handleDetailClick}
+        handleDetailClick={(row) => openDetailModal(row)}
       />
       <CategoryModal
-        category={categoryModal.category}
-        open={categoryModal.open}
-        action={categoryModal.action}
-        onSave={handleSave}
-        onClose={handleClose}
+        category={dataModal.data}
+        open={dataModal.open}
+        action={dataModal.action}
+        onSave={dataModal.handleSave}
+        onClose={() => closeModal()}
       />
       <ConfirmModal
         open={confirm.open}
