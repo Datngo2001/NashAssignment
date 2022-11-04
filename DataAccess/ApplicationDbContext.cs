@@ -11,6 +11,7 @@ namespace DataAccess
         public DbSet<Product> Products { get; set; }
         public DbSet<Feature> Features { get; set; }
         public DbSet<Rating> Ratings { get; set; }
+        public DbSet<Image> Images { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -34,6 +35,9 @@ namespace DataAccess
             modelBuilder.Entity<IdentityUserClaim<string>>()
                 .Property(c => c.Id)
                 .UseIdentityColumn();
+
+            modelBuilder.Entity<Product>().Property(p => p.CreateDate).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Product>().Property(p => p.UpdateDate).ValueGeneratedOnAddOrUpdate();
         }
     }
 }

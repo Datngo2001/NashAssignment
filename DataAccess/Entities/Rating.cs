@@ -12,7 +12,7 @@ namespace DataAccess.Entities
         public string Title { get; set; } = "";
         public string Message { get; set; } = "";
         public DateTime CreateDate { get; set; }
-        public ApplicationUser ApplicationUser { get; set; }
-        public Product Product { get; set; }
+        public ApplicationUser ApplicationUser { get; set; } = new ApplicationUser();
+        public Product Product { get; set; } = new Product();
     }
 }

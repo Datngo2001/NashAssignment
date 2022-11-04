@@ -12,5 +12,7 @@ namespace CommonModel.Product
         public string Name { get; set; } = "";
         public string Image { get; set; } = "";
         public long Price { get; set; } = 0;
+        public DateTime CreateDate { get; set; }
+        public DateTime UpdateDate { get; set; }
     }
 }
