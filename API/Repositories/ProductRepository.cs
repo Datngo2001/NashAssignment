@@ -27,6 +27,7 @@ namespace API.Repositories
         public async Task<List<ProductDto>> GetAllProduct(int page, int limit)
         {
             return await context.Products
+                .OrderByDescending(p => p.UpdateDate)
                 .Skip((page - 1) * limit)
                 .Take(limit)
                 .ProjectTo<ProductDto>(mapper.ConfigurationProvider)
@@ -45,7 +46,7 @@ namespace API.Repositories
 
         public async Task<PagingDto<ProductDto>> SearchProduct(string query, int page, int limit)
         {
-            var queryable = context.Products.Where(p => p.Name.Contains(query));
+            var queryable = context.Products.Where(p => p.Name.Contains(query)).OrderByDescending(p => p.UpdateDate);
 
             var products = await queryable
                 .Skip((page - 1) * limit)
@@ -66,11 +67,12 @@ namespace API.Repositories
 
         public async Task<PagingDto<ProductDetailDto>> AdminSearchProduct(string query, int page, int limit)
         {
-            var queryable = context.Products.Where(p => p.Name.Contains(query));
+            var queryable = context.Products.Where(p => p.Name.Contains(query)).OrderByDescending(p => p.UpdateDate);
 
             var products = await queryable
                 .Include(p => p.Features)
                 .Include(p => p.Categories)
+                .Include(p => p.Images.OrderBy(i => i.IsMain))
                 .Skip((page - 1) * limit)
                 .Take(limit)
                 .ProjectTo<ProductDetailDto>(mapper.ConfigurationProvider)
@@ -93,6 +95,7 @@ namespace API.Repositories
         {
             return await context.Products
                 .Where(p => p.Name.Contains(query))
+                .OrderByDescending(p => p.UpdateDate)
                 .Take(limit)
                 .ProjectTo<ProductSearchHintDto>(mapper.ConfigurationProvider)
                 .ToListAsync();
