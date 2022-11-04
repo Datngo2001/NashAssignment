@@ -73,7 +73,7 @@ function CategoryPage() {
       type: SEARCH_CATEGORY_REQUEST,
       payload: { query: e.target.value, page: 1, limit: limit },
     });
-  }, 1000);
+  }, 250);
 
   const handleDelete = (category) => {
     openNewConfirm(() => {
@@ -89,6 +89,7 @@ function CategoryPage() {
       });
     });
   };
+
   const handleCreate = () => {
     openCreateModal((data) => {
       dispatch({

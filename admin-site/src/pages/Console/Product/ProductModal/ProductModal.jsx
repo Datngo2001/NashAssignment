@@ -9,14 +9,22 @@ import RichTextField from "../../../../components/RichTextField/RichTextField";
 import dumpImg from "../../../../assets/dump_img.webp";
 import { convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
+import useDataForm from "../../../../hooks/useDataForm";
+import { getSrc } from "../../../../util/getSrcImg";
 
 function ProductModal({ open, onClose, onSave, product, action = "create" }) {
-  const { control, getValues, register, handleSubmit, formState, reset } =
-    useForm({
-      defaultValues: { ...product },
-    });
+  const {
+    getValues,
+    register,
+    handleSubmit,
+    formState,
+    reset,
+    watch,
+    UPDATING,
+    DETAILING,
+  } = useDataForm({ action });
 
-  const watchImg = useWatch({ control: control, name: "image" });
+  const watchImg = watch("image");
 
   const description = useRef();
 
@@ -25,10 +33,10 @@ function ProductModal({ open, onClose, onSave, product, action = "create" }) {
   });
 
   const handleClose = () => {
-    if (formState.isDirty) {
+    if (formState.isDirty && !DETAILING) {
       openNewConfirm(
         () => {
-          onSave();
+          onSave(getValues());
           reset();
         },
         () => {
@@ -67,25 +75,50 @@ function ProductModal({ open, onClose, onSave, product, action = "create" }) {
         <Stack spacing={2} sx={{ height: "100%" }}>
           <Box sx={{ display: "flex", gap: 1 }}>
             <Stack spacing={2} sx={{ flexGrow: 2 }}>
-              {action === "edit" && (
-                <TextField
-                  label="Product ID"
-                  {...register("id")}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                />
+              {(UPDATING || DETAILING) && (
+                <>
+                  <TextField
+                    value={product?.id}
+                    label="Product ID"
+                    disabled={true}
+                  />
+                  <input
+                    type="text"
+                    defaultValue={product?.id}
+                    hidden
+                    {...register("id")}
+                  />
+                </>
               )}
               <TextField
                 label="Product Name"
                 multiline
                 rows={4}
-                {...register("name")}
+                InputProps={{
+                  ...register("name"),
+                  defaultValue: product?.name,
+                  readOnly: DETAILING,
+                }}
               />
-              <TextField label="Price" type="number" {...register("price")} />
+              <TextField
+                label="Price"
+                type="number"
+                InputProps={{
+                  ...register("price"),
+                  defaultValue: product?.price,
+                  readOnly: DETAILING,
+                }}
+              />
             </Stack>
             <Stack spacing={2} sx={{ flexGrow: 1 }}>
-              <TextField label="Image" {...register("image")} />
+              <TextField
+                label="Image"
+                InputProps={{
+                  ...register("image"),
+                  value: product?.image,
+                  readOnly: DETAILING,
+                }}
+              />
               <Paper elevation={1} sx={{ textAlign: "center" }}>
                 <img
                   style={{
@@ -93,21 +126,27 @@ function ProductModal({ open, onClose, onSave, product, action = "create" }) {
                     width: "444px",
                     objectFit: "contain",
                   }}
-                  src={getValues("image") ? getValues("image") : dumpImg}
+                  src={getSrc([watchImg, product?.image])}
                   alt="img"
                 />
               </Paper>
             </Stack>
           </Box>
           <Box sx={{ flexGrow: 1 }}>
-            <RichTextField ref={description} />
+            <RichTextField
+              defaultValue={product?.description}
+              ref={description}
+              readOnly={DETAILING}
+            />
           </Box>
-          <Box sx={{ textAlign: "end" }}>
-            <Button type="submit" variant="contained">
-              Save
-            </Button>
-            <Button onClick={handleCancel}>Cancel</Button>
-          </Box>
+          {!DETAILING && (
+            <Box sx={{ textAlign: "end" }}>
+              <Button type="submit" variant="contained">
+                Save
+              </Button>
+              <Button onClick={handleCancel}>Cancel</Button>
+            </Box>
+          )}
         </Stack>
       </form>
       <ConfirmModal

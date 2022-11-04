@@ -2,11 +2,16 @@ import React, { useEffect, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { Paper } from "@mui/material";
-import { EditorState } from "draft-js";
+import { ContentState, convertFromHTML, EditorState } from "draft-js";
 
-function RichTextField({ defaultValue }, ref) {
+function RichTextField({ defaultValue = "", readOnly = false }, ref) {
+  const blocksFromHTML = convertFromHTML(defaultValue);
+  const state = ContentState.createFromBlockArray(
+    blocksFromHTML.contentBlocks,
+    blocksFromHTML.entityMap
+  );
   const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty()
+    EditorState.createWithContent(state)
   );
 
   useEffect(() => {
@@ -15,7 +20,11 @@ function RichTextField({ defaultValue }, ref) {
 
   return (
     <Paper elevation={1} sx={{ p: 1, height: "100%" }}>
-      <Editor editorState={editorState} onEditorStateChange={setEditorState} />;
+      <Editor
+        editorState={editorState}
+        onEditorStateChange={setEditorState}
+        readOnly={readOnly}
+      />
     </Paper>
   );
 }

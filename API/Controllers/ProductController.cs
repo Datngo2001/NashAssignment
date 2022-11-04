@@ -35,6 +35,20 @@ namespace API.Controllers
             return await productRepository.CreateProduct(model);
         }
 
+        [Authorize(AuthenticationSchemes = "Bearer", Policy = "Admin")]
+        [HttpDelete("delete/{id}")]
+        public async Task<ActionResult<ProductDetailDto>> DeleteProduct(int id)
+        {
+            return await productRepository.DeleteProduct(id);
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer", Policy = "Admin")]
+        [HttpPut("update")]
+        public async Task<ActionResult<ProductDetailDto>> UpdateProduct([FromBody] UpdateProductDto model)
+        {
+            return await productRepository.UpdateProduct(model);
+        }
+
         [HttpGet("get-all")]
         public async Task<ActionResult<List<ProductDto>>> GetAllProduct([FromQuery(Name = "p")] int page = 1)
         {

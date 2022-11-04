@@ -1,9 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import ConfirmModal from "../../../components/ConfirmModal";
 import DataTable from "../../../components/DataTable/DataTable";
+import useConfirmModal from "../../../hooks/useConfirmModal";
+import useDataModal from "../../../hooks/useDataModal";
+import useThrottle from "../../../hooks/useThrottle";
 import {
   CREATE_PRODUCT_REQUEST,
+  DELETE_PRODUCT_REQUEST,
   SEARCH_PRODUCT_REQUEST,
+  UPDATE_PRODUCT_REQUEST,
 } from "../../../store/reducer/product/productActionTypes";
 import ProductModal from "./ProductModal/ProductModal";
 
@@ -33,10 +39,16 @@ function ProductPage() {
   const { query, page, limit, count, products } = useSelector(
     (state) => state.product
   );
-  const [productModal, setProductModal] = useState({
-    open: false,
-    product: null,
-    action: "create",
+  const {
+    dataModal,
+    openCreateModal,
+    openDetailModal,
+    openUpdateModal,
+    closeModal,
+  } = useDataModal();
+
+  const { confirm, openNewConfirm, onAnswer } = useConfirmModal({
+    message: "Do you want to delete product?",
   });
 
   useEffect(() => {
@@ -60,44 +72,34 @@ function ProductPage() {
     });
   };
 
-  const searchThrottle = useRef();
-  const handleSearch = (e) => {
-    if (searchThrottle.current) {
-      clearTimeout(searchThrottle);
-    }
-    searchThrottle.current = setTimeout(() => {
-      dispatch({
-        type: SEARCH_PRODUCT_REQUEST,
-        payload: { query: e.target.value, page: 1, limit: limit },
-      });
-    }, 250);
-  };
-
-  const handleAddClick = () => {
-    setProductModal({
-      open: true,
-      product: null,
-      action: "create",
-    });
-  };
-
-  const handleSave = (data) => {
+  const handleSearch = useThrottle((e) => {
     dispatch({
-      type: CREATE_PRODUCT_REQUEST,
-      payload: data,
+      type: SEARCH_PRODUCT_REQUEST,
+      payload: { query: e.target.value, page: 1, limit: limit },
     });
-    setProductModal({
-      open: false,
-      product: null,
-      action: "create",
+  }, 250);
+
+  const handleCreate = () => {
+    openCreateModal((data) => {
+      dispatch({
+        type: CREATE_PRODUCT_REQUEST,
+        payload: data,
+      });
     });
   };
 
-  const handleClose = () => {
-    setProductModal({
-      open: false,
-      product: null,
-      action: "create",
+  const handleEdit = (row) => {
+    openUpdateModal(row, (data) => {
+      dispatch({
+        type: UPDATE_PRODUCT_REQUEST,
+        payload: data,
+      });
+    });
+  };
+
+  const handleDelete = (category) => {
+    openNewConfirm(() => {
+      dispatch({ type: DELETE_PRODUCT_REQUEST, payload: category.id });
     });
   };
 
@@ -114,13 +116,22 @@ function ProductPage() {
         handleChangePage={handlePageChange}
         handleChangeRowsPerPage={handleLimitChange}
         handleSearch={handleSearch}
-        handleAddClick={handleAddClick}
+        handleAddClick={handleCreate}
+        handleEditClick={handleEdit}
+        handleDeleteClick={handleDelete}
+        handleDetailClick={(row) => openDetailModal(row)}
       />
       <ProductModal
-        open={productModal.open}
-        action={productModal.action}
-        onSave={handleSave}
-        onClose={handleClose}
+        open={dataModal.open}
+        product={dataModal.data}
+        action={dataModal.action}
+        onSave={dataModal.handleSave}
+        onClose={() => closeModal()}
+      />
+      <ConfirmModal
+        open={confirm.open}
+        message={confirm.message}
+        onAnswer={onAnswer}
       />
     </div>
   );

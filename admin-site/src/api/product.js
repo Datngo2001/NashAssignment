@@ -13,3 +13,7 @@ export function postProduct(data) {
 export function putProduct(data) {
     return api.put("Product/update", data);
 }
+
+export function deleteProduct(id) {
+    return api.delete(`Product/delete/${id}`);
+}
