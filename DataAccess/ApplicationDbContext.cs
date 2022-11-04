@@ -36,8 +36,15 @@ namespace DataAccess
                 .Property(c => c.Id)
                 .UseIdentityColumn();
 
-            modelBuilder.Entity<Product>().Property(p => p.CreateDate).ValueGeneratedOnAdd();
-            modelBuilder.Entity<Product>().Property(p => p.UpdateDate).ValueGeneratedOnAddOrUpdate();
+            modelBuilder.Entity<Product>()
+                .Property(p => p.CreateDate)
+                .HasDefaultValue(DateTime.Now)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Product>()
+                .Property(p => p.UpdateDate)
+                .HasDefaultValue(DateTime.Now)
+                .ValueGeneratedOnAddOrUpdate();
         }
     }
 }

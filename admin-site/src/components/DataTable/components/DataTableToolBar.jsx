@@ -28,7 +28,7 @@ export default function DataTableToolbar({ onSearchChange, onAddClick }) {
       <Button
         size="large"
         color="secondary"
-        variant="outlined"
+        variant="contained"
         onClick={onAddClick}
       >
         <AddIcon />

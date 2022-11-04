@@ -1,12 +1,10 @@
 import { Button, Paper, TextField } from "@mui/material";
 import React, { useRef } from "react";
 import BaseModal from "../../../../components/BaseModal/BaseModal";
-import { useForm, useWatch } from "react-hook-form";
 import { Box, Stack } from "@mui/system";
 import ConfirmModal from "../../../../components/ConfirmModal";
 import useConfirmModal from "../../../../hooks/useConfirmModal";
 import RichTextField from "../../../../components/RichTextField/RichTextField";
-import dumpImg from "../../../../assets/dump_img.webp";
 import { convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import useDataForm from "../../../../hooks/useDataForm";
@@ -109,6 +107,26 @@ function ProductModal({ open, onClose, onSave, product, action = "create" }) {
                   readOnly: DETAILING,
                 }}
               />
+              {(UPDATING || DETAILING) && (
+                <>
+                  <TextField
+                    label="Create Date"
+                    type="text"
+                    InputProps={{
+                      defaultValue: product?.createDate,
+                      disabled: DETAILING || UPDATING,
+                    }}
+                  />
+                  <TextField
+                    label="Update Date"
+                    type="text"
+                    InputProps={{
+                      defaultValue: product?.updateDate,
+                      disabled: DETAILING || UPDATING,
+                    }}
+                  />
+                </>
+              )}
             </Stack>
             <Stack spacing={2} sx={{ flexGrow: 1 }}>
               <TextField

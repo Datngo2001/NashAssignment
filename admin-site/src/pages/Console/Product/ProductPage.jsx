@@ -32,6 +32,18 @@ const headCells = [
     disablePadding: false,
     label: "Price",
   },
+  {
+    id: "createDate",
+    numeric: true,
+    disablePadding: false,
+    label: "Create Date",
+  },
+  {
+    id: "updateDate",
+    numeric: true,
+    disablePadding: false,
+    label: "Update Date",
+  },
 ];
 
 function ProductPage() {
