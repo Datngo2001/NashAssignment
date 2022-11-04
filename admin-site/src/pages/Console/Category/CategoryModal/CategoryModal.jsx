@@ -1,6 +1,5 @@
 import { Box, Button, Paper, Stack, TextField } from "@mui/material";
-import React, { useEffect } from "react";
-import { useWatch } from "react-hook-form";
+import React from "react";
 import BaseModal from "../../../../components/BaseModal/BaseModal";
 import ConfirmModal from "../../../../components/ConfirmModal";
 import useConfirmModal from "../../../../hooks/useConfirmModal";
@@ -29,7 +28,7 @@ function CategoryModal({ open, onClose, onSave, category, action }) {
     if (formState.isDirty && !DETAILING) {
       openNewConfirm(
         () => {
-          onSave(getValues(), action);
+          onSave(getValues());
           reset();
         },
         () => {

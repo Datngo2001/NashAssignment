@@ -122,5 +122,37 @@ namespace API.Repositories
 
             return mapper.Map<ProductDetailDto>(product);
         }
+
+        public async Task<ProductDetailDto> UpdateProduct(UpdateProductDto updateProductDto)
+        {
+            var product = await context.Products.FirstOrDefaultAsync(p => p.Id == updateProductDto.Id);
+
+            if (product == null)
+            {
+                throw new Exception($"Can not find product with id: {updateProductDto.Id}");
+            }
+
+            context.Products.Update(product);
+
+            mapper.Map(updateProductDto, product);
+
+            await context.SaveChangesAsync();
+
+            return mapper.Map<ProductDetailDto>(product);
+        }
+
+        public async Task<ProductDetailDto> DeleteProduct(int id)
+        {
+            var product = await context.Products.FirstOrDefaultAsync(c => c.Id == id);
+            if (product == null)
+            {
+                throw new Exception($"Can not find product with id: {id}");
+            }
+
+            context.Products.Remove(product);
+            await context.SaveChangesAsync();
+
+            return mapper.Map<ProductDetailDto>(product);
+        }
     }
 }

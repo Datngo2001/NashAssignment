@@ -16,6 +16,7 @@ namespace API.Helpers
             CreateMap<UpdateCategoryDto, Category>();
             CreateMap<Product, ProductDto>();
             CreateMap<Product, ProductDetailDto>();
+            CreateMap<UpdateProductDto, Product>();
             CreateMap<Feature, FeatureDto>();
             CreateMap<Rating, RatingDto>()
                 .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.ApplicationUser));
