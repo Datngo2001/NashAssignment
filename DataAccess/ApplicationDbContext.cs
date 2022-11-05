@@ -45,6 +45,15 @@ namespace DataAccess
                 .Property(p => p.UpdateDate)
                 .HasDefaultValue(DateTime.Now)
                 .ValueGeneratedOnAddOrUpdate();
+
+            modelBuilder.Entity<Product>()
+                .HasMany(p => p.Images)
+                .WithOne(i => i.Product)
+                .IsRequired();
+
+            modelBuilder.Entity<Product>()
+                .HasMany(p => p.Categories)
+                .WithMany(c => c.Products);
         }
     }
 }

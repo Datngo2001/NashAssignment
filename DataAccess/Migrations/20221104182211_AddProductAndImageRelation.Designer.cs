@@ -4,6 +4,7 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221104182211_AddProductAndImageRelation")]
+    partial class AddProductAndImageRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -185,7 +187,7 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 11, 5, 1, 29, 46, 652, DateTimeKind.Local).AddTicks(5108));
+                        .HasDefaultValue(new DateTime(2022, 11, 5, 1, 22, 11, 0, DateTimeKind.Local).AddTicks(5377));
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -201,7 +203,7 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("UpdateDate")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 11, 5, 1, 29, 46, 652, DateTimeKind.Local).AddTicks(5388));
+                        .HasDefaultValue(new DateTime(2022, 11, 5, 1, 22, 11, 0, DateTimeKind.Local).AddTicks(5634));
 
                     b.HasKey("Id");
 
@@ -222,7 +224,7 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 11, 5, 1, 29, 46, 652, DateTimeKind.Local).AddTicks(4522));
+                        .HasDefaultValue(new DateTime(2022, 11, 5, 1, 22, 11, 0, DateTimeKind.Local).AddTicks(4610));
 
                     b.Property<string>("Message")
                         .IsRequired()

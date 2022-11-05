@@ -21,8 +21,8 @@ function BaseModalContent({ title, open, onClose, styles, children }) {
         sx={{
           ...styles,
           bgcolor: "background.paper",
-          marginTop: 10,
-          marginBottom: 10,
+          marginTop: 5,
+          marginBottom: 5,
           boxShadow: 24,
         }}
       >

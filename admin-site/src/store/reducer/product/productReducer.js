@@ -60,7 +60,6 @@ export default function productReducer(state = init, { type, payload }) {
                 products: removeElementById(state.products, payload),
                 loading: false,
             };
-
         case UPDATE_PRODUCT_SUCCESS:
             return {
                 ...state,

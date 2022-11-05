@@ -1,5 +1,5 @@
-import { Button, Paper, TextField } from "@mui/material";
-import React, { useRef } from "react";
+import { Button, TextField } from "@mui/material";
+import React, { useRef, useState } from "react";
 import BaseModal from "../../../../components/BaseModal/BaseModal";
 import { Box, Stack } from "@mui/system";
 import ConfirmModal from "../../../../components/ConfirmModal";
@@ -8,23 +8,21 @@ import RichTextField from "../../../../components/RichTextField/RichTextField";
 import { convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import useDataForm from "../../../../hooks/useDataForm";
-import { getSrc } from "../../../../util/getSrcImg";
+import ProductImages from "../ProductImages/ProductImages";
 
-function ProductModal({ open, onClose, onSave, product, action = "create" }) {
+function ProductModal({ open, onClose, onSave, product, action }) {
   const {
     getValues,
     register,
     handleSubmit,
     formState,
     reset,
-    watch,
     UPDATING,
     DETAILING,
   } = useDataForm({ action });
 
-  const watchImg = watch("image");
-
   const description = useRef();
+  const images = useRef();
 
   const { confirm, openNewConfirm, onAnswer } = useConfirmModal({
     message: "Save Change ?",
@@ -52,15 +50,20 @@ function ProductModal({ open, onClose, onSave, product, action = "create" }) {
     data.description = draftToHtml(
       convertToRaw(description.current.getCurrentContent())
     );
+    data.images = images.current;
     onSave(data);
     reset();
   };
 
   const handleCancel = () => handleClose();
 
+  const handleImagesChange = (newImages) => {
+    images.current = newImages;
+  };
+
   return (
     <BaseModal
-      title={"Create product"}
+      title={"Product"}
       open={open}
       onClose={handleClose}
       styles={{ width: 1300, height: 1300 }}
@@ -72,7 +75,7 @@ function ProductModal({ open, onClose, onSave, product, action = "create" }) {
       >
         <Stack spacing={2} sx={{ height: "100%" }}>
           <Box sx={{ display: "flex", gap: 1 }}>
-            <Stack spacing={2} sx={{ flexGrow: 2 }}>
+            <Stack spacing={2} sx={{ flexGrow: 1 }}>
               {(UPDATING || DETAILING) && (
                 <>
                   <TextField
@@ -128,27 +131,13 @@ function ProductModal({ open, onClose, onSave, product, action = "create" }) {
                 </>
               )}
             </Stack>
-            <Stack spacing={2} sx={{ flexGrow: 1 }}>
-              <TextField
-                label="Image"
-                InputProps={{
-                  ...register("image"),
-                  value: product?.image,
-                  readOnly: DETAILING,
-                }}
+            <Box>
+              <ProductImages
+                items={product?.images}
+                action={action}
+                onImagesChange={handleImagesChange}
               />
-              <Paper elevation={1} sx={{ textAlign: "center" }}>
-                <img
-                  style={{
-                    height: "444px",
-                    width: "444px",
-                    objectFit: "contain",
-                  }}
-                  src={getSrc([watchImg, product?.image])}
-                  alt="img"
-                />
-              </Paper>
-            </Stack>
+            </Box>
           </Box>
           <Box sx={{ flexGrow: 1 }}>
             <RichTextField

@@ -109,9 +109,9 @@ function ProductPage() {
     });
   };
 
-  const handleDelete = (category) => {
+  const handleDelete = (product) => {
     openNewConfirm(() => {
-      dispatch({ type: DELETE_PRODUCT_REQUEST, payload: category.id });
+      dispatch({ type: DELETE_PRODUCT_REQUEST, payload: product.id });
     });
   };
 

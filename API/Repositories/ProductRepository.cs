@@ -67,12 +67,12 @@ namespace API.Repositories
 
         public async Task<PagingDto<ProductDetailDto>> AdminSearchProduct(string query, int page, int limit)
         {
-            var queryable = context.Products.Where(p => p.Name.Contains(query)).OrderByDescending(p => p.UpdateDate);
+            var queryable = context.Products.AsNoTracking().Where(p => p.Name.Contains(query)).OrderByDescending(p => p.UpdateDate);
 
             var products = await queryable
                 .Include(p => p.Features)
                 .Include(p => p.Categories)
-                .Include(p => p.Images.OrderBy(i => i.IsMain))
+                .Include(p => p.Images)
                 .Skip((page - 1) * limit)
                 .Take(limit)
                 .ProjectTo<ProductDetailDto>(mapper.ConfigurationProvider)
@@ -128,7 +128,7 @@ namespace API.Repositories
 
         public async Task<ProductDetailDto> UpdateProduct(UpdateProductDto updateProductDto)
         {
-            var product = await context.Products.FirstOrDefaultAsync(p => p.Id == updateProductDto.Id);
+            var product = await context.Products.Include(p => p.Images).FirstOrDefaultAsync(p => p.Id == updateProductDto.Id);
 
             if (product == null)
             {
@@ -137,6 +137,7 @@ namespace API.Repositories
 
             context.Products.Update(product);
 
+            product.Images = new List<Image>();
             mapper.Map(updateProductDto, product);
 
             await context.SaveChangesAsync();
