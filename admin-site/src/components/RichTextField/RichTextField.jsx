@@ -19,7 +19,7 @@ function RichTextField({ defaultValue = "", readOnly = false }, ref) {
   }, [editorState]);
 
   return (
-    <Paper elevation={1} sx={{ p: 1, height: "100%" }}>
+    <Paper elevation={1} sx={{ p: 1, minHeight: 500 }}>
       <Editor
         editorState={editorState}
         onEditorStateChange={setEditorState}

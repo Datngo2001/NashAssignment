@@ -76,7 +76,7 @@ function ProductModal({ open, onClose, onSave, product = init, action }) {
       title={"Product"}
       open={open}
       onClose={handleClose}
-      styles={{ width: 1300, height: 1300 }}
+      styles={{ width: 1300, height: "max-content" }}
     >
       <form
         autoComplete="off"
