@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import ConfirmModal from "../../../components/ConfirmModal";
 import DataTable from "../../../components/DataTable/DataTable";
 import useConfirmModal from "../../../hooks/useConfirmModal";
 import useDataModal from "../../../hooks/useDataModal";

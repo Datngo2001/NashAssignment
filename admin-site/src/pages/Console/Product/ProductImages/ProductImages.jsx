@@ -5,14 +5,13 @@ import ImageListItemBar from "@mui/material/ImageListItemBar";
 import ListSubheader from "@mui/material/ListSubheader";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Paper, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import useDataModal from "../../../../hooks/useDataModal";
 import ImageModal from "../ImageModal/ImageModal";
 import EditIcon from "@mui/icons-material/Edit";
 import useConfirmModal from "../../../../hooks/useConfirmModal";
 import { DETAIL } from "../../../../hooks/_dataAction";
-import ConfirmModal from "../../../../components/ConfirmModal";
 
 export default function ProductImages({ items = [], action, onImagesChange }) {
   const {
@@ -79,7 +78,7 @@ export default function ProductImages({ items = [], action, onImagesChange }) {
   };
 
   return (
-    <>
+    <Paper sx={{ padding: 1 }}>
       <ImageList sx={{ width: 500, height: 450 }}>
         <ImageListItem key="Subheader" cols={2}>
           <ListSubheader component="div" sx={{ padding: 0 }}>
@@ -143,6 +142,6 @@ export default function ProductImages({ items = [], action, onImagesChange }) {
         onSave={dataModal.handleSave}
         onClose={() => closeModal()}
       />
-    </>
+    </Paper>
   );
 }

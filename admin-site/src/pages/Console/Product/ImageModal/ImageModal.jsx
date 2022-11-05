@@ -86,7 +86,7 @@ function ImageModal({ open, onClose, onSave, image = init, action }) {
               label="Image"
               InputProps={{
                 ...register("url"),
-                value: image.url,
+                defaultValue: image.url,
                 readOnly: DETAILING,
               }}
             />
