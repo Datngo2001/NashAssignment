@@ -43,8 +43,7 @@ namespace DataAccess
 
             modelBuilder.Entity<Product>()
                 .Property(p => p.UpdateDate)
-                .HasDefaultValue(DateTime.Now)
-                .ValueGeneratedOnAddOrUpdate();
+                .HasDefaultValue(DateTime.Now);
 
             modelBuilder.Entity<Product>()
                 .HasMany(p => p.Images)

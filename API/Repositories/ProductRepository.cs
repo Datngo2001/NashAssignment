@@ -140,6 +140,8 @@ namespace API.Repositories
             product.Images = new List<Image>();
             mapper.Map(updateProductDto, product);
 
+            product.UpdateDate = DateTime.Now;
+
             await context.SaveChangesAsync();
 
             return mapper.Map<ProductDetailDto>(product);
