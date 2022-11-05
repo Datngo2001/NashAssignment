@@ -13,7 +13,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import useConfirmModal from "../../../../hooks/useConfirmModal";
 import { DETAIL } from "../../../../hooks/_dataAction";
 
-export default function ProductImages({ items = [], action, onImagesChange }) {
+function ProductImages({ items = [], action, onImagesChange, style }) {
   const {
     dataModal,
     openCreateModal,
@@ -79,7 +79,7 @@ export default function ProductImages({ items = [], action, onImagesChange }) {
 
   return (
     <Paper sx={{ padding: 1 }}>
-      <ImageList sx={{ width: 500, height: 450 }}>
+      <ImageList sx={style}>
         <ImageListItem key="Subheader" cols={2}>
           <ListSubheader component="div" sx={{ padding: 0 }}>
             <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -105,33 +105,35 @@ export default function ProductImages({ items = [], action, onImagesChange }) {
               alt={image.url}
               loading="lazy"
             />
-            {action === DETAIL ? null : (
-              <ImageListItemBar
-                title={image.isMain ? "Main" : `Image ${index}`}
-                actionIcon={
-                  <>
-                    <IconButton
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleEditImage(image);
-                      }}
-                      sx={{ color: "rgba(255, 255, 255, 0.54)" }}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteImage(image);
-                      }}
-                      sx={{ color: "rgba(255, 255, 255, 0.54)" }}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </>
-                }
-              />
-            )}
+            <ImageListItemBar
+              title={image.isMain ? "Main" : `Image ${index}`}
+              actionIcon={
+                <>
+                  {action === DETAIL ? null : (
+                    <>
+                      <IconButton
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEditImage(image);
+                        }}
+                        sx={{ color: "rgba(255, 255, 255, 0.54)" }}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteImage(image);
+                        }}
+                        sx={{ color: "rgba(255, 255, 255, 0.54)" }}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </>
+                  )}
+                </>
+              }
+            />
           </ImageListItem>
         ))}
       </ImageList>
@@ -145,3 +147,5 @@ export default function ProductImages({ items = [], action, onImagesChange }) {
     </Paper>
   );
 }
+
+export default ProductImages;

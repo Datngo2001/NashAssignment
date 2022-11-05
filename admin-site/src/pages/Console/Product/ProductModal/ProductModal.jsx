@@ -84,8 +84,8 @@ function ProductModal({ open, onClose, onSave, product = init, action }) {
         onSubmit={handleSubmit(onSubmit)}
       >
         <Stack spacing={2} sx={{ height: "100%" }}>
-          <Box sx={{ display: "flex", gap: 1 }}>
-            <Stack spacing={2} sx={{ flexGrow: 1 }}>
+          <Box sx={{ display: "flex", gap: 1, height: 450 }}>
+            <Stack spacing={2} sx={{ width: "50%" }}>
               {(UPDATING || DETAILING) && (
                 <>
                   <TextField
@@ -141,8 +141,9 @@ function ProductModal({ open, onClose, onSave, product = init, action }) {
                 </>
               )}
             </Stack>
-            <Box>
+            <Box sx={{ width: "50%" }}>
               <ProductImages
+                style={{ height: 396 }}
                 items={product.images}
                 action={action}
                 onImagesChange={handleImagesChange}
