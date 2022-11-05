@@ -48,6 +48,7 @@ const headCells = [
 
 function ProductPage() {
   const dispatch = useDispatch();
+  const openConfirm = useConfirmModal();
   const { query, page, limit, count, products } = useSelector(
     (state) => state.product
   );
@@ -58,10 +59,6 @@ function ProductPage() {
     openUpdateModal,
     closeModal,
   } = useDataModal();
-
-  const { confirm, openNewConfirm, onAnswer } = useConfirmModal({
-    message: "Do you want to delete product?",
-  });
 
   useEffect(() => {
     dispatch({
@@ -110,8 +107,12 @@ function ProductPage() {
   };
 
   const handleDelete = (product) => {
-    openNewConfirm(() => {
-      dispatch({ type: DELETE_PRODUCT_REQUEST, payload: product.id });
+    openConfirm({
+      message: `Do you want to delete product with id: ${product.id}?`,
+      onYes: () => {
+        dispatch({ type: DELETE_PRODUCT_REQUEST, payload: product.id });
+      },
+      onNO: () => {},
     });
   };
 
@@ -139,11 +140,6 @@ function ProductPage() {
         action={dataModal.action}
         onSave={dataModal.handleSave}
         onClose={() => closeModal()}
-      />
-      <ConfirmModal
-        open={confirm.open}
-        message={confirm.message}
-        onAnswer={onAnswer}
       />
     </div>
   );

@@ -24,22 +24,21 @@ function ProductModal({ open, onClose, onSave, product, action }) {
   const description = useRef();
   const images = useRef();
 
-  const { confirm, openNewConfirm, onAnswer } = useConfirmModal({
-    message: "Save Change ?",
-  });
+  const openConfirm = useConfirmModal();
 
   const handleClose = () => {
     if (formState.isDirty && !DETAILING) {
-      openNewConfirm(
-        () => {
+      openConfirm({
+        message: "Save Changes?",
+        onYes: () => {
           onSave(getValues());
           reset();
         },
-        () => {
+        onNo: () => {
           onClose();
           reset();
-        }
-      );
+        },
+      });
     } else {
       onClose();
       reset();
@@ -156,11 +155,6 @@ function ProductModal({ open, onClose, onSave, product, action }) {
           )}
         </Stack>
       </form>
-      <ConfirmModal
-        open={confirm.open}
-        message={confirm.message}
-        onAnswer={onAnswer}
-      />
     </BaseModal>
   );
 }

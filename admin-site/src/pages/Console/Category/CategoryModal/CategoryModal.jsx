@@ -7,6 +7,8 @@ import useDataForm from "../../../../hooks/useDataForm";
 import { getSrc } from "../../../../util/getSrcImg";
 
 function CategoryModal({ open, onClose, onSave, category, action }) {
+  const openConfirm = useConfirmModal();
+
   const {
     getValues,
     register,
@@ -20,22 +22,19 @@ function CategoryModal({ open, onClose, onSave, category, action }) {
 
   const watchImg = watch("image");
 
-  const { confirm, openNewConfirm, onAnswer } = useConfirmModal({
-    message: "Save Change ?",
-  });
-
   const handleClose = () => {
     if (formState.isDirty && !DETAILING) {
-      openNewConfirm(
-        () => {
+      openConfirm({
+        message: "Save Change ?",
+        onYes: () => {
           onSave(getValues());
           reset();
         },
-        () => {
+        onNo: () => {
           onClose();
           reset();
-        }
-      );
+        },
+      });
     } else {
       onClose();
       reset();
@@ -123,11 +122,6 @@ function CategoryModal({ open, onClose, onSave, category, action }) {
           )}
         </Stack>
       </form>
-      <ConfirmModal
-        open={confirm.open}
-        message={confirm.message}
-        onAnswer={onAnswer}
-      />
     </BaseModal>
   );
 }

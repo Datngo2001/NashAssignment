@@ -5,6 +5,7 @@ import ConsoleLayout from "./layout/ConsoleLayout";
 import "./App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { CHECK_USER_STATUS } from "./store/reducer/user/userActionTypes";
+import ConfirmModal from "./components/ConfirmModal";
 
 const theme = createTheme({
   palette: {
@@ -31,6 +32,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       {user ? <ConsoleLayout /> : <LoginLayout />}
+      <ConfirmModal />
     </ThemeProvider>
   );
 }

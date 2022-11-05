@@ -9,7 +9,6 @@ import {
   UPDATE_CATEGORY_REQUEST,
 } from "../../../store/reducer/category/categoryActionTypes";
 import useConfirmModal from "../../../hooks/useConfirmModal";
-import ConfirmModal from "../../../components/ConfirmModal";
 import useThrottle from "../../../hooks/useThrottle";
 import useDataModal from "../../../hooks/useDataModal";
 
@@ -30,7 +29,7 @@ const headCells = [
 
 function CategoryPage() {
   const dispatch = useDispatch();
-
+  const openConfirm = useConfirmModal();
   const { query, page, limit, count, categories } = useSelector(
     (state) => state.category
   );
@@ -42,10 +41,6 @@ function CategoryPage() {
     openUpdateModal,
     closeModal,
   } = useDataModal();
-
-  const { confirm, openNewConfirm, onAnswer } = useConfirmModal({
-    message: "Do you want to delete category ?",
-  });
 
   useEffect(() => {
     dispatch({
@@ -76,8 +71,12 @@ function CategoryPage() {
   }, 250);
 
   const handleDelete = (category) => {
-    openNewConfirm(() => {
-      dispatch({ type: DELETE_CATEGORY_REQUEST, payload: category.id });
+    openConfirm({
+      message: `Do you want to delete category ${category.id}`,
+      onYes: () => {
+        dispatch({ type: DELETE_CATEGORY_REQUEST, payload: category.id });
+      },
+      onNo: () => {},
     });
   };
 
@@ -123,11 +122,6 @@ function CategoryPage() {
         action={dataModal.action}
         onSave={dataModal.handleSave}
         onClose={() => closeModal()}
-      />
-      <ConfirmModal
-        open={confirm.open}
-        message={confirm.message}
-        onAnswer={onAnswer}
       />
     </div>
   );

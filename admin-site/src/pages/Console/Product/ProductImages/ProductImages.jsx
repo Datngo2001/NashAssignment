@@ -22,9 +22,8 @@ export default function ProductImages({ items = [], action, onImagesChange }) {
     openUpdateModal,
     closeModal,
   } = useDataModal();
-  const { confirm, openNewConfirm, onAnswer } = useConfirmModal({
-    message: "Save Change ?",
-  });
+  const openConfirm = useConfirmModal();
+
   const [images, setImages] = useState(items);
 
   useEffect(() => {
@@ -69,9 +68,13 @@ export default function ProductImages({ items = [], action, onImagesChange }) {
   };
 
   const handleDeleteImage = (image) => {
-    openNewConfirm(() => {
-      let index = images.findIndex((img) => img.id === image.id);
-      images.splice(index, 1);
+    openConfirm({
+      message: `Do you want to delete image?`,
+      onYes: () => {
+        let index = images.findIndex((img) => img.id === image.id);
+        images.splice(index, 1);
+      },
+      onNo: () => {},
     });
   };
 
@@ -139,11 +142,6 @@ export default function ProductImages({ items = [], action, onImagesChange }) {
         action={dataModal.action}
         onSave={dataModal.handleSave}
         onClose={() => closeModal()}
-      />
-      <ConfirmModal
-        open={confirm.open}
-        message={confirm.message}
-        onAnswer={onAnswer}
       />
     </>
   );

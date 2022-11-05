@@ -9,12 +9,12 @@ import {
 import { Box } from "@mui/system";
 import React from "react";
 import BaseModal from "../../../../components/BaseModal/BaseModal";
-import ConfirmModal from "../../../../components/ConfirmModal";
 import useConfirmModal from "../../../../hooks/useConfirmModal";
 import useDataForm from "../../../../hooks/useDataForm";
 import { getSrc } from "../../../../util/getSrcImg";
 
 function ImageModal({ open, onClose, onSave, image, action }) {
+  const openConfirm = useConfirmModal();
   const {
     getValues,
     register,
@@ -27,22 +27,19 @@ function ImageModal({ open, onClose, onSave, image, action }) {
 
   const watchUrl = watch("url");
 
-  const { confirm, openNewConfirm, onAnswer } = useConfirmModal({
-    message: "Save Change ?",
-  });
-
   const handleClose = () => {
     if (formState.isDirty && !DETAILING) {
-      openNewConfirm(
-        () => {
+      openConfirm({
+        message: "Save changes?",
+        onYes: () => {
           onSave(getValues());
           reset();
         },
-        () => {
+        onNo: () => {
           onClose();
           reset();
-        }
-      );
+        },
+      });
     } else {
       onClose();
       reset();
@@ -121,11 +118,6 @@ function ImageModal({ open, onClose, onSave, image, action }) {
           </Stack>
         </form>
       </BaseModal>
-      <ConfirmModal
-        open={confirm.open}
-        message={confirm.message}
-        onAnswer={onAnswer}
-      />
     </>
   );
 }
