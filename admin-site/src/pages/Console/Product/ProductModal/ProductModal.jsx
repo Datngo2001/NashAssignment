@@ -1,8 +1,7 @@
 import { Button, TextField } from "@mui/material";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import BaseModal from "../../../../components/BaseModal/BaseModal";
 import { Box, Stack } from "@mui/system";
-import ConfirmModal from "../../../../components/ConfirmModal";
 import useConfirmModal from "../../../../hooks/useConfirmModal";
 import RichTextField from "../../../../components/RichTextField/RichTextField";
 import { convertToRaw } from "draft-js";
@@ -10,7 +9,19 @@ import draftToHtml from "draftjs-to-html";
 import useDataForm from "../../../../hooks/useDataForm";
 import ProductImages from "../ProductImages/ProductImages";
 
-function ProductModal({ open, onClose, onSave, product, action }) {
+const init = {
+  id: "",
+  name: "",
+  price: 0,
+  description: "",
+  createDate: "",
+  updateDate: "",
+  categories: [],
+  images: [],
+  features: [],
+};
+
+function ProductModal({ open, onClose, onSave, product = init, action }) {
   const {
     getValues,
     register,
@@ -78,13 +89,13 @@ function ProductModal({ open, onClose, onSave, product, action }) {
               {(UPDATING || DETAILING) && (
                 <>
                   <TextField
-                    value={product?.id}
+                    value={product.id}
                     label="Product ID"
                     disabled={true}
                   />
                   <input
                     type="text"
-                    defaultValue={product?.id}
+                    defaultValue={product.id}
                     hidden
                     {...register("id")}
                   />
@@ -96,7 +107,7 @@ function ProductModal({ open, onClose, onSave, product, action }) {
                 rows={4}
                 InputProps={{
                   ...register("name"),
-                  defaultValue: product?.name,
+                  defaultValue: product.name,
                   readOnly: DETAILING,
                 }}
               />
@@ -105,7 +116,7 @@ function ProductModal({ open, onClose, onSave, product, action }) {
                 type="number"
                 InputProps={{
                   ...register("price"),
-                  defaultValue: product?.price,
+                  defaultValue: product.price,
                   readOnly: DETAILING,
                 }}
               />
@@ -115,7 +126,7 @@ function ProductModal({ open, onClose, onSave, product, action }) {
                     label="Create Date"
                     type="text"
                     InputProps={{
-                      defaultValue: product?.createDate,
+                      defaultValue: product.createDate,
                       disabled: DETAILING || UPDATING,
                     }}
                   />
@@ -123,7 +134,7 @@ function ProductModal({ open, onClose, onSave, product, action }) {
                     label="Update Date"
                     type="text"
                     InputProps={{
-                      defaultValue: product?.updateDate,
+                      defaultValue: product.updateDate,
                       disabled: DETAILING || UPDATING,
                     }}
                   />
@@ -132,7 +143,7 @@ function ProductModal({ open, onClose, onSave, product, action }) {
             </Stack>
             <Box>
               <ProductImages
-                items={product?.images}
+                items={product.images}
                 action={action}
                 onImagesChange={handleImagesChange}
               />
@@ -140,7 +151,7 @@ function ProductModal({ open, onClose, onSave, product, action }) {
           </Box>
           <Box sx={{ flexGrow: 1 }}>
             <RichTextField
-              defaultValue={product?.description}
+              defaultValue={product.description}
               ref={description}
               readOnly={DETAILING}
             />

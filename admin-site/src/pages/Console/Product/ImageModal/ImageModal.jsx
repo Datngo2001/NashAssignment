@@ -13,7 +13,13 @@ import useConfirmModal from "../../../../hooks/useConfirmModal";
 import useDataForm from "../../../../hooks/useDataForm";
 import { getSrc } from "../../../../util/getSrcImg";
 
-function ImageModal({ open, onClose, onSave, image, action }) {
+const init = {
+  id: "",
+  url: "",
+  isMain: false,
+};
+
+function ImageModal({ open, onClose, onSave, image = init, action }) {
   const openConfirm = useConfirmModal();
   const {
     getValues,
@@ -73,14 +79,14 @@ function ImageModal({ open, onClose, onSave, image, action }) {
             <input
               type="text"
               hidden
-              defaultValue={image?.id}
+              defaultValue={image.id}
               {...register("id")}
             />
             <TextField
               label="Image"
               InputProps={{
                 ...register("url"),
-                value: image?.url,
+                value: image.url,
                 readOnly: DETAILING,
               }}
             />
@@ -88,7 +94,7 @@ function ImageModal({ open, onClose, onSave, image, action }) {
               control={
                 <Checkbox
                   {...register("isMain")}
-                  defaultChecked={image?.isMain}
+                  defaultChecked={image.isMain}
                   disabled={DETAILING}
                 />
               }
@@ -102,7 +108,7 @@ function ImageModal({ open, onClose, onSave, image, action }) {
                   width: "444px",
                   objectFit: "contain",
                 }}
-                src={getSrc([watchUrl, image?.url])}
+                src={getSrc([watchUrl, image.url])}
                 alt="img"
               />
             </Paper>

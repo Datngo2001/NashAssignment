@@ -17,7 +17,7 @@ export default function DataTableToolbar({ onSearchChange, onAddClick }) {
           autoComplete="off"
           sx={{ width: 500 }}
           variant="standard"
-          placeholder="Search Product ..."
+          placeholder="Search ..."
           value={query}
           onChange={(e) => {
             onSearchChange(e);

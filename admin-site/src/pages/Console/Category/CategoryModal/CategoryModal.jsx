@@ -6,7 +6,13 @@ import useConfirmModal from "../../../../hooks/useConfirmModal";
 import useDataForm from "../../../../hooks/useDataForm";
 import { getSrc } from "../../../../util/getSrcImg";
 
-function CategoryModal({ open, onClose, onSave, category, action }) {
+const init = {
+  id: "",
+  name: "",
+  image: "",
+};
+
+function CategoryModal({ open, onClose, onSave, category = init, action }) {
   const openConfirm = useConfirmModal();
 
   const {
@@ -66,13 +72,13 @@ function CategoryModal({ open, onClose, onSave, category, action }) {
               {(UPDATING || DETAILING) && (
                 <>
                   <TextField
-                    value={category?.id}
+                    value={category.id}
                     label="Category ID"
                     disabled={true}
                   />
                   <input
                     type="text"
-                    defaultValue={category?.id}
+                    defaultValue={category.id}
                     hidden
                     {...register("id")}
                   />
@@ -84,7 +90,7 @@ function CategoryModal({ open, onClose, onSave, category, action }) {
                 rows={4}
                 InputProps={{
                   ...register("name"),
-                  defaultValue: category?.name,
+                  defaultValue: category.name,
                   readOnly: DETAILING,
                 }}
               />
@@ -94,7 +100,7 @@ function CategoryModal({ open, onClose, onSave, category, action }) {
                 label="Image"
                 InputProps={{
                   ...register("image"),
-                  value: category?.image,
+                  value: category.image,
                   readOnly: DETAILING,
                 }}
               />

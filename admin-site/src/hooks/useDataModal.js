@@ -4,7 +4,7 @@ import { CREATE, UPDATE, DETAIL } from "./_dataAction"
 function useDataModal() {
     const [dataModal, setDataModal] = useState({
         open: false,
-        data: null,
+        data: undefined,
         action: CREATE,
         handleSave: () => { }
     });
@@ -12,7 +12,7 @@ function useDataModal() {
     const openCreateModal = (onSave) => {
         setDataModal({
             open: true,
-            data: null,
+            data: undefined,
             action: CREATE,
             handleSave: onSave ? (data) => { onSave(data); closeModal(); } : () => { }
         });
