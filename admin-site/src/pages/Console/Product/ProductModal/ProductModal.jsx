@@ -106,7 +106,7 @@ function ProductModal({ open, onClose, onSave, product = init, action }) {
         onSubmit={handleSubmit(onSubmit)}
       >
         <Stack spacing={2} sx={{ height: "100%" }}>
-          <Box sx={{ display: "flex", gap: 1, height: 410 }}>
+          <Box sx={{ display: "flex", gap: 1, height: "max-content" }}>
             <Stack spacing={2} sx={{ width: "50%" }}>
               {(UPDATING || DETAILING) && (
                 <>
@@ -133,54 +133,56 @@ function ProductModal({ open, onClose, onSave, product = init, action }) {
                   readOnly: DETAILING,
                 }}
               />
-              <TextField
-                label="Price"
-                type="number"
-                InputProps={{
-                  ...register("price"),
-                  defaultValue: product.price,
-                  readOnly: DETAILING,
-                }}
-              />
-              {(UPDATING || DETAILING) && (
-                <>
-                  <TextField
-                    label="Create Date"
-                    type="text"
-                    InputProps={{
-                      defaultValue: product.createDate,
-                      disabled: DETAILING || UPDATING,
-                    }}
+              <Box sx={{ display: "flex", gap: 1 }}>
+                <Box sx={{ width: "50%" }}>
+                  <CategoryList
+                    action={action}
+                    items={product.categories}
+                    onCategoriesChange={handleCategoriesChange}
                   />
-                  <TextField
-                    label="Update Date"
-                    type="text"
-                    InputProps={{
-                      defaultValue: product.updateDate,
-                      disabled: DETAILING || UPDATING,
-                    }}
-                  />
-                </>
-              )}
+                </Box>
+                <Box sx={{ width: "50%" }}>
+                  <Stack
+                    spacing={2}
+                    sx={{ height: "100%", justifyContent: "space-between" }}
+                  >
+                    <TextField
+                      label="Price"
+                      type="number"
+                      InputProps={{
+                        ...register("price"),
+                        defaultValue: product.price,
+                        readOnly: DETAILING,
+                      }}
+                    />
+                    <TextField
+                      label="Create Date"
+                      type="text"
+                      InputProps={{
+                        defaultValue: product.createDate,
+                        disabled: true,
+                      }}
+                    />
+                    <TextField
+                      label="Update Date"
+                      type="text"
+                      InputProps={{
+                        defaultValue: product.updateDate,
+                        disabled: true,
+                      }}
+                    />
+                  </Stack>
+                </Box>
+              </Box>
             </Stack>
             <Box sx={{ width: "50%" }}>
               <ProductImageList
-                style={{ height: 396 }}
+                style={{ maxHeight: 396 }}
                 items={product.images}
                 action={action}
                 onImagesChange={handleImagesChange}
               />
             </Box>
-          </Box>
-          <Box sx={{ display: "flex", gap: 1 }}>
-            <Box sx={{ width: "30%" }}>
-              <CategoryList
-                action={action}
-                items={product.categories}
-                onCategoriesChange={handleCategoriesChange}
-              />
-            </Box>
-            <Box sx={{ width: "50%" }}></Box>
           </Box>
           <Box sx={{ flexGrow: 1 }}>
             <RichTextField

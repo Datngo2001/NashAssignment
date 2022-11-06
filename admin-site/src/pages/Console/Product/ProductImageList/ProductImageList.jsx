@@ -79,7 +79,7 @@ function ProductImageList({ items = [], action, onImagesChange, style }) {
   };
 
   return (
-    <Paper sx={{ padding: 1 }}>
+    <Paper sx={{ padding: 1, height: "100%" }}>
       <ImageList sx={style}>
         <ImageListItem key="Subheader" cols={2}>
           <ListSubheader component="div" sx={{ padding: 0 }}>

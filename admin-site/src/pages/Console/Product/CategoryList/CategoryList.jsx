@@ -48,7 +48,7 @@ function CategoryList({ items = [], action, onCategoriesChange }) {
   };
 
   return (
-    <Paper sx={{ padding: 1 }}>
+    <Paper sx={{ padding: 1, height: "100%" }}>
       <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
         <Typography sx={{ flexGrow: 1 }}>
           {categories ? `${categories.length} categories` : "0 category"}
@@ -63,7 +63,9 @@ function CategoryList({ items = [], action, onCategoriesChange }) {
           </Button>
         )}
       </Box>
-      <List sx={{ width: "100%" }}>
+      <List
+        sx={{ width: "100%", height: "100%", maxHeight: 147, overflow: "auto" }}
+      >
         {categories.map((category) => (
           <ListItem
             key={category.id}
