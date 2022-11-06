@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Models;
 using System.Collections.Generic;
@@ -20,12 +21,12 @@ namespace IdentityServer
         public static IEnumerable<ApiScope> ApiScopes =>
             new ApiScope[]
             {
-                new ApiScope("AssignmentAPI"),
+                new ApiScope("AssignmentAPI",new [] { JwtClaimTypes.Role }),
             };
 
         public static IEnumerable<Client> Clients =>
-            new Client[]
-            {
+        new Client[]
+        {
                 // m2m client credentials flow client
                 new Client
                 {
@@ -54,7 +55,8 @@ namespace IdentityServer
                     AllowedScopes = {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        "AssignmentAPI"
+                        "AssignmentAPI",
+                        JwtClaimTypes.Role
                     }
                 },
                 new Client
@@ -72,9 +74,10 @@ namespace IdentityServer
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        "AssignmentAPI"
+                        "AssignmentAPI",
+                        JwtClaimTypes.Role
                     }
                 }
-            };
+        };
     }
 }

@@ -23,7 +23,7 @@ namespace API.Controllers
             this.ratingRepository = ratingRepository;
         }
 
-        [Authorize(Policy = "ApiScope", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = "Bearer", Policy = "Customer")]
         [HttpPost]
         public async Task<AddRatingResDto> addRating([FromBody] AddRatingDto addRatingDto)
         {

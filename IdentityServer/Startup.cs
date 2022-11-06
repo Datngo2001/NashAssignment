@@ -66,6 +66,7 @@ namespace IdentityServer
                     options.ClientId = Configuration.GetValue<string>("GoogleOAuthClientID");
                     options.ClientSecret = Configuration.GetValue<string>("GoogleOAuthClientSecret");
                 });
+
         }
 
         public void Configure(IApplicationBuilder app)
@@ -73,7 +74,6 @@ namespace IdentityServer
             if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
 
             app.UseStaticFiles();

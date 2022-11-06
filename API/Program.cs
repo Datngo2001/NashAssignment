@@ -38,18 +38,29 @@ builder.Services.AddAuthentication(options =>
         {
             ValidateAudience = false
         };
+        options.MapInboundClaims = true;
     });
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders();
+    .AddRoles<IdentityRole>()
+    .AddRoleManager<RoleManager<IdentityRole>>()
+    .AddSignInManager<SignInManager<ApplicationUser>>()
+    .AddRoleValidator<RoleValidator<IdentityRole>>()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddAuthorization(options =>
 {
+    options.AddPolicy("Customer", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireClaim("scope", "AssignmentAPI");
+        policy.RequireRole("customer");
+    });
     options.AddPolicy("Admin", policy =>
     {
         policy.RequireAuthenticatedUser();
         policy.RequireClaim("scope", "AssignmentAPI");
+        policy.RequireRole("admin");
     });
 });
 
