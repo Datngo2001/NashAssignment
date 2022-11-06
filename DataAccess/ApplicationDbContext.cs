@@ -36,8 +36,23 @@ namespace DataAccess
                 .Property(c => c.Id)
                 .UseIdentityColumn();
 
-            modelBuilder.Entity<Product>().Property(p => p.CreateDate).ValueGeneratedOnAdd();
-            modelBuilder.Entity<Product>().Property(p => p.UpdateDate).ValueGeneratedOnAddOrUpdate();
+            modelBuilder.Entity<Product>()
+                .Property(p => p.CreateDate)
+                .HasDefaultValue(DateTime.Now)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Product>()
+                .Property(p => p.UpdateDate)
+                .HasDefaultValue(DateTime.Now);
+
+            modelBuilder.Entity<Product>()
+                .HasMany(p => p.Images)
+                .WithOne(i => i.Product)
+                .IsRequired();
+
+            modelBuilder.Entity<Product>()
+                .HasMany(p => p.Categories)
+                .WithMany(c => c.Products);
         }
     }
 }

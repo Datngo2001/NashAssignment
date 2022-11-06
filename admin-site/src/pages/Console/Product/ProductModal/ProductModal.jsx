@@ -1,71 +1,104 @@
-import { Button, Paper, TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import React, { useRef } from "react";
 import BaseModal from "../../../../components/BaseModal/BaseModal";
-import { useForm, useWatch } from "react-hook-form";
 import { Box, Stack } from "@mui/system";
-import ConfirmModal from "../../../../components/ConfirmModal";
 import useConfirmModal from "../../../../hooks/useConfirmModal";
 import RichTextField from "../../../../components/RichTextField/RichTextField";
-import dumpImg from "../../../../assets/dump_img.webp";
 import { convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import useDataForm from "../../../../hooks/useDataForm";
-import { getSrc } from "../../../../util/getSrcImg";
+import ProductImageList from "../ProductImageList/ProductImageList";
+import CategoryList from "../CategoryList/CategoryList";
 
-function ProductModal({ open, onClose, onSave, product, action = "create" }) {
+const init = {
+  id: "",
+  name: "",
+  price: 0,
+  description: "",
+  createDate: "",
+  updateDate: "",
+  categories: [],
+  images: [],
+  features: [],
+};
+
+function ProductModal({ open, onClose, onSave, product = init, action }) {
   const {
     getValues,
     register,
     handleSubmit,
     formState,
     reset,
-    watch,
     UPDATING,
     DETAILING,
   } = useDataForm({ action });
 
-  const watchImg = watch("image");
+  const descriptionChange = useRef();
+  const imagesChange = useRef();
+  const categoriesChange = useRef();
 
-  const description = useRef();
-
-  const { confirm, openNewConfirm, onAnswer } = useConfirmModal({
-    message: "Save Change ?",
-  });
+  const openConfirm = useConfirmModal();
 
   const handleClose = () => {
-    if (formState.isDirty && !DETAILING) {
-      openNewConfirm(
-        () => {
-          onSave(getValues());
-          reset();
-        },
-        () => {
-          onClose();
-          reset();
-        }
-      );
-    } else {
+    if (DETAILING) {
       onClose();
       reset();
+    } else if (
+      formState.isDirty ||
+      imagesChange ||
+      descriptionChange ||
+      categoriesChange
+    ) {
+      openConfirm({
+        message: "Save Changes?",
+        onYes: () => {
+          let data = getValues();
+          data.description = draftToHtml(
+            convertToRaw(descriptionChange.current.getCurrentContent())
+          );
+          data.images = imagesChange.current;
+          data.categories = categoriesChange.current;
+          onSave(data);
+          reset();
+        },
+        onNo: () => {
+          onClose();
+          reset();
+        },
+      });
     }
   };
 
   const onSubmit = (data) => {
     data.description = draftToHtml(
-      convertToRaw(description.current.getCurrentContent())
+      convertToRaw(descriptionChange.current.getCurrentContent())
     );
+    data.images = imagesChange.current;
+    data.categories = categoriesChange.current;
     onSave(data);
     reset();
   };
 
   const handleCancel = () => handleClose();
 
+  const handleImagesChange = (newImages) => {
+    imagesChange.current = newImages;
+  };
+
+  const handleCategoriesChange = (newCategories) => {
+    categoriesChange.current = newCategories;
+  };
+
+  const handleDescriptionChange = (newDescription) => {
+    descriptionChange.current = newDescription;
+  };
+
   return (
     <BaseModal
-      title={"Create product"}
+      title={"Product"}
       open={open}
       onClose={handleClose}
-      styles={{ width: 1300, height: 1300 }}
+      styles={{ width: 1300, height: "max-content" }}
     >
       <form
         autoComplete="off"
@@ -73,18 +106,18 @@ function ProductModal({ open, onClose, onSave, product, action = "create" }) {
         onSubmit={handleSubmit(onSubmit)}
       >
         <Stack spacing={2} sx={{ height: "100%" }}>
-          <Box sx={{ display: "flex", gap: 1 }}>
-            <Stack spacing={2} sx={{ flexGrow: 2 }}>
+          <Box sx={{ display: "flex", gap: 1, height: "max-content" }}>
+            <Stack spacing={2} sx={{ width: "50%" }}>
               {(UPDATING || DETAILING) && (
                 <>
                   <TextField
-                    value={product?.id}
+                    value={product.id}
                     label="Product ID"
                     disabled={true}
                   />
                   <input
                     type="text"
-                    defaultValue={product?.id}
+                    defaultValue={product.id}
                     hidden
                     {...register("id")}
                   />
@@ -96,46 +129,65 @@ function ProductModal({ open, onClose, onSave, product, action = "create" }) {
                 rows={4}
                 InputProps={{
                   ...register("name"),
-                  defaultValue: product?.name,
+                  defaultValue: product.name,
                   readOnly: DETAILING,
                 }}
               />
-              <TextField
-                label="Price"
-                type="number"
-                InputProps={{
-                  ...register("price"),
-                  defaultValue: product?.price,
-                  readOnly: DETAILING,
-                }}
-              />
+              <Box sx={{ display: "flex", gap: 1 }}>
+                <Box sx={{ width: "50%" }}>
+                  <CategoryList
+                    action={action}
+                    items={product.categories}
+                    onCategoriesChange={handleCategoriesChange}
+                  />
+                </Box>
+                <Box sx={{ width: "50%" }}>
+                  <Stack
+                    spacing={2}
+                    sx={{ height: "100%", justifyContent: "space-between" }}
+                  >
+                    <TextField
+                      label="Price"
+                      type="number"
+                      InputProps={{
+                        ...register("price"),
+                        defaultValue: product.price,
+                        readOnly: DETAILING,
+                      }}
+                    />
+                    <TextField
+                      label="Create Date"
+                      type="text"
+                      InputProps={{
+                        defaultValue: product.createDate,
+                        disabled: true,
+                      }}
+                    />
+                    <TextField
+                      label="Update Date"
+                      type="text"
+                      InputProps={{
+                        defaultValue: product.updateDate,
+                        disabled: true,
+                      }}
+                    />
+                  </Stack>
+                </Box>
+              </Box>
             </Stack>
-            <Stack spacing={2} sx={{ flexGrow: 1 }}>
-              <TextField
-                label="Image"
-                InputProps={{
-                  ...register("image"),
-                  value: product?.image,
-                  readOnly: DETAILING,
-                }}
+            <Box sx={{ width: "50%" }}>
+              <ProductImageList
+                style={{ maxHeight: 396 }}
+                items={product.images}
+                action={action}
+                onImagesChange={handleImagesChange}
               />
-              <Paper elevation={1} sx={{ textAlign: "center" }}>
-                <img
-                  style={{
-                    height: "444px",
-                    width: "444px",
-                    objectFit: "contain",
-                  }}
-                  src={getSrc([watchImg, product?.image])}
-                  alt="img"
-                />
-              </Paper>
-            </Stack>
+            </Box>
           </Box>
           <Box sx={{ flexGrow: 1 }}>
             <RichTextField
-              defaultValue={product?.description}
-              ref={description}
+              defaultValue={product.description}
+              onChange={handleDescriptionChange}
               readOnly={DETAILING}
             />
           </Box>
@@ -149,11 +201,6 @@ function ProductModal({ open, onClose, onSave, product, action = "create" }) {
           )}
         </Stack>
       </form>
-      <ConfirmModal
-        open={confirm.open}
-        message={confirm.message}
-        onAnswer={onAnswer}
-      />
     </BaseModal>
   );
 }

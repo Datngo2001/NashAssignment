@@ -67,12 +67,12 @@ namespace API.Repositories
 
         public async Task<PagingDto<ProductDetailDto>> AdminSearchProduct(string query, int page, int limit)
         {
-            var queryable = context.Products.Where(p => p.Name.Contains(query)).OrderByDescending(p => p.UpdateDate);
+            var queryable = context.Products.AsNoTracking().Where(p => p.Name.Contains(query)).OrderByDescending(p => p.UpdateDate);
 
             var products = await queryable
                 .Include(p => p.Features)
                 .Include(p => p.Categories)
-                .Include(p => p.Images.OrderBy(i => i.IsMain))
+                .Include(p => p.Images)
                 .Skip((page - 1) * limit)
                 .Take(limit)
                 .ProjectTo<ProductDetailDto>(mapper.ConfigurationProvider)
@@ -120,7 +120,15 @@ namespace API.Repositories
         public async Task<ProductDetailDto> CreateProduct(CreateProductDto createProductDto)
         {
             var product = mapper.Map<Product>(createProductDto);
+
+            foreach (var categoryDto in createProductDto.Categories)
+            {
+                var category = await context.Categories.FirstAsync(c => c.Id == categoryDto.Id);
+                product.Categories.Add(category);
+            }
+
             context.Products.Add(product);
+
             await context.SaveChangesAsync();
 
             return mapper.Map<ProductDetailDto>(product);
@@ -128,7 +136,7 @@ namespace API.Repositories
 
         public async Task<ProductDetailDto> UpdateProduct(UpdateProductDto updateProductDto)
         {
-            var product = await context.Products.FirstOrDefaultAsync(p => p.Id == updateProductDto.Id);
+            var product = await context.Products.Include(p => p.Categories).Include(p => p.Images).FirstOrDefaultAsync(p => p.Id == updateProductDto.Id);
 
             if (product == null)
             {
@@ -138,6 +146,48 @@ namespace API.Repositories
             context.Products.Update(product);
 
             mapper.Map(updateProductDto, product);
+
+            // Remove category
+            foreach (var category in product.Categories)
+            {
+                if (!updateProductDto.Categories.Exists(c => c.Id == category.Id))
+                {
+                    product.Categories.Remove(category);
+                }
+            }
+            // Add category
+            foreach (var categoryDto in updateProductDto.Categories)
+            {
+                if (!product.Categories.Exists(c => c.Id == categoryDto.Id))
+                {
+                    product.Categories.Add(mapper.Map<Category>(categoryDto));
+                }
+            }
+
+            // Add or Update image
+            foreach (var updateProductImageDto in updateProductDto.Images)
+            {
+                if (updateProductImageDto.IsNew)
+                {
+                    product.Images.Add(mapper.Map<Image>(updateProductImageDto));
+                }
+                else
+                {
+                    var image = product.Images.First(c => c.Id == updateProductImageDto.Id);
+                    mapper.Map(updateProductImageDto, image);
+                }
+            }
+
+            // Delete image
+            foreach (var image in product.Images)
+            {
+                if (!updateProductDto.Images.Exists(i => i.Id == image.Id))
+                {
+                    product.Images.Remove(image);
+                }
+            }
+
+            product.UpdateDate = DateTime.Now;
 
             await context.SaveChangesAsync();
 

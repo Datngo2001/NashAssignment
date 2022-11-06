@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import ConfirmModal from "../../../components/ConfirmModal";
 import DataTable from "../../../components/DataTable/DataTable";
 import useConfirmModal from "../../../hooks/useConfirmModal";
 import useDataModal from "../../../hooks/useDataModal";
@@ -32,10 +31,23 @@ const headCells = [
     disablePadding: false,
     label: "Price",
   },
+  {
+    id: "createDate",
+    numeric: true,
+    disablePadding: false,
+    label: "Create Date",
+  },
+  {
+    id: "updateDate",
+    numeric: true,
+    disablePadding: false,
+    label: "Update Date",
+  },
 ];
 
 function ProductPage() {
   const dispatch = useDispatch();
+  const openConfirm = useConfirmModal();
   const { query, page, limit, count, products } = useSelector(
     (state) => state.product
   );
@@ -46,10 +58,6 @@ function ProductPage() {
     openUpdateModal,
     closeModal,
   } = useDataModal();
-
-  const { confirm, openNewConfirm, onAnswer } = useConfirmModal({
-    message: "Do you want to delete product?",
-  });
 
   useEffect(() => {
     dispatch({
@@ -97,9 +105,13 @@ function ProductPage() {
     });
   };
 
-  const handleDelete = (category) => {
-    openNewConfirm(() => {
-      dispatch({ type: DELETE_PRODUCT_REQUEST, payload: category.id });
+  const handleDelete = (product) => {
+    openConfirm({
+      message: `Do you want to delete product with id: ${product.id}?`,
+      onYes: () => {
+        dispatch({ type: DELETE_PRODUCT_REQUEST, payload: product.id });
+      },
+      onNO: () => {},
     });
   };
 
@@ -127,11 +139,6 @@ function ProductPage() {
         action={dataModal.action}
         onSave={dataModal.handleSave}
         onClose={() => closeModal()}
-      />
-      <ConfirmModal
-        open={confirm.open}
-        message={confirm.message}
-        onAnswer={onAnswer}
       />
     </div>
   );
