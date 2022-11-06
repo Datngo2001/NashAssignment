@@ -7,7 +7,8 @@ import RichTextField from "../../../../components/RichTextField/RichTextField";
 import { convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import useDataForm from "../../../../hooks/useDataForm";
-import ProductImages from "../ProductImages/ProductImages";
+import ProductImageList from "../ProductImageList/ProductImageList";
+import CategoryList from "../CategoryList/CategoryList";
 
 const init = {
   id: "",
@@ -32,17 +33,32 @@ function ProductModal({ open, onClose, onSave, product = init, action }) {
     DETAILING,
   } = useDataForm({ action });
 
-  const description = useRef();
-  const images = useRef();
+  const descriptionChange = useRef();
+  const imagesChange = useRef();
+  const categoriesChange = useRef();
 
   const openConfirm = useConfirmModal();
 
   const handleClose = () => {
-    if (formState.isDirty && !DETAILING) {
+    if (DETAILING) {
+      onClose();
+      reset();
+    } else if (
+      formState.isDirty ||
+      imagesChange ||
+      descriptionChange ||
+      categoriesChange
+    ) {
       openConfirm({
         message: "Save Changes?",
         onYes: () => {
-          onSave(getValues());
+          let data = getValues();
+          data.description = draftToHtml(
+            convertToRaw(descriptionChange.current.getCurrentContent())
+          );
+          data.images = imagesChange.current;
+          data.categories = categoriesChange.current;
+          onSave(data);
           reset();
         },
         onNo: () => {
@@ -50,17 +66,15 @@ function ProductModal({ open, onClose, onSave, product = init, action }) {
           reset();
         },
       });
-    } else {
-      onClose();
-      reset();
     }
   };
 
   const onSubmit = (data) => {
     data.description = draftToHtml(
-      convertToRaw(description.current.getCurrentContent())
+      convertToRaw(descriptionChange.current.getCurrentContent())
     );
-    data.images = images.current;
+    data.images = imagesChange.current;
+    data.categories = categoriesChange.current;
     onSave(data);
     reset();
   };
@@ -68,7 +82,15 @@ function ProductModal({ open, onClose, onSave, product = init, action }) {
   const handleCancel = () => handleClose();
 
   const handleImagesChange = (newImages) => {
-    images.current = newImages;
+    imagesChange.current = newImages;
+  };
+
+  const handleCategoriesChange = (newCategories) => {
+    categoriesChange.current = newCategories;
+  };
+
+  const handleDescriptionChange = (newDescription) => {
+    descriptionChange.current = newDescription;
   };
 
   return (
@@ -84,7 +106,7 @@ function ProductModal({ open, onClose, onSave, product = init, action }) {
         onSubmit={handleSubmit(onSubmit)}
       >
         <Stack spacing={2} sx={{ height: "100%" }}>
-          <Box sx={{ display: "flex", gap: 1, height: 450 }}>
+          <Box sx={{ display: "flex", gap: 1, height: 410 }}>
             <Stack spacing={2} sx={{ width: "50%" }}>
               {(UPDATING || DETAILING) && (
                 <>
@@ -142,7 +164,7 @@ function ProductModal({ open, onClose, onSave, product = init, action }) {
               )}
             </Stack>
             <Box sx={{ width: "50%" }}>
-              <ProductImages
+              <ProductImageList
                 style={{ height: 396 }}
                 items={product.images}
                 action={action}
@@ -150,10 +172,20 @@ function ProductModal({ open, onClose, onSave, product = init, action }) {
               />
             </Box>
           </Box>
+          <Box sx={{ display: "flex", gap: 1 }}>
+            <Box sx={{ width: "30%" }}>
+              <CategoryList
+                action={action}
+                items={product.categories}
+                onCategoriesChange={handleCategoriesChange}
+              />
+            </Box>
+            <Box sx={{ width: "50%" }}></Box>
+          </Box>
           <Box sx={{ flexGrow: 1 }}>
             <RichTextField
               defaultValue={product.description}
-              ref={description}
+              onChange={handleDescriptionChange}
               readOnly={DETAILING}
             />
           </Box>

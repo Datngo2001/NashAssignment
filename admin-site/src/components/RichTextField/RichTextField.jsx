@@ -4,7 +4,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { Paper } from "@mui/material";
 import { ContentState, convertFromHTML, EditorState } from "draft-js";
 
-function RichTextField({ defaultValue = "", readOnly = false }, ref) {
+function RichTextField({ defaultValue = "", readOnly = false, onChange }) {
   const blocksFromHTML = convertFromHTML(defaultValue);
   const state = ContentState.createFromBlockArray(
     blocksFromHTML.contentBlocks,
@@ -15,7 +15,7 @@ function RichTextField({ defaultValue = "", readOnly = false }, ref) {
   );
 
   useEffect(() => {
-    ref.current = editorState;
+    onChange(editorState);
   }, [editorState]);
 
   return (
@@ -29,4 +29,4 @@ function RichTextField({ defaultValue = "", readOnly = false }, ref) {
   );
 }
 
-export default React.forwardRef(RichTextField);
+export default RichTextField;

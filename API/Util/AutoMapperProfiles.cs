@@ -14,6 +14,7 @@ namespace API.Helpers
         {
             // Category
             CreateMap<Category, CategoryDto>();
+            CreateMap<CategoryDto, Category>();
             CreateMap<CreateCategoryDto, Category>();
             CreateMap<UpdateCategoryDto, Category>();
 
@@ -23,8 +24,11 @@ namespace API.Helpers
             CreateMap<Product, ProductDetailDto>();
             CreateMap<Product, ProductSearchHintDto>()
                 .ForMember(dest => dest.hint, opt => opt.MapFrom(src => src.Name));
-            CreateMap<CreateProductDto, Product>();
-            CreateMap<UpdateProductDto, Product>();
+            CreateMap<CreateProductDto, Product>()
+                .ForMember(dest => dest.Categories, opt => opt.Ignore());
+            CreateMap<UpdateProductDto, Product>()
+                .ForMember(dest => dest.Images, opt => opt.Ignore())
+                .ForMember(dest => dest.Categories, opt => opt.Ignore());
 
             // Feature
             CreateMap<Feature, FeatureDto>();
@@ -42,7 +46,9 @@ namespace API.Helpers
             CreateMap<Image, ImageDto>();
             CreateMap<ImageDto, Image>();
             CreateMap<CreateImageDto, Image>();
-            CreateMap<UpdateImageDto, Image>();
+            CreateMap<UpdateProductImageDto, Image>()
+                // if new image not map id
+                .ForMember(dest => dest.Id, opt => opt.Condition(src => src.IsNew == false));
         }
     }
 }

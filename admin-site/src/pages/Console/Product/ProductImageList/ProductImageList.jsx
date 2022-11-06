@@ -13,7 +13,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import useConfirmModal from "../../../../hooks/useConfirmModal";
 import { DETAIL } from "../../../../hooks/_dataAction";
 
-function ProductImages({ items = [], action, onImagesChange, style }) {
+function ProductImageList({ items = [], action, onImagesChange, style }) {
   const {
     dataModal,
     openCreateModal,
@@ -72,6 +72,7 @@ function ProductImages({ items = [], action, onImagesChange, style }) {
       onYes: () => {
         let index = images.findIndex((img) => img.id === image.id);
         images.splice(index, 1);
+        setImages(() => [...images]);
       },
       onNo: () => {},
     });
@@ -148,4 +149,4 @@ function ProductImages({ items = [], action, onImagesChange, style }) {
   );
 }
 
-export default ProductImages;
+export default ProductImageList;
