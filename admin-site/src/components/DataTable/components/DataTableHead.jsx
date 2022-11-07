@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Box,
-  Checkbox,
   TableCell,
   TableHead,
   TableRow,
@@ -11,12 +10,10 @@ import { visuallyHidden } from "@mui/utils";
 
 export default function DataTableHead({
   headCells,
-  onSelectAllClick,
   order,
   orderBy,
-  numSelected,
-  rowCount,
   onRequestSort,
+  allowActions,
 }) {
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);

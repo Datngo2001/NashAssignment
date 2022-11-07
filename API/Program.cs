@@ -38,18 +38,29 @@ builder.Services.AddAuthentication(options =>
         {
             ValidateAudience = false
         };
+        options.MapInboundClaims = true;
     });
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders();
+builder.Services.AddIdentity<AppUser, AppRole>()
+    .AddRoles<AppRole>()
+    .AddRoleManager<RoleManager<AppRole>>()
+    .AddSignInManager<SignInManager<AppUser>>()
+    .AddRoleValidator<RoleValidator<AppRole>>()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddAuthorization(options =>
 {
+    options.AddPolicy("Customer", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireClaim("scope", "AssignmentAPI");
+        policy.RequireRole("customer", "admin");
+    });
     options.AddPolicy("Admin", policy =>
     {
         policy.RequireAuthenticatedUser();
         policy.RequireClaim("scope", "AssignmentAPI");
+        policy.RequireRole("admin");
     });
 });
 
@@ -67,6 +78,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IRatingRepository, RatingRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 

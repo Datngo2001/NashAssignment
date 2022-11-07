@@ -10,7 +10,6 @@ import {
 } from "@mui/material";
 import React from "react";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
-import StarRateIcon from "@mui/icons-material/StarRate";
 import CategoryIcon from "@mui/icons-material/Category";
 import PersonIcon from "@mui/icons-material/Person";
 import { useLocation, useNavigate } from "react-router";
@@ -66,17 +65,6 @@ function SideBar() {
                 <PersonIcon />
               </ListItemIcon>
               <ListItemText primary={"Customer"} />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton
-              selected={location.pathname === "/rating"}
-              onClick={() => navigate("/rating")}
-            >
-              <ListItemIcon>
-                <StarRateIcon />
-              </ListItemIcon>
-              <ListItemText primary={"Rating"} />
             </ListItemButton>
           </ListItem>
         </List>

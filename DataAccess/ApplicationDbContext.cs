@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace DataAccess
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, string>
     {
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
@@ -32,9 +32,9 @@ namespace DataAccess
                 .Property(r => r.CreateDate)
                 .HasDefaultValue(DateTime.Now);
 
-            modelBuilder.Entity<IdentityUserClaim<string>>()
-                .Property(c => c.Id)
-                .UseIdentityColumn();
+            // modelBuilder.Entity<IdentityUserClaim<string>>()
+            //     .Property(c => c.Id)
+            //     .UseIdentityColumn();
 
             modelBuilder.Entity<Product>()
                 .Property(p => p.CreateDate)

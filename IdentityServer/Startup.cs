@@ -33,7 +33,7 @@ namespace IdentityServer
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<AppUser, AppRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -50,7 +50,7 @@ namespace IdentityServer
                 .AddInMemoryIdentityResources(Config.IdentityResources)
                 .AddInMemoryApiScopes(Config.ApiScopes)
                 .AddInMemoryClients(Config.Clients)
-                .AddAspNetIdentity<ApplicationUser>();
+                .AddAspNetIdentity<AppUser>();
 
             // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
@@ -66,6 +66,7 @@ namespace IdentityServer
                     options.ClientId = Configuration.GetValue<string>("GoogleOAuthClientID");
                     options.ClientSecret = Configuration.GetValue<string>("GoogleOAuthClientSecret");
                 });
+
         }
 
         public void Configure(IApplicationBuilder app)
@@ -73,7 +74,6 @@ namespace IdentityServer
             if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
 
             app.UseStaticFiles();

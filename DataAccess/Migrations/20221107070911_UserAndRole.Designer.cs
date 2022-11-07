@@ -4,6 +4,7 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221107070911_UserAndRole")]
+    partial class UserAndRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,6 +44,9 @@ namespace DataAccess.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("AppRoleId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -55,6 +60,8 @@ namespace DataAccess.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppRoleId");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
@@ -71,6 +78,9 @@ namespace DataAccess.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
+
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -117,6 +127,8 @@ namespace DataAccess.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -212,7 +224,7 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 11, 7, 20, 2, 19, 56, DateTimeKind.Local).AddTicks(6037));
+                        .HasDefaultValue(new DateTime(2022, 11, 7, 14, 9, 10, 938, DateTimeKind.Local).AddTicks(3067));
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -228,7 +240,7 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("UpdateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 11, 7, 20, 2, 19, 56, DateTimeKind.Local).AddTicks(6192));
+                        .HasDefaultValue(new DateTime(2022, 11, 7, 14, 9, 10, 938, DateTimeKind.Local).AddTicks(3236));
 
                     b.HasKey("Id");
 
@@ -249,7 +261,7 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 11, 7, 20, 2, 19, 56, DateTimeKind.Local).AddTicks(5750));
+                        .HasDefaultValue(new DateTime(2022, 11, 7, 14, 9, 10, 938, DateTimeKind.Local).AddTicks(2720));
 
                     b.Property<string>("Message")
                         .IsRequired()
@@ -395,6 +407,20 @@ namespace DataAccess.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("DataAccess.Entities.AppRole", b =>
+                {
+                    b.HasOne("DataAccess.Entities.AppRole", null)
+                        .WithMany("Roles")
+                        .HasForeignKey("AppRoleId");
+                });
+
+            modelBuilder.Entity("DataAccess.Entities.AppUser", b =>
+                {
+                    b.HasOne("DataAccess.Entities.AppUser", null)
+                        .WithMany("Users")
+                        .HasForeignKey("AppUserId");
+                });
+
             modelBuilder.Entity("DataAccess.Entities.Feature", b =>
                 {
                     b.HasOne("DataAccess.Entities.Product", null)
@@ -479,6 +505,16 @@ namespace DataAccess.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("DataAccess.Entities.AppRole", b =>
+                {
+                    b.Navigation("Roles");
+                });
+
+            modelBuilder.Entity("DataAccess.Entities.AppUser", b =>
+                {
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("DataAccess.Entities.Product", b =>

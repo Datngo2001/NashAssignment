@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataAccess.Entities;
 
 namespace DataAccess.Entities
 {
@@ -12,7 +13,7 @@ namespace DataAccess.Entities
         public string Title { get; set; } = "";
         public string Message { get; set; } = "";
         public DateTime CreateDate { get; set; }
-        public ApplicationUser ApplicationUser { get; set; } = new ApplicationUser();
+        public AppUser AppUser { get; set; } = new AppUser();
         public Product Product { get; set; } = new Product();
     }
 }

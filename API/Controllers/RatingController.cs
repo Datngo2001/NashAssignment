@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataAccess.Entities;
 using API.Interfaces;
 using CommonModel;
 using CommonModel.Rating;
-using DataAccess.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -16,14 +16,14 @@ namespace API.Controllers
     public class RatingController : _APIController
     {
         private readonly IRatingRepository ratingRepository;
-        private readonly UserManager<ApplicationUser> userManager;
-        public RatingController(IRatingRepository ratingRepository, UserManager<ApplicationUser> userManager)
+        private readonly UserManager<AppUser> userManager;
+        public RatingController(IRatingRepository ratingRepository, UserManager<AppUser> userManager)
         {
             this.userManager = userManager;
             this.ratingRepository = ratingRepository;
         }
 
-        [Authorize(Policy = "ApiScope", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = "Bearer", Policy = "Customer")]
         [HttpPost]
         public async Task<AddRatingResDto> addRating([FromBody] AddRatingDto addRatingDto)
         {

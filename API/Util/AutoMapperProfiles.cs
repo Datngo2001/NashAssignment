@@ -5,6 +5,7 @@ using CommonModel.Category;
 using CommonModel.Product;
 using CommonModel.Rating;
 using CommonModel.Image;
+using CommonModel.User;
 
 namespace API.Helpers
 {
@@ -35,12 +36,14 @@ namespace API.Helpers
 
             // Rating
             CreateMap<Rating, RatingDto>()
-                .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.ApplicationUser));
+                .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.AppUser));
             CreateMap<Rating, AddRatingResDto>();
             CreateMap<AddRatingDto, Rating>();
 
             // User
-            CreateMap<ApplicationUser, RatingAuthorDto>();
+            CreateMap<AppUser, RatingAuthorDto>();
+            CreateMap<AppUser, AppUserDto>();
+            CreateMap<AppRole, AppRoleDto>();
 
             // Image
             CreateMap<Image, ImageDto>();
