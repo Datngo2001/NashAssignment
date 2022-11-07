@@ -1,18 +1,18 @@
-import {
-  Divider,
-  IconButton,
-  Menu,
-  MenuItem,
-  Popover,
-  Typography,
-} from "@mui/material";
+import { IconButton, Menu, MenuItem, Popover, Typography } from "@mui/material";
 import React from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import InfoIcon from "@mui/icons-material/Info";
+import { UPDATE, DELETE, DETAIL } from "../../../hooks/_dataAction";
 
-function RowAction({ row, onEditClick, onDeleteClick, onDetailClick }) {
+function RowAction({
+  row,
+  onEditClick,
+  onDeleteClick,
+  onDetailClick,
+  allowActions,
+}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -46,38 +46,48 @@ function RowAction({ row, onEditClick, onDeleteClick, onDetailClick }) {
         }}
       >
         <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-          <MenuItem
-            onClick={() => {
-              handleClose();
-              onDetailClick(row);
-            }}
-            disableRipple
-          >
-            <InfoIcon />
-            <Typography sx={{ marginLeft: 1 }}>Detail</Typography>
-          </MenuItem>
-          <Divider />
-          <MenuItem
-            onClick={() => {
-              handleClose();
-              onEditClick(row);
-            }}
-            disableRipple
-          >
-            <EditIcon />
-            <Typography sx={{ marginLeft: 1 }}>Edit</Typography>
-          </MenuItem>
-          <Divider />
-          <MenuItem
-            onClick={() => {
-              handleClose();
-              onDeleteClick(row);
-            }}
-            disableRipple
-          >
-            <DeleteIcon />
-            <Typography sx={{ marginLeft: 1 }}>Delete</Typography>
-          </MenuItem>
+          {allowActions.includes(DETAIL) && (
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                onDetailClick(row);
+              }}
+              disableRipple
+            >
+              <InfoIcon />
+              <Typography sx={{ marginLeft: 1 }}>Detail</Typography>
+            </MenuItem>
+          )}
+          {allowActions.includes(UPDATE) && (
+            <MenuItem
+              sx={{
+                display: allowActions.includes(UPDATE),
+              }}
+              onClick={() => {
+                handleClose();
+                onEditClick(row);
+              }}
+              disableRipple
+            >
+              <EditIcon />
+              <Typography sx={{ marginLeft: 1 }}>Edit</Typography>
+            </MenuItem>
+          )}
+          {allowActions.includes(DELETE) && (
+            <MenuItem
+              sx={{
+                display: allowActions.includes(DELETE),
+              }}
+              onClick={() => {
+                handleClose();
+                onDeleteClick(row);
+              }}
+              disableRipple
+            >
+              <DeleteIcon />
+              <Typography sx={{ marginLeft: 1 }}>Delete</Typography>
+            </MenuItem>
+          )}
         </Menu>
       </Popover>
     </>

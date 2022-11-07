@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using API.Interfaces;
 using AutoMapper;
+using System.Security.Claims;
 
 namespace API.Controllers
 {
@@ -83,6 +84,12 @@ namespace API.Controllers
         public async Task<ActionResult<PagingDto<AppUserDto>>> SearchCustomer([FromBody] UserSearchDto model)
         {
             return await userRepository.SearchCustomer(model.Query, model.Page, model.Limit);
+        }
+
+        [HttpGet("claims/{userId}")]
+        public async Task<ActionResult<List<Claim>>> GetUserClaims([FromRoute] string userId)
+        {
+            return await userRepository.GetUserClaimsById(userId);
         }
     }
 }

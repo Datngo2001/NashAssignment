@@ -10,6 +10,7 @@ import Paper from "@mui/material/Paper";
 import DataTableHead from "./components/DataTableHead";
 import DataTableToolbar from "./components/DataTableToolBar";
 import RowAction from "./components/RowAction";
+import { CREATE, UPDATE, DELETE, DETAIL } from "../../hooks/_dataAction";
 
 // EXAMPLE HEAD CONFIG
 // const headCells = [
@@ -27,13 +28,14 @@ export default function DataTable({
   page,
   count,
   limit,
-  handleChangePage,
-  handleChangeRowsPerPage,
-  handleSearch,
-  handleAddClick,
-  handleEditClick,
-  handleDeleteClick,
-  handleDetailClick,
+  handleChangePage = () => {},
+  handleChangeRowsPerPage = () => {},
+  handleSearch = () => {},
+  handleAddClick = () => {},
+  handleEditClick = () => {},
+  handleDeleteClick = () => {},
+  handleDetailClick = () => {},
+  allowActions = [CREATE, UPDATE, DELETE, DETAIL],
 }) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
@@ -48,12 +50,14 @@ export default function DataTable({
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
         <DataTableToolbar
+          allowActions={allowActions}
           onSearchChange={handleSearch}
           onAddClick={handleAddClick}
         />
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
             <DataTableHead
+              allowActions={allowActions}
               headCells={headCells}
               order={order}
               orderBy={orderBy}
@@ -63,7 +67,7 @@ export default function DataTable({
             <TableBody>
               {rows.map((row, index) => {
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.name}>
+                  <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                     {headCells.map((headCell) => (
                       <TableCell
                         key={`cell-${headCell.id}-${index}`}
@@ -75,6 +79,7 @@ export default function DataTable({
                     <TableCell padding="none" sx={{ textAlign: "end" }}>
                       <RowAction
                         row={row}
+                        allowActions={allowActions}
                         onDetailClick={handleDetailClick}
                         onEditClick={handleEditClick}
                         onDeleteClick={handleDeleteClick}

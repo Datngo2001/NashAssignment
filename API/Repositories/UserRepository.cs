@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper.QueryableExtensions;
 using CommonModel;
+using System.Security.Claims;
 
 namespace API.Repositories
 {
@@ -27,6 +28,13 @@ namespace API.Repositories
             this.mapper = mapper;
             this.userManager = userManager;
             this.roleManager = roleManager;
+        }
+
+        public async Task<List<Claim>> GetUserClaimsById(string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            var claims = await userManager.GetClaimsAsync(user);
+            return claims.ToList();
         }
 
         public async Task<PagingDto<AppUserDto>> SearchCustomer(string query, int page, int limit)

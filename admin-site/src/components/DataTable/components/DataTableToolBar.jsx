@@ -2,8 +2,13 @@ import React, { useState } from "react";
 import { Button, TextField, Toolbar } from "@mui/material";
 import { Box } from "@mui/system";
 import AddIcon from "@mui/icons-material/Add";
+import { CREATE } from "../../../hooks/_dataAction";
 
-export default function DataTableToolbar({ onSearchChange, onAddClick }) {
+export default function DataTableToolbar({
+  onSearchChange,
+  onAddClick,
+  allowActions,
+}) {
   const [query, setQuery] = useState("");
   return (
     <Toolbar
@@ -25,14 +30,16 @@ export default function DataTableToolbar({ onSearchChange, onAddClick }) {
           }}
         />
       </Box>
-      <Button
-        size="large"
-        color="secondary"
-        variant="contained"
-        onClick={onAddClick}
-      >
-        <AddIcon />
-      </Button>
+      {allowActions.includes(CREATE) && (
+        <Button
+          size="large"
+          color="secondary"
+          variant="contained"
+          onClick={onAddClick}
+        >
+          <AddIcon />
+        </Button>
+      )}
     </Toolbar>
   );
 }
