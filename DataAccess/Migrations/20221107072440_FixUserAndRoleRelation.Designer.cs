@@ -4,6 +4,7 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221107072440_FixUserAndRoleRelation")]
+    partial class FixUserAndRoleRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +23,21 @@ namespace DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("AppRoleAppUser", b =>
+                {
+                    b.Property<string>("UsersId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UsersId1")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UsersId", "UsersId1");
+
+                    b.HasIndex("UsersId1");
+
+                    b.ToTable("AppRoleAppUser");
+                });
 
             modelBuilder.Entity("CategoryProduct", b =>
                 {
@@ -212,7 +229,7 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 11, 7, 20, 2, 19, 56, DateTimeKind.Local).AddTicks(6037));
+                        .HasDefaultValue(new DateTime(2022, 11, 7, 14, 24, 40, 384, DateTimeKind.Local).AddTicks(2895));
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -228,7 +245,7 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("UpdateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 11, 7, 20, 2, 19, 56, DateTimeKind.Local).AddTicks(6192));
+                        .HasDefaultValue(new DateTime(2022, 11, 7, 14, 24, 40, 384, DateTimeKind.Local).AddTicks(3063));
 
                     b.HasKey("Id");
 
@@ -249,7 +266,7 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 11, 7, 20, 2, 19, 56, DateTimeKind.Local).AddTicks(5750));
+                        .HasDefaultValue(new DateTime(2022, 11, 7, 14, 24, 40, 384, DateTimeKind.Local).AddTicks(2619));
 
                     b.Property<string>("Message")
                         .IsRequired()
@@ -378,6 +395,21 @@ namespace DataAccess.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("AppRoleAppUser", b =>
+                {
+                    b.HasOne("DataAccess.Entities.AppRole", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataAccess.Entities.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CategoryProduct", b =>

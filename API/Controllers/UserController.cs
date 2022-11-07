@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using API.Interfaces;
+using AutoMapper;
 
 namespace API.Controllers
 {
@@ -17,30 +19,46 @@ namespace API.Controllers
     public class UserController : _APIController
     {
         private readonly UserManager<AppUser> userManager;
-        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly RoleManager<AppRole> roleManager;
         private readonly ApplicationDbContext dbContext;
+        private readonly IUserRepository userRepository;
+        private readonly IMapper mapper;
 
-        public UserController(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext dbContext)
+        public UserController(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, ApplicationDbContext dbContext, IUserRepository userRepository, IMapper mapper)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.dbContext = dbContext;
+            this.userRepository = userRepository;
+            this.mapper = mapper;
         }
 
         [HttpPost("create-role")]
-        public async Task<ActionResult<IdentityRole>> CreateRole(string name)
+        public async Task<ActionResult<AppRole>> CreateRole(string name)
         {
-            var role = new IdentityRole() { Name = name };
+            var role = new AppRole() { Name = name };
             await roleManager.CreateAsync(role);
             await dbContext.SaveChangesAsync();
             return role;
         }
 
-        [HttpGet("get-role")]
+        [HttpGet("get-roles")]
         public async Task<ActionResult<List<AppRole>>> GetRoles()
         {
             var roles = await dbContext.Roles.ToListAsync();
             return roles;
+        }
+
+        [HttpGet("get-user-in-role")]
+        public async Task<ActionResult<List<AppUserDto>>> GetRoles(string name)
+        {
+            var users = await userManager.GetUsersInRoleAsync(name);
+            var userDtos = new List<AppUserDto>();
+            foreach (var user in users)
+            {
+                userDtos.Add(mapper.Map<AppUserDto>(user));
+            }
+            return userDtos;
         }
 
         [HttpDelete("delete-role")]
@@ -61,14 +79,10 @@ namespace API.Controllers
             return Ok();
         }
 
-        // [Authorize(AuthenticationSchemes = "Bearer", Policy = "Admin")]
-        // [HttpPost("admin/search")]
-        // public async Task<ActionResult<PagingDto<ApplicationUser>>> SearchCustomer([FromBody] UserSearchDto model)
-        // {
-        //     // return await productRepository.AdminSearchProduct(model.Query, model.Page, model.Limit);
-        //     var customers = await dbContext.Users.Where(u=>u.UserRoles.Where(ur=>ur.Role.))
-
-        //     dbContext.UserRoles.Where(ur=>ur.RoleId == asdasd)
-        // }
+        [HttpPost("search")]
+        public async Task<ActionResult<PagingDto<AppUserDto>>> SearchCustomer([FromBody] UserSearchDto model)
+        {
+            return await userRepository.SearchCustomer(model.Query, model.Page, model.Limit);
+        }
     }
 }
