@@ -41,11 +41,11 @@ builder.Services.AddAuthentication(options =>
         options.MapInboundClaims = true;
     });
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddRoles<IdentityRole>()
-    .AddRoleManager<RoleManager<IdentityRole>>()
-    .AddSignInManager<SignInManager<ApplicationUser>>()
-    .AddRoleValidator<RoleValidator<IdentityRole>>()
+builder.Services.AddIdentity<AppUser, AppRole>()
+    .AddRoles<AppRole>()
+    .AddRoleManager<RoleManager<AppRole>>()
+    .AddSignInManager<SignInManager<AppUser>>()
+    .AddRoleValidator<RoleValidator<AppRole>>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddAuthorization(options =>
@@ -54,7 +54,7 @@ builder.Services.AddAuthorization(options =>
     {
         policy.RequireAuthenticatedUser();
         policy.RequireClaim("scope", "AssignmentAPI");
-        policy.RequireRole("customer");
+        policy.RequireRole("customer", "admin");
     });
     options.AddPolicy("Admin", policy =>
     {

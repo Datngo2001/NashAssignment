@@ -35,12 +35,12 @@ namespace API.Helpers
 
             // Rating
             CreateMap<Rating, RatingDto>()
-                .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.ApplicationUser));
+                .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.AppUser));
             CreateMap<Rating, AddRatingResDto>();
             CreateMap<AddRatingDto, Rating>();
 
             // User
-            CreateMap<ApplicationUser, RatingAuthorDto>();
+            CreateMap<AppUser, RatingAuthorDto>();
 
             // Image
             CreateMap<Image, ImageDto>();

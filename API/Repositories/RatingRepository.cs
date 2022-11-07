@@ -33,14 +33,14 @@ namespace API.Repositories
                 throw new Exception($"Can not find product with id: {addRatingDto.ProductId}");
             }
 
-            var user = await dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            var user = await dbContext.Users.FirstOrDefaultAsync(u => u.Id.ToString() == userId);
             if (user == null)
             {
                 throw new Exception($"Can not find user with id: {userId}");
             }
 
             var rating = mapper.Map<Rating>(addRatingDto);
-            rating.ApplicationUser = user;
+            rating.AppUser = user;
             product.Ratings.Add(rating);
 
             await dbContext.SaveChangesAsync();
@@ -50,7 +50,7 @@ namespace API.Repositories
 
         public async Task<PagingDto<RatingDto>> GetRatingByProductId(int productId, int page, int limit)
         {
-            var queryable = dbContext.Ratings.Include(r => r.ApplicationUser).Where(p => p.Product.Id == productId);
+            var queryable = dbContext.Ratings.Include(r => r.AppUser).Where(p => p.Product.Id == productId);
 
             var ratings = await queryable
                 .OrderByDescending(r => r.CreateDate)

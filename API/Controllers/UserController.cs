@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DataAccess;
 using DataAccess.Entities;
+using CommonModel;
+using CommonModel.User;
+using DataAccess;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,11 +16,11 @@ namespace API.Controllers
     [Authorize(AuthenticationSchemes = "Bearer", Policy = "Admin")]
     public class UserController : _APIController
     {
-        private readonly UserManager<ApplicationUser> userManager;
+        private readonly UserManager<AppUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly ApplicationDbContext dbContext;
 
-        public UserController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext dbContext)
+        public UserController(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext dbContext)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
@@ -35,7 +37,7 @@ namespace API.Controllers
         }
 
         [HttpGet("get-role")]
-        public async Task<ActionResult<List<IdentityRole>>> GetRoles()
+        public async Task<ActionResult<List<AppRole>>> GetRoles()
         {
             var roles = await dbContext.Roles.ToListAsync();
             return roles;
@@ -59,5 +61,14 @@ namespace API.Controllers
             return Ok();
         }
 
+        // [Authorize(AuthenticationSchemes = "Bearer", Policy = "Admin")]
+        // [HttpPost("admin/search")]
+        // public async Task<ActionResult<PagingDto<ApplicationUser>>> SearchCustomer([FromBody] UserSearchDto model)
+        // {
+        //     // return await productRepository.AdminSearchProduct(model.Query, model.Page, model.Limit);
+        //     var customers = await dbContext.Users.Where(u=>u.UserRoles.Where(ur=>ur.Role.))
+
+        //     dbContext.UserRoles.Where(ur=>ur.RoleId == asdasd)
+        // }
     }
 }

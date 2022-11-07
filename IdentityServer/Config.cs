@@ -70,6 +70,8 @@ namespace IdentityServer
                     PostLogoutRedirectUris = { "http://localhost:3000/" },
                     AllowedCorsOrigins =     { "http://localhost:3000" },
 
+                    AllowOfflineAccess = true,
+
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
