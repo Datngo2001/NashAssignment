@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using AuthServer.Extensions;
 using AuthServer.Models.Account;
 using DataAccess.Entities;
+using IdentityModel;
+using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
@@ -86,6 +88,37 @@ namespace AuthServer.Controllers
             };
 
             return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Logout(string logoutId)
+        {
+            var logoutRequest = await interaction.GetLogoutContextAsync(logoutId);
+
+            if (User?.Identity?.IsAuthenticated == true)
+            {
+                var identityProvider = User.FindFirst(JwtClaimTypes.IdentityProvider)?.Value;
+                if (identityProvider != null && identityProvider != IdentityServer4.IdentityServerConstants.LocalIdentityProvider)
+                {
+                    var providerSupportsSignout = await HttpContext.GetSchemeSupportsSignOutAsync(identityProvider);
+                    if (providerSupportsSignout)
+                    {
+                        if (logoutId == null)
+                        {
+                            logoutId = await interaction.CreateLogoutContextAsync();
+                        }
+
+                        string url = Url.Action("Logout", new { logoutId = logoutId });
+                        return SignOut(new AuthenticationProperties { RedirectUri = url }, identityProvider);
+                    }
+                }
+                else if (identityProvider == IdentityServer4.IdentityServerConstants.LocalIdentityProvider)
+                {
+                    await signInManager.SignOutAsync();
+                }
+            }
+
+            return Redirect(logoutRequest.PostLogoutRedirectUri);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
