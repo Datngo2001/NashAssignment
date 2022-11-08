@@ -32,7 +32,7 @@ builder.Services.AddAuthentication(options =>
 })
     .AddJwtBearer(options =>
     {
-        options.Authority = "https://localhost:5001";
+        options.Authority = "https://localhost:7041";
 
         options.TokenValidationParameters = new TokenValidationParameters
         {
