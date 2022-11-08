@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\Da
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "identityserver", "identityserver\identityserver.csproj", "{9CB9891B-FC6E-4414-9013-3FCB3712010E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthServer", "AuthServer\AuthServer.csproj", "{6CFDCCD2-5AC0-45B1-99C4-35A510612FE0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{9CB9891B-FC6E-4414-9013-3FCB3712010E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9CB9891B-FC6E-4414-9013-3FCB3712010E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9CB9891B-FC6E-4414-9013-3FCB3712010E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CFDCCD2-5AC0-45B1-99C4-35A510612FE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CFDCCD2-5AC0-45B1-99C4-35A510612FE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CFDCCD2-5AC0-45B1-99C4-35A510612FE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CFDCCD2-5AC0-45B1-99C4-35A510612FE0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
