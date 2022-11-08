@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AuthServer.Extensions;
 using AuthServer.Models.Account;
@@ -119,6 +120,92 @@ namespace AuthServer.Controllers
             }
 
             return Redirect(logoutRequest.PostLogoutRedirectUri);
+        }
+
+        [HttpGet]
+        public IActionResult Register(string returnUrl)
+        {
+            var vm = new RegisterViewModel()
+            {
+                ReturnUrl = returnUrl
+            };
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterViewModel model, string button)
+        {
+            var context = await interaction.GetAuthorizationContextAsync(model.ReturnUrl);
+
+            if (ModelState.IsValid)
+            {
+                var userByName = await userManager.FindByNameAsync(model.UserName);
+                var userByEmail = await userManager.FindByNameAsync(model.Email);
+                if (userByName == null && userByEmail == null)
+                {
+                    var newUser = new AppUser
+                    {
+                        UserName = model.UserName,
+                        Email = model.Email,
+                        EmailConfirmed = false,
+                    };
+
+                    var result = await userManager.CreateAsync(newUser, model.Password);
+                    if (!result.Succeeded)
+                    {
+                        ModelState.AddModelError(string.Empty, result.Errors.First().Description);
+                    }
+
+                    result = await userManager.AddClaimsAsync(newUser, new Claim[]{
+                        new Claim(JwtClaimTypes.Name, model.FirstName + model.LastName),
+                        new Claim(JwtClaimTypes.GivenName, model.LastName),
+                        new Claim(JwtClaimTypes.FamilyName, model.FirstName),
+                    });
+                    if (!result.Succeeded)
+                    {
+                        ModelState.AddModelError(string.Empty, result.Errors.First().Description);
+                    }
+
+                    result = await userManager.AddToRoleAsync(newUser, "customer");
+                    if (!result.Succeeded)
+                    {
+                        ModelState.AddModelError(string.Empty, result.Errors.First().Description);
+                    }
+
+                    // signin user after created
+                    await signInManager.SignInAsync(newUser, isPersistent: true);
+
+                    if (context != null)
+                    {
+                        if (context.IsNativeClient())
+                        {
+                            return this.LoadingPage("Redirect", model.ReturnUrl);
+                        }
+
+                        return Redirect(model.ReturnUrl);
+                    }
+
+                    // request for a local page
+                    if (Url.IsLocalUrl(model.ReturnUrl))
+                    {
+                        return Redirect(model.ReturnUrl);
+                    }
+                    else if (string.IsNullOrEmpty(model.ReturnUrl))
+                    {
+                        return Redirect("~/");
+                    }
+                    else
+                    {
+                        throw new Exception("invalid return URL");
+                    }
+                }
+
+                ModelState.AddModelError(string.Empty, "Username or email existed");
+            }
+
+            return View(model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
