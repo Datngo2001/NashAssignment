@@ -148,7 +148,7 @@
                                     <span>@rating.CreateDate</span>
                                 </div>
                             </div>
-                            <h5>@rating.Title - @rating.Author.UserName</h5>
+                            <h5>@rating.Title - @rating.Author?.UserName</h5>
                             <p>@rating.Message</p>
                         </li>
                     }

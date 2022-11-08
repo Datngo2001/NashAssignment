@@ -2,7 +2,7 @@ export const { NODE_ENV } = process.env;
 
 let apiurl;
 if (NODE_ENV === 'development') {
-  apiurl = 'https://localhost:6001/api';
+  apiurl = 'https://localhost:5003/api';
 } else {
   apiurl = '';
 }

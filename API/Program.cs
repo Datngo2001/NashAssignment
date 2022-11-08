@@ -32,7 +32,7 @@ builder.Services.AddAuthentication(options =>
 })
     .AddJwtBearer(options =>
     {
-        options.Authority = "https://localhost:5001";
+        options.Authority = builder.Configuration.GetValue<string>("Authority");
 
         options.TokenValidationParameters = new TokenValidationParameters
         {
@@ -69,9 +69,12 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: "AllowOrigin",
         policy =>
         {
-            policy.WithOrigins("http://localhost:3000", "https://localhost:5002")
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
+            policy.WithOrigins(
+                builder.Configuration.GetValue<string>("AdminSiteOrigin"),
+                builder.Configuration.GetValue<string>("CustomerSiteOrigin")
+            )
+                .AllowAnyHeader()
+                .AllowAnyMethod();
         });
 });
 
