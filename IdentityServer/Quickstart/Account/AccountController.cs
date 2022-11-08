@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace IdentityServerHost.Quickstart.UI
 {
@@ -104,7 +105,7 @@ namespace IdentityServerHost.Quickstart.UI
 
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberLogin, lockoutOnFailure: true);
+                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, true, true);
                 if (result.Succeeded)
                 {
                     var user = await _userManager.FindByNameAsync(model.Username);
@@ -145,6 +146,128 @@ namespace IdentityServerHost.Quickstart.UI
 
             // something went wrong, show form with error
             var vm = await BuildLoginViewModelAsync(model);
+            return View(vm);
+        }
+
+        /// <summary>
+        /// Entry point into the login workflow
+        /// </summary>
+        [HttpGet]
+        public IActionResult Register(string returnUrl)
+        {
+            var vm = new RegisterViewModel()
+            {
+                ReturnUrl = returnUrl
+            };
+
+            return View(vm);
+        }
+
+        /// <summary>
+        /// Handle postback from username/password login
+        /// </summary>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterViewModel model, string button)
+        {
+            // check if we are in the context of an authorization request
+            var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
+
+            // the user clicked the "cancel" button
+            if (button != "register")
+            {
+                if (context != null)
+                {
+                    await _interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
+
+                    // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
+                    if (context.IsNativeClient())
+                    {
+                        return this.LoadingPage("Redirect", model.ReturnUrl);
+                    }
+
+                    return Redirect(model.ReturnUrl);
+                }
+                else
+                {
+                    // since we don't have a valid context, then we just go back to the home page
+                    return Redirect("~/");
+                }
+            }
+
+            if (ModelState.IsValid)
+            {
+                var userByName = await _userManager.FindByNameAsync(model.UserName);
+                var userByEmail = await _userManager.FindByNameAsync(model.Email);
+                if (userByName == null && userByEmail == null)
+                {
+                    var newUser = new AppUser
+                    {
+                        UserName = model.UserName,
+                        Email = model.Email,
+                        EmailConfirmed = false,
+                    };
+                    var result = await _userManager.CreateAsync(newUser, model.Password);
+                    if (!result.Succeeded)
+                    {
+                        throw new Exception(result.Errors.First().Description);
+                    }
+
+                    result = await _userManager.AddClaimsAsync(newUser, new Claim[]{
+                        new Claim(JwtClaimTypes.Name, model.FirstName + model.LastName),
+                        new Claim(JwtClaimTypes.GivenName, model.LastName),
+                        new Claim(JwtClaimTypes.FamilyName, model.FirstName),
+                    });
+                    if (!result.Succeeded)
+                    {
+                        throw new Exception(result.Errors.First().Description);
+                    }
+
+                    result = await _userManager.AddToRoleAsync(newUser, "customer");
+                    if (!result.Succeeded)
+                    {
+                        throw new Exception(result.Errors.First().Description);
+                    }
+
+                    // signin user after created
+                    await _signInManager.SignInAsync(newUser, isPersistent: true);
+
+                    var user = await _userManager.FindByNameAsync(model.UserName);
+                    await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName, clientId: context?.Client.ClientId));
+
+                    if (context != null)
+                    {
+                        if (context.IsNativeClient())
+                        {
+                            // The client is native, so this change in how to
+                            // return the response is for better UX for the end user.
+                            return this.LoadingPage("Redirect", model.ReturnUrl);
+                        }
+
+                        // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
+                        return Redirect(model.ReturnUrl);
+                    }
+
+                    // request for a local page
+                    if (Url.IsLocalUrl(model.ReturnUrl))
+                    {
+                        return Redirect(model.ReturnUrl);
+                    }
+                    else if (string.IsNullOrEmpty(model.ReturnUrl))
+                    {
+                        return Redirect("~/");
+                    }
+                    else
+                    {
+                        // user might have clicked on a malicious link - should be logged
+                        throw new Exception("invalid return URL");
+                    }
+                }
+
+                ModelState.AddModelError(string.Empty, AccountOptions.InvalidCredentialsErrorMessage);
+            }
+
+            var vm = model;
             return View(vm);
         }
 

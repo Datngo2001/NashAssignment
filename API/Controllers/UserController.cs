@@ -74,7 +74,6 @@ namespace API.Controllers
         [HttpPost("add-user-to-role")]
         public async Task<ActionResult> AddUserToRole(string id, string roleName)
         {
-            var roles = await dbContext.Roles.ToListAsync();
             var user = await userManager.FindByIdAsync(id);
             await userManager.AddToRoleAsync(user, roleName);
             return Ok();
