@@ -20,6 +20,7 @@ builder.Services.AddIdentity<AppUser, AppRole>(options =>
                 options.SignIn.RequireConfirmedAccount = false;
                 options.SignIn.RequireConfirmedEmail = false;
                 options.SignIn.RequireConfirmedPhoneNumber = false;
+                options.User.RequireUniqueEmail = true;
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
@@ -45,10 +46,6 @@ builder.Services.AddAuthentication()
                 .AddGoogle(options =>
                 {
                     options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-
-                    // register your IdentityServer with Google at https://console.developers.google.com
-                    // enable the Google+ API
-                    // set the redirect URI to https://localhost:5001/signin-google
                     options.ClientId = builder.Configuration.GetValue<string>("GoogleOAuthClientID");
                     options.ClientSecret = builder.Configuration.GetValue<string>("GoogleOAuthClientSecret");
                 });

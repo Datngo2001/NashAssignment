@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using AuthServer.Extensions;
 using AuthServer.Models.Account;
+using DataAccess;
 using DataAccess.Entities;
 using IdentityModel;
 using IdentityServer4.Extensions;
@@ -27,6 +28,7 @@ namespace AuthServer.Controllers
         private readonly IIdentityServerInteractionService interaction;
         private readonly IClientStore clientStore;
         private readonly IAuthenticationSchemeProvider schemeProvider;
+        private readonly ApplicationDbContext dbContext;
 
         public AccountController(
             ILogger<AccountController> logger,
@@ -34,7 +36,8 @@ namespace AuthServer.Controllers
             SignInManager<AppUser> signInManager,
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
-            IAuthenticationSchemeProvider schemeProvider
+            IAuthenticationSchemeProvider schemeProvider,
+            ApplicationDbContext dbContext
            )
         {
             _logger = logger;
@@ -43,6 +46,7 @@ namespace AuthServer.Controllers
             this.interaction = interaction;
             this.clientStore = clientStore;
             this.schemeProvider = schemeProvider;
+            this.dbContext = dbContext;
         }
 
         [HttpGet]
@@ -137,75 +141,90 @@ namespace AuthServer.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model, string button)
         {
-            var context = await interaction.GetAuthorizationContextAsync(model.ReturnUrl);
-
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var userByName = await userManager.FindByNameAsync(model.UserName);
-                var userByEmail = await userManager.FindByNameAsync(model.Email);
-                if (userByName == null && userByEmail == null)
+                return View(model);
+            }
+
+            using var transaction = dbContext.Database.BeginTransaction();
+
+            var newUser = new AppUser
+            {
+                UserName = model.UserName,
+                Email = model.Email,
+                EmailConfirmed = false,
+            };
+
+            try
+            {
+                var result = await userManager.CreateAsync(newUser, model.Password);
+                if (!result.Succeeded)
                 {
-                    var newUser = new AppUser
+                    foreach (var err in result.Errors)
                     {
-                        UserName = model.UserName,
-                        Email = model.Email,
-                        EmailConfirmed = false,
-                    };
-
-                    var result = await userManager.CreateAsync(newUser, model.Password);
-                    if (!result.Succeeded)
-                    {
-                        ModelState.AddModelError(string.Empty, result.Errors.First().Description);
+                        ModelState.AddModelError(string.Empty, err.Description);
                     }
+                    throw new Exception();
+                }
 
-                    result = await userManager.AddClaimsAsync(newUser, new Claim[]{
+                result = await userManager.AddClaimsAsync(newUser, new Claim[]{
                         new Claim(JwtClaimTypes.Name, model.FirstName + model.LastName),
                         new Claim(JwtClaimTypes.GivenName, model.LastName),
                         new Claim(JwtClaimTypes.FamilyName, model.FirstName),
                     });
-                    if (!result.Succeeded)
+                if (!result.Succeeded)
+                {
+                    foreach (var err in result.Errors)
                     {
-                        ModelState.AddModelError(string.Empty, result.Errors.First().Description);
+                        ModelState.AddModelError(string.Empty, err.Description);
                     }
-
-                    result = await userManager.AddToRoleAsync(newUser, "customer");
-                    if (!result.Succeeded)
-                    {
-                        ModelState.AddModelError(string.Empty, result.Errors.First().Description);
-                    }
-
-                    // signin user after created
-                    await signInManager.SignInAsync(newUser, isPersistent: true);
-
-                    if (context != null)
-                    {
-                        if (context.IsNativeClient())
-                        {
-                            return this.LoadingPage("Redirect", model.ReturnUrl);
-                        }
-
-                        return Redirect(model.ReturnUrl);
-                    }
-
-                    // request for a local page
-                    if (Url.IsLocalUrl(model.ReturnUrl))
-                    {
-                        return Redirect(model.ReturnUrl);
-                    }
-                    else if (string.IsNullOrEmpty(model.ReturnUrl))
-                    {
-                        return Redirect("~/");
-                    }
-                    else
-                    {
-                        throw new Exception("invalid return URL");
-                    }
+                    throw new Exception();
                 }
 
-                ModelState.AddModelError(string.Empty, "Username or email existed");
+                result = await userManager.AddToRoleAsync(newUser, "customer");
+                if (!result.Succeeded)
+                {
+                    foreach (var err in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, err.Description);
+                    }
+                    throw new Exception();
+                }
+
+                await transaction.CommitAsync();
+            }
+            catch (System.Exception)
+            {
+                await transaction.RollbackAsync();
+                return View(model);
             }
 
-            return View(model);
+            await signInManager.SignInAsync(newUser, isPersistent: true);
+
+            var context = await interaction.GetAuthorizationContextAsync(model.ReturnUrl);
+            if (context != null)
+            {
+                if (context.IsNativeClient())
+                {
+                    return this.LoadingPage("Redirect", model.ReturnUrl);
+                }
+
+                return Redirect(model.ReturnUrl);
+            }
+
+            // request for a local page
+            if (Url.IsLocalUrl(model.ReturnUrl))
+            {
+                return Redirect(model.ReturnUrl);
+            }
+            else if (string.IsNullOrEmpty(model.ReturnUrl))
+            {
+                return Redirect("~/");
+            }
+            else
+            {
+                throw new Exception("invalid return URL");
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
