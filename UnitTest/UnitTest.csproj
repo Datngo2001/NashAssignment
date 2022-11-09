@@ -9,7 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FakeItEasy" Version="7.3.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
     <PackageReference Include="Moq" Version="4.18.2" />
     <PackageReference Include="xunit" Version="2.4.1" />
@@ -24,8 +23,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="CustomerSite\ViewComponent\" />
+    <Folder Include="CustomerSite\Service\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\API\API.csproj" />
     <ProjectReference Include="..\CommonModel\CommonModel.csproj" />
+    <ProjectReference Include="..\CustomerSite\CustomerSite.csproj" />
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
   </ItemGroup>
 
 </Project>
