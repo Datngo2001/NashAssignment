@@ -44,16 +44,8 @@ namespace CustomerSite.Pages
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAddRatingAsync()
+        public async Task<IActionResult> OnPostAddRatingAsync(AddRatingDto addRatingDto)
         {
-            var addRatingDto = new AddRatingDto()
-            {
-                ProductId = Convert.ToInt32(Request.Form["ProductId"]),
-                Title = Request.Form["Title"],
-                Message = Request.Form["Message"],
-                Star = Convert.ToInt32(Request.Form["Star"])
-            };
-
             var accessToken = await HttpContext.GetTokenAsync("access_token");
             if (accessToken == null || accessToken == "")
             {

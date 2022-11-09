@@ -15,11 +15,6 @@ builder.Services.AddHttpClient("", opt =>
     opt.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
 });
 
-builder.Services.AddSession(option =>
-{
-    option.IdleTimeout = TimeSpan.FromMinutes(10);
-});
-
 JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 builder.Services.AddAuthentication(options =>
     {
@@ -67,7 +62,6 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseSession();
 
 app.UseRouting();
 app.UseAuthentication();
