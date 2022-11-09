@@ -9,6 +9,13 @@ import draftToHtml from "draftjs-to-html";
 import useDataForm from "../../../../hooks/useDataForm";
 import ProductImageList from "../ProductImageList/ProductImageList";
 import CategoryList from "../CategoryList/CategoryList";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+const schema = yup.object({
+  name: yup.string().required(),
+  price: yup.number().required().min(0),
+});
 
 const init = {
   id: "",
@@ -29,10 +36,12 @@ function ProductModal({ open, onClose, onSave, product = init, action }) {
     handleSubmit,
     formState,
     reset,
+    formState: { errors },
     UPDATING,
     DETAILING,
-  } = useDataForm({ action });
+  } = useDataForm({ action, resolver: yupResolver(schema) });
 
+  console.log(errors);
   const descriptionChange = useRef();
   const imagesChange = useRef();
   const categoriesChange = useRef();
@@ -124,6 +133,8 @@ function ProductModal({ open, onClose, onSave, product = init, action }) {
                 </>
               )}
               <TextField
+                error={errors.name}
+                helperText={errors.name?.message}
                 label="Product Name"
                 multiline
                 rows={4}
@@ -147,6 +158,8 @@ function ProductModal({ open, onClose, onSave, product = init, action }) {
                     sx={{ height: "100%", justifyContent: "space-between" }}
                   >
                     <TextField
+                      error={errors.price}
+                      helperText={errors.price?.message}
                       label="Price"
                       type="number"
                       InputProps={{

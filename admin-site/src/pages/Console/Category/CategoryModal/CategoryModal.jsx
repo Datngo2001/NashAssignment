@@ -1,10 +1,16 @@
 import { Box, Button, Paper, Stack, TextField } from "@mui/material";
 import React from "react";
 import BaseModal from "../../../../components/BaseModal/BaseModal";
-import ConfirmModal from "../../../../components/ConfirmModal";
 import useConfirmModal from "../../../../hooks/useConfirmModal";
 import useDataForm from "../../../../hooks/useDataForm";
 import { getSrc } from "../../../../util/getSrcImg";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+const schema = yup.object({
+  name: yup.string().required(),
+  image: yup.string().required(),
+});
 
 const init = {
   id: "",
@@ -20,11 +26,12 @@ function CategoryModal({ open, onClose, onSave, category = init, action }) {
     register,
     handleSubmit,
     formState,
+    formState: { errors },
     reset,
     watch,
     UPDATING,
     DETAILING,
-  } = useDataForm({ action });
+  } = useDataForm({ action, resolver: yupResolver(schema) });
 
   const watchImg = watch("image");
 
@@ -85,6 +92,8 @@ function CategoryModal({ open, onClose, onSave, category = init, action }) {
                 </>
               )}
               <TextField
+                error={errors.name}
+                helperText={errors.name?.message}
                 label="Category Name"
                 multiline
                 rows={4}
@@ -98,6 +107,8 @@ function CategoryModal({ open, onClose, onSave, category = init, action }) {
             <Stack spacing={2} sx={{ flexGrow: 1 }}>
               <TextField
                 label="Image"
+                error={errors.image}
+                helperText={errors.image?.message}
                 InputProps={{
                   ...register("image"),
                   value: category.image,

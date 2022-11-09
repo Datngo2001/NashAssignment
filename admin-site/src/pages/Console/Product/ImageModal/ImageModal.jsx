@@ -12,6 +12,12 @@ import BaseModal from "../../../../components/BaseModal/BaseModal";
 import useConfirmModal from "../../../../hooks/useConfirmModal";
 import useDataForm from "../../../../hooks/useDataForm";
 import { getSrc } from "../../../../util/getSrcImg";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+const schema = yup.object({
+  url: yup.string().required(),
+});
 
 const init = {
   id: "",
@@ -26,10 +32,11 @@ function ImageModal({ open, onClose, onSave, image = init, action }) {
     register,
     handleSubmit,
     formState,
+    formState: { errors },
     reset,
     watch,
     DETAILING,
-  } = useDataForm({ action });
+  } = useDataForm({ action, resolver: yupResolver(schema) });
 
   const watchUrl = watch("url");
 
@@ -84,6 +91,8 @@ function ImageModal({ open, onClose, onSave, image = init, action }) {
             />
             <TextField
               label="Image"
+              error={errors.url}
+              helperText={errors.url?.message}
               InputProps={{
                 ...register("url"),
                 defaultValue: image.url,
