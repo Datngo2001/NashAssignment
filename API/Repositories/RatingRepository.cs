@@ -9,6 +9,7 @@ using CommonModel;
 using CommonModel.Rating;
 using DataAccess;
 using DataAccess.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Repositories
@@ -17,9 +18,11 @@ namespace API.Repositories
     {
         private readonly ApplicationDbContext dbContext;
         private readonly IMapper mapper;
+        private readonly UserManager<AppUser> userManager;
 
-        public RatingRepository(ApplicationDbContext dbContext, IMapper mapper)
+        public RatingRepository(ApplicationDbContext dbContext, IMapper mapper, UserManager<AppUser> userManager)
         {
+            this.userManager = userManager;
             this.mapper = mapper;
             this.dbContext = dbContext;
         }
@@ -33,7 +36,7 @@ namespace API.Repositories
                 throw new Exception($"Can not find product with id: {addRatingDto.ProductId}");
             }
 
-            var user = await dbContext.Users.FirstOrDefaultAsync(u => u.Id.ToString() == userId);
+            var user = await userManager.FindByIdAsync(userId);
             if (user == null)
             {
                 throw new Exception($"Can not find user with id: {userId}");
