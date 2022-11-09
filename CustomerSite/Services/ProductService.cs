@@ -39,7 +39,21 @@ namespace CustomerSite.Services
 
             if (result == null)
             {
-                throw new Exception("Can not get category");
+                throw new Exception("Can not get product");
+            }
+
+            return result;
+        }
+
+        public async Task<ProductDto> GetProductBriefByIdAsync(int id)
+        {
+            var httpClient = clientFactory.CreateClient();
+
+            var result = await httpClient.GetApiAsync<ProductDto>($"Product/{id}/brief");
+
+            if (result == null)
+            {
+                throw new Exception("Can not get product");
             }
 
             return result;

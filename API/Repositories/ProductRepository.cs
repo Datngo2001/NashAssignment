@@ -34,6 +34,14 @@ namespace API.Repositories
                 .ToListAsync();
         }
 
+        public async Task<ProductDto?> GetProductBriefById(int id)
+        {
+            return await context.Products
+                .Where(p => p.Id == id)
+                .ProjectTo<ProductDto>(mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<ProductDetailDto?> GetProductById(int id)
         {
             return await context.Products
