@@ -7,12 +7,16 @@ using System.IdentityModel.Tokens.Jwt;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
 
 builder.Services.AddHttpClient("", opt =>
 {
     opt.BaseAddress = new Uri(builder.Configuration["ApiUrl"] ?? "");
     opt.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
+});
+
+builder.Services.AddSession(cfg => {                  
+    cfg.Cookie.Name = "xuanthulab";           
+    cfg.IdleTimeout = new TimeSpan(0, 30, 0);
 });
 
 JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
@@ -41,7 +45,9 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
@@ -49,6 +55,7 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ISearchService, SearchService>();
 builder.Services.AddScoped<IIdentityService, IdentityService>();
 builder.Services.AddScoped<IRatingService, RatingService>();
+builder.Services.AddScoped<ICartService, CartService>();
 
 var app = builder.Build();
 
@@ -61,10 +68,15 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
+app.UseSession();
+
 app.UseRouting();
+
 app.UseAuthentication();
+
 app.UseAuthorization();
 
 // app.MapControllerRoute(

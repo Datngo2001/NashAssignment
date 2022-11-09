@@ -21,7 +21,6 @@
                                 style="position: absolute; z-index: 1000; top:100%; width: 100%;">
                             </div>
                         </div>
-                        <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
                 </div>
                 <ul class="navbar-nav">
@@ -32,11 +31,16 @@
                         </li>
                     }
                     @if (User.Claims.Count() != 0)
-                    {
+                    {   
+                        <li class="nav-item me-3">
+                            <a class="btn btn-light" asp-page="Cart">
+                                <i class="fas fa-shopping-cart"></i>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <div class="dropdown">
-                                <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="userMenuDropDown"
-                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="btn btn-light dropdown-toggle" href="#" role="button" id="userMenuDropDown"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
                                     @User.Claims.FirstOrDefault(c=>c.Type=="name")?.Value
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="userMenuDropDown">
