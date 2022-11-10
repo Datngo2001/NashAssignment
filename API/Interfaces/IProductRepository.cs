@@ -18,5 +18,6 @@ namespace API.Interfaces
         Task<ProductDetailDto> CreateProduct(CreateProductDto createProductDto);
         Task<ProductDetailDto> UpdateProduct(UpdateProductDto updateProductDto);
         Task<ProductDetailDto> DeleteProduct(int id);
+        Task<ProductDto?> GetProductBriefById(int id);
     }
 }

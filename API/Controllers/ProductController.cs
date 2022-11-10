@@ -80,6 +80,19 @@ namespace API.Controllers
             return product;
         }
 
+        [HttpGet("{id}/brief")]
+        public async Task<ActionResult<ProductDto>> GetProductBriefById(int id)
+        {
+            var product = await productRepository.GetProductBriefById(id);
+
+            if (product == null)
+            {
+                return BadRequest();
+            }
+
+            return product;
+        }
+
         [HttpGet("{id}/avg-star")]
         public async Task<ActionResult<double>> GetProductAvgStar(int id)
         {

@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthServer", "AuthServer\Au
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "identityserver", "identityserver\identityserver.csproj", "{934B57F5-2C5F-4493-928C-5AE854DE81E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{A2D2DA6D-98EA-4224-8C32-174F2641C745}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTest", "UnitTest\UnitTest.csproj", "{A2D2DA6D-98EA-4224-8C32-174F2641C745}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

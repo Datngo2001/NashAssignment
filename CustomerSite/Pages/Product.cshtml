@@ -7,7 +7,7 @@
 
     var addingRating = Convert.ToBoolean(ViewData["is-adding-rating"]);
     double avgStar = Convert.ToDouble(ViewData["avg-star"]);
-    CultureInfo cul = CultureInfo.GetCultureInfo("vi-VN"); // try with "en-US"
+    CultureInfo cul = CultureInfo.GetCultureInfo("vi-VN");
     var price = Model.Product.Price.ToString("#,###", cul.NumberFormat) + " đ";
 
     var avgStarModel = new RatingStarsViewModel()
@@ -71,7 +71,8 @@
                         style="background-color: #FF424E; color: white;">
                         Buy now
                     </button>
-                    <button class="btn btn-outline-primary flex-grow-1  flex-shrink-0 p-2 fs-6">Add to cart</button>
+                    <a class="btn btn-outline-primary flex-grow-1  flex-shrink-0 p-2 fs-6" asp-page="Cart"
+                        asp-page-handler="AddToCart" asp-route-productId="@Model.Product.Id">Add to cart</a>
                 </div>
             </div>
             <div class="col-4 d-flex align-content-start flex-wrap overflow-auto">
