@@ -4,6 +4,8 @@ using CustomerSite.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Globalization;
+using System.Reflection;
 
 namespace CustomerSite.Pages
 {
@@ -48,7 +50,7 @@ namespace CustomerSite.Pages
             cartService.SaveCartSession(cart);
 
             CartItems = cart;
-            return Page();
+            return RedirectToPage();
         }
 
         public ActionResult OnGetRemoveFromCartAsync(int productId)
@@ -65,7 +67,32 @@ namespace CustomerSite.Pages
             cartService.SaveCartSession(cart);
 
             CartItems = cart;
-            return Page();
+            return RedirectToPage();
         }
+
+        public ActionResult OnPostUpdateCartAsync([FromBody] UpdateCartInputModel updateCartInput)
+        {
+            var cart = cartService.GetCartItems();
+            var cartitem = cart.FirstOrDefault(p => p.Product.Id == updateCartInput.ProductId);
+
+            if (cartitem == null)
+            {
+                return new BadRequestResult();
+            }
+
+            cartitem.Quantity = updateCartInput.Quantity;
+            cartService.SaveCartSession(cart);
+
+            CultureInfo cul = CultureInfo.GetCultureInfo("vi-VN");
+            var totalMoney = cart.Aggregate((long)0, (total, next) => total + next.Product.Price * next.Quantity).ToString("#,###", cul.NumberFormat);
+
+            return new JsonResult(new
+            {
+                productId=updateCartInput.ProductId,
+                quantity=updateCartInput.Quantity,
+                totalMoney=totalMoney,
+            });
+        }
+
     }
 }

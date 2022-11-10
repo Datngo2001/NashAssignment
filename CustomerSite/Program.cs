@@ -14,8 +14,8 @@ builder.Services.AddHttpClient("", opt =>
     opt.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
 });
 
-builder.Services.AddSession(cfg => {                  
-    cfg.Cookie.Name = "xuanthulab";           
+builder.Services.AddSession(cfg =>
+{
     cfg.IdleTimeout = new TimeSpan(0, 30, 0);
 });
 

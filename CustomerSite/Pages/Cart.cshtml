@@ -2,97 +2,145 @@
 @using System.Globalization
 @model CustomerSite.Pages.CartModel
 @{
+    ViewData["Title"] = "Cart";
     CultureInfo cul = CultureInfo.GetCultureInfo("vi-VN");
+    var totalMoney = Model.CartItems.Aggregate((long)0, (total, next) => total + next.Product.Price * next.Quantity).ToString("#,###", cul.NumberFormat);
 }
 
-<section class="h-100 h-custom">
-    <div class="container h-100 py-5">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col">
-                <div class="card shopping-cart" style="border-radius: 15px;">
-                    <div class="card-body text-black">
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions {
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Model.HttpContext).RequestToken;
+    }
+}
 
-                        <div class="row">
-                            <div class="col-lg-6 px-5 py-4">
+<div class="container h-100" id="cart">
+    <div class="card shopping-cart" style="border-radius: 15px;">
+        <div class="card-body text-black">
 
-                                <h3 class="mb-5 pt-2 text-center fw-bold text-uppercase">Your products</h3>
+            <div class="row">
+                <div class="col-lg-6 px-5 py-4">
 
-                                @foreach (var cartItem in Model.CartItems)
-                                {
-                                    <div class="d-flex align-items-center mb-5">
-                                        <div class="flex-shrink-0">
-                                            <img src="@cartItem.Product.Image" class="img-fluid" style="width: 150px;"
-                                            alt="@cartItem.Product.Name">
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <a href="#!" class="float-end text-black"><i class="fas fa-times"></i></a>
-                                            <h5 class="text-primary">@cartItem.Product.Name</h5>
-                                            <h6 style="color: #9e9e9e;">Color: white</h6>
-                                            <div class="d-flex align-items-center">
-                                                <p class="fw-bold mb-0 me-5 pe-3">
-                                                    @($"{cartItem.Product.Price.ToString("#,###", cul.NumberFormat)}đ")</p>
-                                                <div class="def-number-input number-input safari_only">
-                                                    <button class="btn"
-                                                    onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
-                                                        <i class="fa-solid fa-minus"></i>
-                                                    </button>
-                                                    <input class="form-control" readonly asp-for="@cartItem.Quantity"
-                                                    id="@($"quantity-{cartItem.Product.Id}")">
-                                                    <button class="btn"
-                                                    onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
-                                                        <i class="fa-solid fa-plus"></i>
-                                                    </button>
-                                                    @* <a class="btn btn-danger" asp-route="Cart"
-                                                        asp-page-handler="RemoveFromCart"
-                                                        asp-route-productId="@cartItem.Product.Id">Delete</a> *@
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
+                    <h3 class="mb-5 pt-2 text-center fw-bold text-uppercase">Your Cart</h3>
 
-                                <hr class="mb-4" style="height: 2px; background-color: #1266f1; opacity: 1;">
-
-                                <div class="d-flex justify-content-between p-2 mb-2" style="background-color: #e1f5fe;">
-                                    <h5 class="fw-bold mb-0">Total:</h5>
-                                    <h5 class="fw-bold mb-0">2261$</h5>
-                                </div>
-
+                    @foreach (var cartItem in Model.CartItems)
+                    {
+                        <div class="d-flex align-items-center mb-5">
+                            <div class="flex-shrink-0">
+                                <img src="@cartItem.Product.Image" class="img-fluid" style="width: 150px;"
+                                alt="@cartItem.Product.Name">
                             </div>
-                            <div class="col-lg-6 px-5 py-4">
-
-                                <h3 class="mb-5 pt-2 text-center fw-bold text-uppercase">Payment</h3>
-
-                                <form class="mb-5">
-
-                                    <div class="mb-5">
-                                        <label class="form-label" for="typeText">Your name</label>
-                                        <input type="text" id="typeText" class="form-control form-control-lg" siez="17"
-                                            value="  " />
+                            <div class="flex-grow-1 ms-3">
+                                <a class="float-end text-black" asp-page="Cart" asp-page-handler="RemoveFromCart"
+                                asp-route-productId="@cartItem.Product.Id"><i class="fas fa-times"></i></a>
+                                <h5 class="text-primary">@cartItem.Product.Name</h5>
+                                <h6 style="color: #9e9e9e;">Color: white</h6>
+                                <div class="d-flex align-items-center">
+                                    <p class="fw-bold mb-0 me-5 pe-3">
+                                        @($"{cartItem.Product.Price.ToString("#,###", cul.NumberFormat)}đ")</p>
+                                    <div class="def-number-input number-input safari_only">
+                                        <a class="btn minus-quantity" data-action="minus" data-productId="@cartItem.Product.Id">
+                                            <i class="fas fa-minus"></i>
+                                        </a>
+                                        <span id="quantity-@cartItem.Product.Id" class="">@cartItem.Quantity</span>
+                                        <a class="btn plus-quantity" data-action="plus" data-productId="@cartItem.Product.Id">
+                                            <i class="fas fa-plus"></i>
+                                        </a>
                                     </div>
-
-                                    <div class="mb-5">
-                                        <input type="text" id="typeName" class="form-control form-control-lg" siez="17"
-                                            value="John Smith" />
-                                        <label class="form-label" for="typeName">Name on card</label>
-                                    </div>
-
-                                    <p class="mb-5">
-                                        Lorem ipsum dolor sit amet consectetur, adipisicing elit <a href="#!">obcaecati
-                                            sapiente</a>.
-                                    </p>
-
-                                    <button type="button" class="btn btn-primary btn-block btn-lg">Buy now</button>
-
-                                    <h5 class="fw-bold mb-5" style="position: absolute; bottom: 0;">
-                                        <a href="#!"><i class="fas fa-angle-left me-2"></i>Back to shopping</a>
-                                    </h5>
-                                </form>
+                                </div>
                             </div>
                         </div>
+                    }
+
+                    <hr class="mb-4" style="height: 2px; background-color: #1266f1; opacity: 1;">
+
+                    <div class="d-flex justify-content-between p-2 mb-2" style="background-color: #e1f5fe;">
+                        <h5 class="fw-bold mb-0">Total:</h5>
+                        <h5 id="cart-total-price" class="fw-bold mb-0">@totalMoney đ</h5>
                     </div>
+
+                </div>
+                <div class="col-lg-6 px-5 py-4">
+
+                    <h3 class="mb-5 pt-2 text-center fw-bold text-uppercase">Order</h3>
+
+                    <form class="mb-5">
+
+                        <div class="mb-5">
+                            <label class="form-label" for="customer-name">Your name</label>
+                            <input type="text" id="customer-name" class="form-control form-control-lg" siez="17"
+                                value="" />
+                        </div>
+
+                        <div class="mb-5">
+                            <label class="form-label" for="customer-address">Your address</label>
+                            <textarea id="customer-address" class="form-control form-control-lg" rows="3"
+                                siez="17"></textarea>
+                        </div>
+                        <div class="row m-0">
+                            <h5 class="col-8">
+                                <a href="#!"><i class="fas fa-angle-left me-2"></i>Back to shopping</a>
+                            </h5>
+                            <button type="submit" class="btn btn-primary col-4">Buy now</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-</section>
+</div>
+
+<script>
+    window.onload = () => {
+        let plusThrottle;
+        let buttons = document.querySelectorAll(".plus-quantity,.minus-quantity")
+
+        buttons.forEach(btn => {
+            btn.addEventListener("click", () => {
+                let productId = btn.attributes.getNamedItem("data-productId").nodeValue;
+                let action = btn.attributes.getNamedItem("data-action").nodeValue;
+                let quantity = getProductQuantity(productId)
+
+                if (action == "plus"){
+                    quantity++
+                }else{
+                    if(quantity ==1){
+                        return;
+                    }
+                    quantity--
+                }
+                updateProductQuantity(productId, quantity)
+
+                if (plusThrottle) {
+                    clearTimeout(plusThrottle)
+                }
+                plusThrottle = setTimeout(() => {
+
+                    postAction("@Url.Page("Cart", "UpdateCart")",
+                        {
+                            productId: productId,
+                            quantity: quantity
+                        },
+                        {
+                            "RequestVerificationToken": '@GetAntiXsrfRequestToken()'
+                        })
+                        .then(res=>{
+                            updateProductQuantity(res.productId, res.quantity)
+                            updateTotalPrice(res.totalMoney)
+                        })
+                }, 250)
+            })
+        })
+        function getProductQuantity(id) {
+            var quantity = document.querySelector(`#quantity-${id}`).innerHTML;
+            return parseInt(quantity);
+        }
+        function updateProductQuantity(id, value) {
+            document.querySelector(`#quantity-${id}`).innerHTML = value;
+        }
+        function updateTotalPrice(total){
+            document.getElementById("cart-total-price").innerHTML = total + " đ";
+        }
+    }
+</script>

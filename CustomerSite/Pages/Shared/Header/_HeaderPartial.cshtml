@@ -1,3 +1,11 @@
+@using CustomerSite.Models.Cart
+@using Newtonsoft.Json
+
+@{
+    var jsoncart = Context.Session.GetString("cart") ?? "";
+    var cartItems = JsonConvert.DeserializeObject<List<CartItemViewModel>>(jsoncart) ?? new List<CartItemViewModel>();
+}
+
 <header style="z-index: 1000; position: relative; width: 100%; ">
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
         <div class="container-lg">
@@ -31,16 +39,22 @@
                         </li>
                     }
                     @if (User.Claims.Count() != 0)
-                    {   
+                    {
                         <li class="nav-item me-3">
-                            <a class="btn btn-light" asp-page="Cart">
+                            <a class="btn btn-light position-relative" asp-page="Cart">
                                 <i class="fas fa-shopping-cart"></i>
+                                @if (cartItems.Count > 0)
+                                {
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        @cartItems.Count
+                                    </span>
+                                }
                             </a>
                         </li>
                         <li class="nav-item">
                             <div class="dropdown">
                                 <a class="btn btn-light dropdown-toggle" href="#" role="button" id="userMenuDropDown"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                data-bs-toggle="dropdown" aria-expanded="false">
                                     @User.Claims.FirstOrDefault(c=>c.Type=="name")?.Value
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="userMenuDropDown">
@@ -79,7 +93,7 @@
         clearTimeout(headerSearchTimer)
         headerSearchTimer = setTimeout(async () => {
             if (e.target.value == "") return;
-            var hints = await getView(`Search?handler=SearchHint&q=${e.target.value}`);
+            var hints = await getView(`/Search?handler=SearchHint&q=${e.target.value}`);
             headerSearchHintContainer.innerHTML = hints
             headerSearchOverlay.style.display = "block"
             headerSearchHintContainer.style.display = "block"

@@ -40,7 +40,7 @@
     moreButton.addEventListener("click", async () => {
         var moreButtonText = moreButton.innerText
         moreButton.innerText = "Loading..."
-        var views = await getView(`Index?handler=MoreProduct&p=${currentProductPage + 1}`);
+        var views = await getView(`/Index?handler=MoreProduct&p=${currentProductPage + 1}`);
         if (views) {
             productCardsList.innerHTML += views
             currentProductPage += 1
