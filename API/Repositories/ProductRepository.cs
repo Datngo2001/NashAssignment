@@ -39,17 +39,21 @@ namespace API.Repositories
             return await context.Products
                 .Where(p => p.Id == id)
                 .ProjectTo<ProductDto>(mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(); 
         }
 
         public async Task<ProductDetailDto?> GetProductById(int id)
         {
-            return await context.Products
+            var product = await context.Products
+                .AsNoTracking()
                 .Where(p => p.Id == id)
                 .Include(p => p.Features)
                 .Include(p => p.Categories)
+                .Include(p=> p.Images)
                 .ProjectTo<ProductDetailDto>(mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
+
+            return product;
         }
 
         public async Task<PagingDto<ProductDto>> SearchProduct(string query, int page, int limit)
