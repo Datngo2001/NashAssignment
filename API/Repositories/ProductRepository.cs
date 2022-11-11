@@ -39,7 +39,7 @@ namespace API.Repositories
             return await context.Products
                 .Where(p => p.Id == id)
                 .ProjectTo<ProductDto>(mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(); 
+                .FirstOrDefaultAsync();
         }
 
         public async Task<ProductDetailDto?> GetProductById(int id)
@@ -49,7 +49,7 @@ namespace API.Repositories
                 .Where(p => p.Id == id)
                 .Include(p => p.Features)
                 .Include(p => p.Categories)
-                .Include(p=> p.Images)
+                .Include(p => p.Images)
                 .ProjectTo<ProductDetailDto>(mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
 

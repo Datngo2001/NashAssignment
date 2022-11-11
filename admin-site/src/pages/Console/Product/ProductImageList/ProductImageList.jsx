@@ -100,7 +100,7 @@ function ProductImageList({ items = [], action, onImagesChange, style }) {
           </ListSubheader>
         </ImageListItem>
         {images?.map((image, index) => (
-          <ImageListItem key={image.url} onClick={() => openDetailModal(image)}>
+          <ImageListItem key={image.id} onClick={() => openDetailModal(image)}>
             <img
               src={`${image.url}?w=248&fit=crop&auto=format`}
               alt={image.url}

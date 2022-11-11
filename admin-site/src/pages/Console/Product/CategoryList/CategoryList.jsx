@@ -70,9 +70,13 @@ function CategoryList({ items = [], action, onCategoriesChange }) {
           <ListItem
             key={category.id}
             secondaryAction={
-              <IconButton edge="end" onClick={() => handleRemove(category)}>
-                <CloseIcon />
-              </IconButton>
+              <>
+                {action === DETAIL ? null : (
+                  <IconButton edge="end" onClick={() => handleRemove(category)}>
+                    <CloseIcon />
+                  </IconButton>
+                )}
+              </>
             }
             disablePadding
           >

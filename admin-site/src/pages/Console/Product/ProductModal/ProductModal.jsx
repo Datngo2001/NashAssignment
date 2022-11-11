@@ -82,7 +82,12 @@ function ProductModal({ open, onClose, onSave, product = init, action }) {
     data.description = draftToHtml(
       convertToRaw(descriptionChange.current.getCurrentContent())
     );
-    data.images = imagesChange.current;
+    data.images = [...imagesChange.current];
+    data.images.forEach((img) => {
+      if (img.isNew) {
+        img.id = "0";
+      }
+    });
     data.categories = categoriesChange.current;
     onSave(data);
     reset();
