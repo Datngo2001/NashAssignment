@@ -32,37 +32,37 @@
                     </form>
                 </div>
                 <ul class="navbar-nav">
-                    @if (User.Claims.Count() == 0)
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-page="Signin">Signin</a>
-                        </li>
-                    }
-                    @if (User.Claims.Count() != 0)
-                    {
-                        <li class="nav-item me-3">
-                            <a class="btn btn-light position-relative" asp-page="Cart">
-                                <i class="fas fa-shopping-cart"></i>
-                                @if (cartItems.Count > 0)
-                                {
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                        @cartItems.Count
-                                    </span>
-                                }
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <div class="dropdown">
-                                <a class="btn btn-light dropdown-toggle" href="#" role="button" id="userMenuDropDown"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                    @User.Claims.FirstOrDefault(c=>c.Type=="name")?.Value
+                        @if (User.Claims.Count() == 0)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-page="Signin">Signin</a>
+                            </li>
+                        }
+                        @if (User.Claims.Count() != 0)
+                        {
+                            <li class="nav-item me-3">
+                                <a class="btn btn-light position-relative" asp-page="Cart">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    @if (cartItems.Count > 0)
+                                    {
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                            @cartItems.Count
+                                        </span>
+                                    }
                                 </a>
-                                <ul class="dropdown-menu" aria-labelledby="userMenuDropDown">
-                                    <li><a class="dropdown-item" asp-page="Signout">Signout</a></li>
-                                </ul>
-                            </div>
-                        </li>
-                    }
+                            </li>
+                            <li class="nav-item">
+                                <div class="dropdown">
+                                    <a class="btn btn-light dropdown-toggle" href="#" role="button" id="userMenuDropDown"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                        @User.Claims.FirstOrDefault(c=>c.Type=="name")?.Value
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="userMenuDropDown">
+                                        <li><a class="dropdown-item" asp-page="Signout">Signout</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        }
                 </ul>
             </div>
         </div>

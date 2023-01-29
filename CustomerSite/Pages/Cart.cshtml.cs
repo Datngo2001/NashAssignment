@@ -70,6 +70,7 @@ namespace CustomerSite.Pages
             return RedirectToPage();
         }
 
+        [ValidateAntiForgeryToken]
         public ActionResult OnPostUpdateCartAsync([FromBody] UpdateCartInputModel updateCartInput)
         {
             var cart = cartService.GetCartItems();
@@ -88,9 +89,9 @@ namespace CustomerSite.Pages
 
             return new JsonResult(new
             {
-                productId=updateCartInput.ProductId,
-                quantity=updateCartInput.Quantity,
-                totalMoney=totalMoney,
+                productId = updateCartInput.ProductId,
+                quantity = updateCartInput.Quantity,
+                totalMoney = totalMoney,
             });
         }
 

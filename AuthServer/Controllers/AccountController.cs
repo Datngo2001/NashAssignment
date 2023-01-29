@@ -92,7 +92,7 @@ namespace AuthServer.Controllers
                 ExternalProviders = providers.ToArray()
             };
 
-            return View();
+            return View(vm);
         }
 
         [HttpGet]

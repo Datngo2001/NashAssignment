@@ -4,14 +4,15 @@
 @{
     ViewData["Title"] = "Cart";
     CultureInfo cul = CultureInfo.GetCultureInfo("vi-VN");
-    var totalMoney = Model.CartItems.Aggregate((long)0, (total, next) => total + next.Product.Price * next.Quantity).ToString("#,###", cul.NumberFormat);
+    var totalMoney = Model.CartItems.Aggregate((long)0, (total, next) => total + next.Product.Price *
+    next.Quantity).ToString("#,###", cul.NumberFormat);
 }
 
-@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 @functions {
-    public string GetAntiXsrfRequestToken()
+    public string GetValidateToken()
     {
-        return Xsrf.GetAndStoreTokens(Model.HttpContext).RequestToken;
+        return Antiforgery.GetAndStoreTokens(HttpContext).RequestToken ?? "";
     }
 }
 
@@ -40,11 +41,13 @@
                                     <p class="fw-bold mb-0 me-5 pe-3">
                                         @($"{cartItem.Product.Price.ToString("#,###", cul.NumberFormat)}đ")</p>
                                     <div class="def-number-input number-input safari_only">
-                                        <a class="btn minus-quantity" data-action="minus" data-productId="@cartItem.Product.Id">
+                                        <a class="btn minus-quantity" data-action="minus"
+                                        data-productId="@cartItem.Product.Id">
                                             <i class="fas fa-minus"></i>
                                         </a>
                                         <span id="quantity-@cartItem.Product.Id" class="">@cartItem.Quantity</span>
-                                        <a class="btn plus-quantity" data-action="plus" data-productId="@cartItem.Product.Id">
+                                        <a class="btn plus-quantity" data-action="plus"
+                                        data-productId="@cartItem.Product.Id">
                                             <i class="fas fa-plus"></i>
                                         </a>
                                     </div>
@@ -93,7 +96,7 @@
 
 <script>
     window.onload = () => {
-        let plusThrottle;
+        let throttle;
         let buttons = document.querySelectorAll(".plus-quantity,.minus-quantity")
 
         buttons.forEach(btn => {
@@ -102,20 +105,20 @@
                 let action = btn.attributes.getNamedItem("data-action").nodeValue;
                 let quantity = getProductQuantity(productId)
 
-                if (action == "plus"){
+                if (action == "plus") {
                     quantity++
-                }else{
-                    if(quantity ==1){
+                } else {
+                    if (quantity == 1) {
                         return;
                     }
                     quantity--
                 }
                 updateProductQuantity(productId, quantity)
 
-                if (plusThrottle) {
-                    clearTimeout(plusThrottle)
+                if (throttle) {
+                    clearTimeout(throttle)
                 }
-                plusThrottle = setTimeout(() => {
+                throttle = setTimeout(() => {
 
                     postAction("@Url.Page("Cart", "UpdateCart")",
                         {
@@ -123,9 +126,9 @@
                             quantity: quantity
                         },
                         {
-                            "RequestVerificationToken": '@GetAntiXsrfRequestToken()'
+                            RequestVerificationToken: '@GetValidateToken()'
                         })
-                        .then(res=>{
+                        .then(res => {
                             updateProductQuantity(res.productId, res.quantity)
                             updateTotalPrice(res.totalMoney)
                         })
@@ -139,7 +142,7 @@
         function updateProductQuantity(id, value) {
             document.querySelector(`#quantity-${id}`).innerHTML = value;
         }
-        function updateTotalPrice(total){
+        function updateTotalPrice(total) {
             document.getElementById("cart-total-price").innerHTML = total + " đ";
         }
     }

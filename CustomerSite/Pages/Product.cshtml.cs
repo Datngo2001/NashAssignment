@@ -23,6 +23,9 @@ namespace CustomerSite.Pages
             this.productService = productService;
         }
 
+        [TempData]
+        public string ProductId { get; set; }
+
         [BindProperty]
         public ProductDetailDto Product { get; set; } = new ProductDetailDto();
 

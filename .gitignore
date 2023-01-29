@@ -365,3 +365,5 @@ FodyWeavers.xsd
 .vscode
 
 tempkey.jwk
+
+appsettings.development.json
