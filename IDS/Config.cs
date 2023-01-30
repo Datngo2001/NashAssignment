@@ -79,14 +79,14 @@ namespace IDS
         public static IEnumerable<ApiScope> ApiScopes =>
           new[]
           {
-            new ApiScope("weatherapi.read"),
-            new ApiScope("weatherapi.write"),
+            new ApiScope("API.read"),
+            new ApiScope("API.write"),
           };
         public static IEnumerable<ApiResource> ApiResources => new[]
         {
-          new ApiResource("weatherapi")
+          new ApiResource("API")
           {
-            Scopes = new List<string> {"weatherapi.read", "weatherapi.write"},
+            Scopes = new List<string> {"API.read", "API.write"},
             ApiSecrets = new List<Secret> {new Secret("ScopeSecret".Sha256())},
             UserClaims = new List<string> {"role"}
           }
@@ -104,7 +104,7 @@ namespace IDS
             AllowedGrantTypes = GrantTypes.ClientCredentials,
             ClientSecrets = {new Secret("SuperSecretPassword".Sha256())},
 
-            AllowedScopes = {"weatherapi.read", "weatherapi.write"}
+            AllowedScopes = {"API.read", "API.write"}
           },
 
           // interactive client using code flow + pkce
@@ -115,14 +115,14 @@ namespace IDS
 
             AllowedGrantTypes = GrantTypes.Code,
 
-            RedirectUris = {"https://localhost:5444/signin-oidc"},
-            FrontChannelLogoutUri = "https://localhost:5444/signout-oidc",
-            PostLogoutRedirectUris = {"https://localhost:5444/signout-callback-oidc"},
+            RedirectUris = {"https://localhost:5002/signin-oidc"},
+            FrontChannelLogoutUri = "https://localhost:5002/signout-oidc",
+            PostLogoutRedirectUris = {"https://localhost:5002/signout-callback-oidc"},
 
             AllowOfflineAccess = true,
-            AllowedScopes = {"openid", "profile", "weatherapi.read"},
+            AllowedScopes = {"openid", "profile", "API.read", "API.write"},
             RequirePkce = true,
-            RequireConsent = true,
+            RequireConsent = false,
             AllowPlainTextPkce = false
           },
         };

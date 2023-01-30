@@ -28,16 +28,17 @@ builder.Services.AddAuthentication(options =>
     .AddCookie("Cookies")
     .AddOpenIdConnect("oidc", options =>
     {
-        options.Authority = "https://localhost:7041";
+        options.Authority = "https://localhost:7167";
 
-        options.ClientId = "CustomerSite";
-        options.ClientSecret = "49C1A7E1-0C79-4A89-A3D6-A37998FB86B0";
+        options.ClientId = "interactive";
+        options.ClientSecret = "SuperSecretPassword";
         options.ResponseType = "code";
 
         options.SaveTokens = true;
 
         options.Scope.Add("profile");
-        options.Scope.Add("AssignmentAPI");
+        options.Scope.Add("API.read");
+        options.Scope.Add("API.write");
         options.Scope.Add("offline_access");
 
         options.GetClaimsFromUserInfoEndpoint = true;

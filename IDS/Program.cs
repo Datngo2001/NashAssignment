@@ -30,10 +30,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
 
-builder.Services.AddIdentityServer(option =>
-{
-    option.UserInteraction.LoginUrl = "/login";
-})
+builder.Services.AddIdentityServer()
     .AddAspNetIdentity<AppUser>()
     .AddConfigurationStore(options =>
     {
@@ -49,7 +46,17 @@ builder.Services.AddIdentityServer(option =>
 
 builder.Services.AddRazorPages();
 
+builder.Services.AddAuthentication();
+
 var app = builder.Build();
+
+app.UseHttpsRedirection();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
+
+app.UseStaticFiles();
 
 app.MapRazorPages();
 

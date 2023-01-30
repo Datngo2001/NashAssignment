@@ -1,0 +1,45 @@
+@page
+@model IDS.Pages.Account.Login.Index
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div>
+    <div class="card m-auto w-25 mb-3 mt-5 ">
+        <div class="card-body">
+            <h2 class="text-center">Login</h2>
+            <form asp-route="Login">
+                <input type="hidden" asp-for="@Model.ReturnUrl" />
+
+                <div class="mb-3">
+                    <label class="form-label" asp-for="@Model.Form.UserName"></label>
+                    <input class="form-control" placeholder="Username" asp-for="@Model.Form.UserName" autofocus>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" asp-for="@Model.Form.Password"></label>
+                    <input type="password" class="form-control" placeholder="Password" asp-for="@Model.Form.Password"
+                        autocomplete="off">
+                </div>
+
+                <div class="mb-3">
+                    <input type="checkbox" asp-for="@Model.Form.IsRemember">
+                    <label asp-for="@Model.Form.IsRemember"> Remember me</label><br>
+                </div>
+
+                <!-- Submit button -->
+                <button class="btn btn-primary btn-block mb -4 w-100" name="button" value="login">Login</button>
+
+                <!-- Register buttons -->
+                <div class="text-center">
+                    <p>Not a member? <a asp-controller="Account" asp-action="Register"
+                            asp-route-returnUrl="@Model.ReturnUrl">Register</a></p>
+                    <p>or sign up with:</p>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="m-auto w-50">
+        <partial name="_ValidationSummary" />
+    </div>
+</div>

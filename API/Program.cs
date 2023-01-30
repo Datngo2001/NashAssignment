@@ -33,7 +33,6 @@ builder.Services.AddAuthentication(options =>
     .AddJwtBearer(options =>
     {
         options.Authority = builder.Configuration.GetValue<string>("Authority");
-
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateAudience = false
