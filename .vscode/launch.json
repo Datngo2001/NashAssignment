@@ -1,0 +1,98 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "IDS",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/IDS/bin/Debug/net6.0/IDS.csproj",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        },
+        {
+            "name": "Auth Server",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/AuthServer/bin/Debug/net6.0/AuthServer.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/AuthServer",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            },
+            "requireExactSource": false
+        },
+        {
+            "name": "Customer Site",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/CustomerSite/bin/Debug/net6.0/customersite.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/CustomerSite",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            },
+            "requireExactSource": false
+        },
+        {
+            // Use IntelliSense to find out which attributes exist for C# debugging
+            // Use hover for the description of the existing attributes
+            // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
+            "name": "API",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/API/bin/Debug/net6.0/API.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/API",
+            "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            },
+            "requireExactSource": false
+        },
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach"
+        }
+    ]
+}

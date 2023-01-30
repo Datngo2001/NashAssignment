@@ -362,8 +362,6 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-.vscode
-
 tempkey.jwk
 
 appsettings.development.json
