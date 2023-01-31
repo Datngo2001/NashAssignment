@@ -29,3 +29,19 @@ async function postAction(url, body, headers) {
         console.log(error)
     }
 }
+
+async function postSubmition(url, body, verificationToken) {
+
+    try {
+        await fetch(`${BASE_URL}${url}`, {
+            method: 'POST',
+            body: body,
+            redirect: "follow",
+            headers: {
+                "RequestVerificationToken": verificationToken
+            }
+        });
+    } catch (error) {
+        console.log(error)
+    }
+}

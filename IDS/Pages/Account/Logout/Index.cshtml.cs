@@ -46,7 +46,7 @@ namespace IDS.Pages.Account.Logout
                             logoutId = await _interaction.CreateLogoutContextAsync();
                         }
 
-                        string url = Url.Action("Logout", new { logoutId = logoutId });
+                        string url = Url.Action("Logout", new { logoutId = logoutId }) ?? "";
                         return SignOut(new AuthenticationProperties { RedirectUri = url }, identityProvider);
                     }
                 }

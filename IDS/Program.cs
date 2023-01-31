@@ -1,8 +1,10 @@
+using IdentityServer4;
 using IdentityServer4.Models;
 using IdentityServer4.Test;
 using IDS;
 using IDS.Data;
 using IDS.Entities;
+using IDS.Middlewares;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -44,9 +46,10 @@ builder.Services.AddIdentityServer()
     })
     .AddDeveloperSigningCredential();
 
-builder.Services.AddRazorPages();
 
 builder.Services.AddAuthentication();
+
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
@@ -54,12 +57,22 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 
-app.UseAuthorization();
+// app.UseAuthorization();
 
 app.UseStaticFiles();
 
 app.MapRazorPages();
 
 app.UseIdentityServer();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    app.UseMiddleware<ErrorHandler>();
+}
 
 app.Run();

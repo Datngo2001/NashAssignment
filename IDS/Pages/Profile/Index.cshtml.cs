@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 
 namespace IDS.Pages.Profile
 {
-    [Authorize]
     public class Index : PageModel
     {
         private readonly ILogger<Index> _logger;
