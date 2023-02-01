@@ -36,7 +36,7 @@
                             asp-route-returnUrl="@Model.ReturnUrl">Register</a></p>
                     <p>or sign up with:</p>
                     <div id="g_id_onload"
-                        data-client_id="805851943445-go4th0gl5io6vuamfje3d2q75burr64i.apps.googleusercontent.com"
+                        data-client_id="@Model.GoogleClientId"
                         data-context="signin"
                         data-ux_mode="popup"
                         data-callback="googleCallback"
@@ -59,6 +59,7 @@
         <partial name="_ValidationSummary" />
     </div>
 </div>
+@Html.AntiForgeryToken();
 <script>
     function googleCallback(data){
         const formData = new FormData();

@@ -4,7 +4,10 @@ using IdentityServer4.Test;
 using IDS;
 using IDS.Data;
 using IDS.Entities;
+using IDS.Interfaces;
 using IDS.Middlewares;
+using IDS.Models;
+using IDS.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -51,13 +54,22 @@ builder.Services.AddAuthentication();
 
 builder.Services.AddRazorPages();
 
+builder.Services.AddOptions();
+builder.Services.AddOptions<GoogleConfig>();
+
+builder.Services.AddScoped<IAppTokenService, AppTokenService>();
+
+
+
 var app = builder.Build();
+
+// Configure the HTTP request pipeline.
 
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 
-// app.UseAuthorization();
+app.UseAuthorization();
 
 app.UseStaticFiles();
 
@@ -65,7 +77,6 @@ app.MapRazorPages();
 
 app.UseIdentityServer();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();

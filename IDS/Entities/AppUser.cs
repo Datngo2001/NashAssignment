@@ -10,6 +10,8 @@ namespace IDS.Entities
     [Table("User")]
     public class AppUser : IdentityUser
     {
-
+        public string? Picture { get; set; } = "";
+        public string? FirstName { get; set; } = "";
+        public string? LastName { get; set; } = "";
     }
 }

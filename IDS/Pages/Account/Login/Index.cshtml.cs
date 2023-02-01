@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer4.Services;
 using IDS.Entities;
+using IDS.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Options;
 
 namespace IDS.Pages.Account.Login
 {
@@ -18,21 +20,27 @@ namespace IDS.Pages.Account.Login
         [BindProperty]
         public string ReturnUrl { get; set; } = "";
 
+        public string GoogleClientId { get; set; } = "";
+
         private readonly ILogger<Index> _logger;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IIdentityServerInteractionService _interaction;
+        private readonly IConfiguration _configuration;
 
         public Index(ILogger<Index> logger,
                      SignInManager<AppUser> signInManager,
-                     IIdentityServerInteractionService interaction)
+                     IIdentityServerInteractionService interaction,
+                     IConfiguration configuration)
         {
             _interaction = interaction;
+            _configuration = configuration;
             _signInManager = signInManager;
             _logger = logger;
         }
 
         public void OnGet([FromQuery(Name = "ReturnUrl")] string returnUrl)
         {
+            GoogleClientId = _configuration.GetValue<string>("GoogleConfig:ClientId");
             ReturnUrl = returnUrl;
         }
 
