@@ -52,13 +52,15 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("Customer", policy =>
     {
         policy.RequireAuthenticatedUser();
-        policy.RequireClaim("scope", "AssignmentAPI");
+        policy.RequireClaim("scope", "API.read");
+        policy.RequireClaim("scope", "API.write");
         policy.RequireRole("customer", "admin");
     });
     options.AddPolicy("Admin", policy =>
     {
         policy.RequireAuthenticatedUser();
-        policy.RequireClaim("scope", "AssignmentAPI");
+        policy.RequireClaim("scope", "API.read");
+        policy.RequireClaim("scope", "API.write");
         policy.RequireRole("admin");
     });
 });
