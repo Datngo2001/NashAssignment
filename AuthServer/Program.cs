@@ -23,7 +23,12 @@ builder.Services.AddIdentity<AppUser, AppRole>(options =>
                 options.User.RequireUniqueEmail = true;
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+                .AddDefaultTokenProviders()
+                .AddRoles<AppRole>()
+                .AddRoleManager<RoleManager<AppRole>>()
+                .AddSignInManager<SignInManager<AppUser>>()
+                .AddRoleValidator<RoleValidator<AppRole>>();
+;
 
 var config = new Config(
     builder.Configuration.GetValue<string>("CustomerSiteOrigin"),
