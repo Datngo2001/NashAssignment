@@ -23,8 +23,8 @@ namespace AuthServer
 
             using (var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                var ctx = scope.ServiceProvider.GetService<ApplicationDbContext>();
-                ctx.Database.Migrate();
+                //var ctx = scope.ServiceProvider.GetService<ApplicationDbContext>();
+                //ctx.Database.Migrate();
 
                 EnsureUsers(scope);
             }
@@ -44,6 +44,17 @@ namespace AuthServer
                     throw new Exception(result.Errors.First().Description);
                 }
                 Console.WriteLine("admin role created");
+            }
+
+            var customerRole = roleMgr.FindByNameAsync("customer").Result;
+            if (customerRole == null)
+            {
+                var result = roleMgr.CreateAsync(new AppRole() { Name = "customer" }).Result;
+                if (!result.Succeeded)
+                {
+                    throw new Exception(result.Errors.First().Description);
+                }
+                Console.WriteLine("customer role created");
             }
 
             var admin = userMgr.FindByNameAsync("admin").Result;
@@ -101,6 +112,12 @@ namespace AuthServer
                     throw new Exception(result.Errors.First().Description);
                 }
 
+                result = userMgr.AddToRoleAsync(alice, "customer").Result;
+                if (!result.Succeeded)
+                {
+                    throw new Exception(result.Errors.First().Description);
+                }
+
                 result = userMgr.AddClaimsAsync(alice, new Claim[]
                 {
                     new Claim(JwtClaimTypes.Name, "Alice Smith"),
@@ -129,7 +146,14 @@ namespace AuthServer
                     Email = "BobSmith@email.com",
                     EmailConfirmed = true
                 };
+
                 var result = userMgr.CreateAsync(bob, "Pass123$").Result;
+                if (!result.Succeeded)
+                {
+                    throw new Exception(result.Errors.First().Description);
+                }
+
+                result = userMgr.AddToRoleAsync(bob, "customer").Result;
                 if (!result.Succeeded)
                 {
                     throw new Exception(result.Errors.First().Description);

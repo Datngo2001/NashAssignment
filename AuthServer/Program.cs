@@ -60,6 +60,8 @@ builder.Services.AddAuthentication()
                     options.ClientSecret = builder.Configuration.GetValue<string>("GoogleOAuthClientSecret");
                 });
 
+SeedData.Seed(builder.Configuration.GetConnectionString("DefaultConnection"));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
