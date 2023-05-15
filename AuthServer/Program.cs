@@ -25,6 +25,11 @@ builder.Services.AddIdentity<AppUser, AppRole>(options =>
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+var config = new Config(
+    builder.Configuration.GetValue<string>("CustomerSiteOrigin"),
+    builder.Configuration.GetValue<string>("AdminSiteOrigin")
+);
+
 var identityServerBuilder = builder.Services.AddIdentityServer(options =>
             {
                 options.Events.RaiseErrorEvents = true;
@@ -35,9 +40,9 @@ var identityServerBuilder = builder.Services.AddIdentityServer(options =>
                 // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
                 options.EmitStaticAudienceClaim = true;
             })
-                .AddInMemoryIdentityResources(Config.IdentityResources)
-                .AddInMemoryApiScopes(Config.ApiScopes)
-                .AddInMemoryClients(Config.Clients)
+                .AddInMemoryIdentityResources(config.IdentityResources)
+                .AddInMemoryApiScopes(config.ApiScopes)
+                .AddInMemoryClients(config.Clients)
                 .AddAspNetIdentity<AppUser>();
 
 identityServerBuilder.AddDeveloperSigningCredential();

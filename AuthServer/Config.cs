@@ -10,20 +10,29 @@ namespace AuthServer
 {
     public class Config
     {
-        public static IEnumerable<IdentityResource> IdentityResources =>
+        private readonly string _customerSiteOrigin;
+        private readonly string _adminSiteOrigin;
+
+        public Config(string customerSiteOrigin, string adminSiteOrigin)
+        {
+            _customerSiteOrigin = customerSiteOrigin;
+            _adminSiteOrigin = adminSiteOrigin;
+        }
+
+        public IEnumerable<IdentityResource> IdentityResources =>
            new IdentityResource[]
            {
                         new IdentityResources.OpenId(),
                         new IdentityResources.Profile(),
            };
 
-        public static IEnumerable<ApiScope> ApiScopes =>
+        public IEnumerable<ApiScope> ApiScopes =>
             new ApiScope[]
             {
                 new ApiScope("AssignmentAPI",new [] { JwtClaimTypes.Role }),
             };
 
-        public static IEnumerable<Client> Clients =>
+        public IEnumerable<Client> Clients =>
         new Client[]
         {
                 // interactive client using code flow + pkce
@@ -34,9 +43,9 @@ namespace AuthServer
 
                     AllowedGrantTypes = GrantTypes.Code,
 
-                    RedirectUris = { "https://localhost:5002/signin-oidc" },
-                    FrontChannelLogoutUri = "https://localhost:5002/signout-oidc",
-                    PostLogoutRedirectUris = { "https://localhost:5002/signout-callback-oidc" },
+                    RedirectUris = { $"{_customerSiteOrigin}/signin-oidc" },
+                    FrontChannelLogoutUri = $"{_customerSiteOrigin}/signout-oidc",
+                    PostLogoutRedirectUris = { $"{_customerSiteOrigin}/signout-callback-oidc" },
 
                     AllowOfflineAccess = true,
                     AllowedScopes = {
@@ -53,9 +62,9 @@ namespace AuthServer
                     AllowedGrantTypes = GrantTypes.Code,
                     RequireClientSecret = false,
 
-                    RedirectUris =           { "http://localhost:3000/callback" },
-                    PostLogoutRedirectUris = { "http://localhost:3000/" },
-                    AllowedCorsOrigins =     { "http://localhost:3000" },
+                    RedirectUris =           { $"{_adminSiteOrigin}/callback" },
+                    PostLogoutRedirectUris = { $"{_adminSiteOrigin}/" },
+                    AllowedCorsOrigins =     { $"{_adminSiteOrigin}" },
 
                     AllowOfflineAccess = true,
 
