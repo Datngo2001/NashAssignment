@@ -33,7 +33,7 @@ function CategoryModal({ open, onClose, onSave, category = init, action }) {
     DETAILING,
   } = useDataForm({ action, resolver: yupResolver(schema) });
 
-  const watchImg = watch("image");
+  const image = watch("image");
 
   const handleClose = () => {
     if (formState.isDirty && !DETAILING) {
@@ -122,7 +122,7 @@ function CategoryModal({ open, onClose, onSave, category = init, action }) {
                     width: "200px",
                     objectFit: "contain",
                   }}
-                  src={getSrc([watchImg, category?.image])}
+                  src={image}
                   alt="img"
                 />
               </Paper>
